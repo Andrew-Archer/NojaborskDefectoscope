@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AllGraphsOnOnePage" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7993600d-473a-4b1c-b00f-3775e0d17bd7">
+	<subDataset name="XYDataSet" uuid="8a8db5ee-6a4d-4fc1-9fd3-17be3688d949">
+		<field name="series" class="java.lang.String"/>
+		<field name="xValue" class="java.lang.Double"/>
+		<field name="yValue" class="java.lang.Double"/>
+	</subDataset>
+	<parameter name="DEFECTS" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource" isForPrompting="false"/>
+	<parameter name="TRANSVERSAL" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="LENGTHWISE" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="THICKNESS" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="MAGNETIC" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="GRAPH_LENGTH" class="java.lang.Double"/>
+	<parameter name="TUBE_NUMBER" class="java.lang.String"/>
+	<parameter name="DEFECT_DETECTION_DATE" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="801">
+			<xyLineChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="32" width="555" height="154" uuid="4aacb37d-51a1-41b4-9dfb-673d01ab9755"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<chartTitle>
+						<titleExpression><![CDATA["Мангнитная дефектоскопия - сигнлаы от отверстий"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend position="Right">
+						<font size="8"/>
+					</chartLegend>
+				</chart>
+				<xyDataset>
+					<dataset>
+						<datasetRun subDataset="XYDataSet" uuid="1a15d354-58ab-4dff-a715-05f7ccba160d">
+							<dataSourceExpression><![CDATA[$P{MAGNETIC}]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+					<xySeries autoSort="true">
+						<seriesExpression><![CDATA[$F{series}]]></seriesExpression>
+						<xValueExpression><![CDATA[$F{xValue}]]></xValueExpression>
+						<yValueExpression><![CDATA[$F{yValue}]]></yValueExpression>
+					</xySeries>
+				</xyDataset>
+				<linePlot isShowShapes="false">
+					<plot/>
+					<categoryAxisLabelExpression><![CDATA["Координата по длине трубы в мм"]]></categoryAxisLabelExpression>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Уровень сигнала"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</valueAxisFormat>
+					<domainAxisMinValueExpression><![CDATA[0]]></domainAxisMinValueExpression>
+					<domainAxisMaxValueExpression><![CDATA[$P{GRAPH_LENGTH}]]></domainAxisMaxValueExpression>
+				</linePlot>
+			</xyLineChart>
+			<xyLineChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="494" width="555" height="153" uuid="84ea9586-697e-4722-9d9c-6da9e5dfe9d2"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<chartTitle>
+						<titleExpression><![CDATA["Ултразвук - сигналы от поперечных дефектов"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend position="Right">
+						<font size="8"/>
+					</chartLegend>
+				</chart>
+				<xyDataset>
+					<dataset>
+						<datasetRun subDataset="XYDataSet" uuid="a259e29c-ebf6-4eea-be8e-47d9739417d2">
+							<dataSourceExpression><![CDATA[$P{TRANSVERSAL}]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+					<xySeries autoSort="true">
+						<seriesExpression><![CDATA[$F{series}]]></seriesExpression>
+						<xValueExpression><![CDATA[$F{xValue}]]></xValueExpression>
+						<yValueExpression><![CDATA[$F{yValue}]]></yValueExpression>
+					</xySeries>
+				</xyDataset>
+				<linePlot isShowShapes="false">
+					<plot/>
+					<categoryAxisLabelExpression><![CDATA["Координата по длине трубы в мм"]]></categoryAxisLabelExpression>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Уровень сигнала"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</valueAxisFormat>
+					<domainAxisMinValueExpression><![CDATA[0]]></domainAxisMinValueExpression>
+					<domainAxisMaxValueExpression><![CDATA[$P{GRAPH_LENGTH}]]></domainAxisMaxValueExpression>
+				</linePlot>
+			</xyLineChart>
+			<xyLineChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="340" width="555" height="154" uuid="6bf4fb4f-d02e-44ad-b7bf-ebd3456ce23c"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<chartTitle>
+						<titleExpression><![CDATA["Ультразвук - сигналы от продольных дефектов"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend position="Right">
+						<font size="8"/>
+					</chartLegend>
+				</chart>
+				<xyDataset>
+					<dataset>
+						<datasetRun subDataset="XYDataSet" uuid="43174084-9796-44f4-acf4-31cc8f7caf40">
+							<dataSourceExpression><![CDATA[$P{LENGTHWISE}]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+					<xySeries autoSort="true">
+						<seriesExpression><![CDATA[$F{series}]]></seriesExpression>
+						<xValueExpression><![CDATA[$F{xValue}]]></xValueExpression>
+						<yValueExpression><![CDATA[$F{yValue}]]></yValueExpression>
+					</xySeries>
+				</xyDataset>
+				<linePlot isShowShapes="false">
+					<plot/>
+					<categoryAxisLabelExpression><![CDATA["Координата по длине трубы в мм"]]></categoryAxisLabelExpression>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Уровень сигнала"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</valueAxisFormat>
+					<domainAxisMinValueExpression><![CDATA[0]]></domainAxisMinValueExpression>
+					<domainAxisMaxValueExpression><![CDATA[$P{GRAPH_LENGTH}]]></domainAxisMaxValueExpression>
+				</linePlot>
+			</xyLineChart>
+			<xyLineChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="186" width="555" height="154" uuid="924b9d27-b021-4185-be69-c0eef8728c30"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<chartTitle>
+						<titleExpression><![CDATA["Ультразвук - толщина стенки"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend position="Right">
+						<font size="8"/>
+					</chartLegend>
+				</chart>
+				<xyDataset>
+					<dataset>
+						<datasetRun subDataset="XYDataSet" uuid="daad220d-82c3-473c-ac31-41806787e9aa">
+							<dataSourceExpression><![CDATA[$P{THICKNESS}]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+					<xySeries autoSort="true">
+						<seriesExpression><![CDATA[$F{series}]]></seriesExpression>
+						<xValueExpression><![CDATA[$F{xValue}]]></xValueExpression>
+						<yValueExpression><![CDATA[$F{yValue}]]></yValueExpression>
+					</xySeries>
+				</xyDataset>
+				<linePlot isShowShapes="false">
+					<plot/>
+					<categoryAxisLabelExpression><![CDATA["Координата по длине трубы в мм"]]></categoryAxisLabelExpression>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Толщина в мм"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</valueAxisFormat>
+					<domainAxisMinValueExpression><![CDATA[0]]></domainAxisMinValueExpression>
+					<domainAxisMaxValueExpression><![CDATA[$P{GRAPH_LENGTH}]]></domainAxisMaxValueExpression>
+				</linePlot>
+			</xyLineChart>
+			<xyLineChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="647" width="555" height="154" uuid="693c486b-6814-4076-bf6b-c7ef2d03e9f3"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<chartTitle>
+						<titleExpression><![CDATA["Расположение дефектов по длине трубы"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend position="Right">
+						<font size="8"/>
+					</chartLegend>
+				</chart>
+				<xyDataset>
+					<dataset>
+						<datasetRun subDataset="XYDataSet" uuid="ae4ad904-950e-4e92-b86d-0966695260d7">
+							<dataSourceExpression><![CDATA[$P{DEFECTS}]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+					<xySeries autoSort="true">
+						<seriesExpression><![CDATA[$F{series}]]></seriesExpression>
+						<xValueExpression><![CDATA[$F{xValue}]]></xValueExpression>
+						<yValueExpression><![CDATA[$F{yValue}]]></yValueExpression>
+					</xySeries>
+				</xyDataset>
+				<linePlot isShowLines="false" isShowShapes="true">
+					<plot/>
+					<categoryAxisLabelExpression><![CDATA["Координата по длине трубы в мм"]]></categoryAxisLabelExpression>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Типв дефектов"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" verticalTickLabels="false" axisLineColor="#000000"/>
+					</valueAxisFormat>
+					<domainAxisMinValueExpression><![CDATA[0]]></domainAxisMinValueExpression>
+					<domainAxisMaxValueExpression><![CDATA[$P{GRAPH_LENGTH}]]></domainAxisMaxValueExpression>
+				</linePlot>
+			</xyLineChart>
+			<textField>
+				<reportElement x="0" y="0" width="555" height="30" uuid="087ea6c9-8760-46c0-b88e-2ebe4e69168a"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Отчет по дефектоскопии трубы №" + $P{TUBE_NUMBER} + ". Дата "+$P{DEFECT_DETECTION_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
