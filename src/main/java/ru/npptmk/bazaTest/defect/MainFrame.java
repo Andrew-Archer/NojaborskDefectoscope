@@ -114,6 +114,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         TubesCounter.TubesCounterUpdatedListener {
 
     private boolean monitoringPLC = true;
+    
+    private static final int PIPE_POSITION_COLUMN = 5;
+    private static final int PIPE_STATE_COLUMN = 3;
 
     private JasperPrint jasperPrint;
     /**
@@ -2237,11 +2240,17 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                             hasFocus,
                             row,
                             col);
-                    if (table.getValueAt(row, 5) == t("device")) {
+                    if (table.getValueAt(row, PIPE_POSITION_COLUMN) == t("device")) {
                         label.setBackground(Color.GREEN);
                     }
-                    if (table.getValueAt(row, 5) != t("device")) {
+                    if (table.getValueAt(row, PIPE_POSITION_COLUMN) != t("device")) {
                         label.setBackground(Color.WHITE);
+                    }
+                    if(table.getValueAt(row, PIPE_STATE_COLUMN).equals(t("googClass2"))){
+                        label.setBackground(Color.YELLOW);
+                    }
+                    if(table.getValueAt(row, PIPE_STATE_COLUMN).equals(t("googRepairClass2"))){
+                        label.setBackground(Color.ORANGE);
                     }
                     return label;
                 }
@@ -3054,150 +3063,133 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
         jPanel_UnitFigure.setBorder(javax.swing.BorderFactory.createTitledBorder("Схема установки"));
         jPanel_UnitFigure.setName("UnitFigure"); // NOI18N
-        jPanel_UnitFigure.setLayout(new AbsoluteLayout());
+        jPanel_UnitFigure.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jCheckBox17.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox17.setText("SQ17");
         jCheckBox17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox17.setName("SQ17_TUBE_ON_OUT_TABLE"); // NOI18N
-        jCheckBox17.setOpaque(false);
         jCheckBox17.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox17, new AbsoluteConstraints(630, 30, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox17, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 30, -1, -1));
 
         jCheckBox16.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox16.setText("SQ16");
         jCheckBox16.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         jCheckBox16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox16.setName("SQ16_IN_RELOADER_UP"); // NOI18N
-        jCheckBox16.setOpaque(false);
         jCheckBox16.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox16, new AbsoluteConstraints(70, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox16, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, -1, -1));
 
         jCheckBox15.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox15.setText("SQ15");
         jCheckBox15.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         jCheckBox15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox15.setName("SQ15_IN_RELOADER_DOWN"); // NOI18N
-        jCheckBox15.setOpaque(false);
         jCheckBox15.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox15, new AbsoluteConstraints(70, 110, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox15, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, -1));
 
         jCheckBox14.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox14.setText("SQ14");
         jCheckBox14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox14.setName("SQ14_TUBE_ON_IN_RELOADER"); // NOI18N
-        jCheckBox14.setOpaque(false);
         jCheckBox14.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox14, new AbsoluteConstraints(130, 30, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox14, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, -1, -1));
 
         jCheckBox13.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox13.setText("SQ13");
         jCheckBox13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox13.setName("SQ13_OUT_RELOADER_UP"); // NOI18N
-        jCheckBox13.setOpaque(false);
         jCheckBox13.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox13, new AbsoluteConstraints(670, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox13, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 70, -1, -1));
 
         jCheckBox12.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox12.setText("SQ12");
         jCheckBox12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox12.setName("SQ12_OUT_RELOADER_DOWN"); // NOI18N
-        jCheckBox12.setOpaque(false);
         jCheckBox12.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox12, new AbsoluteConstraints(670, 110, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox12, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 110, -1, -1));
 
         jCheckBox11.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox11.setText("SQ11");
         jCheckBox11.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         jCheckBox11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox11.setName("SQ11_TUBE_ON_OUT_ROLLGANG"); // NOI18N
-        jCheckBox11.setOpaque(false);
         jCheckBox11.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox11, new AbsoluteConstraints(730, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox11, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 70, -1, -1));
 
         jCheckBox10.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox10.setText("SQ10");
         jCheckBox10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox10.setName("SQ10_AFTER_SORTOSCOPE"); // NOI18N
-        jCheckBox10.setOpaque(false);
         jCheckBox10.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox10, new AbsoluteConstraints(580, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox10, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 70, -1, -1));
 
         jCheckBox9.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox9.setText("SQ9");
         jCheckBox9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox9.setName("SQ9_HIGH_WATER_LEVEL"); // NOI18N
-        jCheckBox9.setOpaque(false);
         jCheckBox9.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox9, new AbsoluteConstraints(500, 100, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox9, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 100, -1, -1));
 
         jCheckBox8.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox8.setText("SQ8");
         jCheckBox8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox8.setName("SQ8_FIX3_UP"); // NOI18N
-        jCheckBox8.setOpaque(false);
         jCheckBox8.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox8, new AbsoluteConstraints(540, 30, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox8, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, -1, -1));
 
         jCheckBox7.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox7.setText("SQ7");
         jCheckBox7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox7.setName("SQ7_FIX2_UP"); // NOI18N
-        jCheckBox7.setOpaque(false);
         jCheckBox7.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox7, new AbsoluteConstraints(420, 30, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox7, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 30, -1, -1));
 
         jCheckBox6.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox6.setText("SQ6");
         jCheckBox6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox6.setName("SQ6_BEFORE_ULTRA_SOUND_BATH"); // NOI18N
-        jCheckBox6.setOpaque(false);
         jCheckBox6.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox6, new AbsoluteConstraints(450, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox6, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 70, -1, -1));
 
         jCheckBox5.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox5.setText("SQ5");
         jCheckBox5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox5.setName("SQ5_CALIBRATION_SECTION_END"); // NOI18N
-        jCheckBox5.setOpaque(false);
         jCheckBox5.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox5, new AbsoluteConstraints(300, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox5, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, -1, -1));
 
         jCheckBox4.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox4.setText("SQ4");
         jCheckBox4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox4.setName("SQ4_FIX1_UP"); // NOI18N
-        jCheckBox4.setOpaque(false);
         jCheckBox4.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox4, new AbsoluteConstraints(220, 30, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, -1, -1));
 
         jCheckBox3.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox3.setText("SQ3");
         jCheckBox3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox3.setName("SQ3_CALIBRATION_SECTION_START"); // NOI18N
-        jCheckBox3.setOpaque(false);
         jCheckBox3.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox3, new AbsoluteConstraints(230, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, -1, -1));
 
         jCheckBox2.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox2.setText("SQ2");
         jCheckBox2.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         jCheckBox2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox2.setName("SQ2_FIX1_MUST_BE_DOWN"); // NOI18N
-        jCheckBox2.setOpaque(false);
         jCheckBox2.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox2, new AbsoluteConstraints(180, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 70, -1, -1));
 
         jCheckBox1.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox1.setText("SQ1");
         jCheckBox1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox1.setName("SQ1_TUBE_ON_IN_ROLLGANG"); // NOI18N
-        jCheckBox1.setOpaque(false);
         jCheckBox1.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox1, new AbsoluteConstraints(130, 90, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, -1, -1));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/UNKT500.png"))); // NOI18N
-        jPanel_UnitFigure.add(jLabel3, new AbsoluteConstraints(10, 10, 770, 160));
+        jPanel_UnitFigure.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 770, 160));
 
         javax.swing.GroupLayout panel_TunningLayout = new javax.swing.GroupLayout(panel_Tunning);
         panel_Tunning.setLayout(panel_TunningLayout);

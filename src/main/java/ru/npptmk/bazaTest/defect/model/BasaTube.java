@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -55,6 +57,7 @@ import ru.npptmk.bazaTest.defect.TubeConditions;
             + "between :beg and :end  order by t.dateToKrm")
 })
 public class BasaTube implements Serializable {
+    private static final ResourceBundle RB = ResourceBundle.getBundle("gui_text", new Locale("ru", "RU"));
 
     public static EntityManagerFactory emf;
 
@@ -462,6 +465,10 @@ public class BasaTube implements Serializable {
                 return "брак";
             case 1:
                 return "годная";
+            case 3:
+                return RB.getString("googClass2");
+            case 4:
+                return RB.getString("googRepairClass2");
             default:
                 return "";
         }
