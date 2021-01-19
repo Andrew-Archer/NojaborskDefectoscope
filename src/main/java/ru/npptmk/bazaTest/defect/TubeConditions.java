@@ -10,17 +10,25 @@ package ru.npptmk.bazaTest.defect;
  * 
  * @author RazumnovAA
  */
-public class TubeConditions {
+public interface TubeConditions {
     /**
      * Брак.
      */
-    public final static int BAD = 0;
+    int BAD = 0;
     /**
      * Годная.
      */
-    public final static int GOOD = 1;
+    int GOOD = 1;
     /**
      * Не проверена.
      */
-    public final static int NOT_CHECKED = 2; 
+    int NOT_CHECKED = 2; 
+    /**
+     * Годная класс 2
+     */
+    int GOOD_CLASS_2 = 3;
+    /**
+     * Ремонтная класс 2
+     */
+    int GOOD_REAPAIR_CLASS_2 = 4;
 }
