@@ -305,7 +305,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     server = new NetworkServerControl(InetAddress.getByName("0.0.0.0"), 1527);
                     server.start(null);
                 } catch (Throwable ex) {
-                    Logger.getGlobal().log(Level.SEVERE, String.format("Can't establish connection with derby BD. %s", ex.getMessage()));
+                    Logger.getGlobal().log(Level.SEVERE, String.format("Can't start derby BD Server. %s", ex.getMessage()));
                     JOptionPane.showMessageDialog(null, t("cantConnectToDB"), "Ошибка", ERROR_MESSAGE);
                     System.exit(1);
                 }
@@ -319,7 +319,13 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
         });
 
-        emf = Persistence.createEntityManagerFactory("DefectPU");
+        try {
+            emf = Persistence.createEntityManagerFactory("DefectPU");
+        }catch(Exception ex){
+            Logger.getGlobal().log(Level.SEVERE, String.format("Can't establish connection with derby BD. %s", ex.getMessage()));
+            JOptionPane.showMessageDialog(null, t("cantConnectToDB"), "Ошибка", ERROR_MESSAGE);
+            System.exit(1);
+        }
         //Запускаем менеджер смен.
         shiftManager = new ShiftManagerImpl(emf);
 
