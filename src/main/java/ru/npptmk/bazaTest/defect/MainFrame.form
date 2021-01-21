@@ -368,12 +368,12 @@
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="button_ApproveDefect" min="-2" pref="121" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
                                   <Component id="button_RepeatDefectDetection" min="-2" pref="103" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                                  <Component id="button_EnableVerdict" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="button_MarkAsGood" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="comboBox_TubeConditions" min="-2" pref="119" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="checkBox_GoodAutohandle" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -428,12 +428,12 @@
                               <Component id="button_DropTubesCounter" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="checkBox_GoodAutohandle" alignment="0" min="-2" pref="26" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="checkBox_GoodAutohandle" min="-2" pref="26" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="button_ApproveDefect" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="button_RepeatDefectDetection" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="button_MarkAsGood" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="button_EnableVerdict" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="comboBox_TubeConditions" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -656,18 +656,6 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JButton" name="button_ApproveDefect">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x434;&#x442;&#x432;&#x435;&#x440;&#x434;&#x438;&#x442;&#x44c; &#x431;&#x440;&#x430;&#x43a;"/>
-                    <Property name="enabled" type="boolean" value="false"/>
-                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[2, 2, 2, 2]"/>
-                    </Property>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button_ApproveDefectActionPerformed"/>
-                  </Events>
-                </Component>
                 <Component class="javax.swing.JButton" name="button_RepeatDefectDetection">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&#x41f;&#x435;&#x440;&#x435;&#x43f;&#x440;&#x43e;&#x432;&#x435;&#x440;&#x438;&#x442;&#x44c;"/>
@@ -678,18 +666,6 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button_RepeatDefectDetectionActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JButton" name="button_MarkAsGood">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x43c;&#x435;&#x442;&#x438;&#x442;&#x44c; &#x433;&#x43e;&#x434;&#x43d;&#x43e;&#x439;"/>
-                    <Property name="enabled" type="boolean" value="false"/>
-                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[2, 2, 2, 2]"/>
-                    </Property>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button_MarkAsGoodActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_GoodTubesCount">
@@ -755,6 +731,30 @@
                   </Events>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="checkBox_GoodAutohandle">
+                </Component>
+                <Component class="javax.swing.JButton" name="button_EnableVerdict">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x43c;&#x435;&#x442;&#x438;&#x442;&#x44c;"/>
+                    <Property name="enabled" type="boolean" value="false"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button_EnableVerdictActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JComboBox" name="comboBox_TubeConditions">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="4">
+                        <StringItem index="0" value="&#x413;&#x43e;&#x434;&#x43d;&#x430;&#x44f;"/>
+                        <StringItem index="1" value="&#x411;&#x440;&#x430;&#x43a;"/>
+                        <StringItem index="2" value="&#x413;&#x43e;&#x434;&#x43d;&#x430;&#x44f; &#x43a;&#x441;&#x43b;&#x430;&#x441;&#x441; 2"/>
+                        <StringItem index="3" value="&#x420;&#x435;&#x43c;. &#x43a;&#x43b;&#x430;&#x441;&#x441; 2"/>
+                      </StringArray>
+                    </Property>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
