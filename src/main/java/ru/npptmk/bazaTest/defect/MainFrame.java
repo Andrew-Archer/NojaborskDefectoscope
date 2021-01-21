@@ -66,8 +66,6 @@ import net.sf.jasperreports.view.JasperViewer;
 import org.apache.derby.drda.NetworkServerControl;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.StandardChartTheme;
-import org.netbeans.lib.awtextra.AbsoluteConstraints;
-import org.netbeans.lib.awtextra.AbsoluteLayout;
 import static ru.npptmk.bazaTest.defect.INPUTS_NAMES.*;
 import ru.npptmk.bazaTest.defect.TubeType.ThickClasses;
 import ru.npptmk.bazaTest.defect.Util.ProgressDialog;
@@ -278,7 +276,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private TubeTypesDialog tubeTypesDialog;
     private ProgressDialog progressDialog;
     private boolean mayScan;
-    private final EntityManagerFactory emf;
+    private EntityManagerFactory emf;
 
     /**
      * Creates new form MainFrame
@@ -306,12 +304,11 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 try {
                     server = new NetworkServerControl(InetAddress.getByName("0.0.0.0"), 1527);
                     server.start(null);
-                } catch (Exception ex) {
+                } catch (Throwable ex) {
+                    Logger.getGlobal().log(Level.SEVERE, String.format("Can't establish connection with derby BD. %s", ex.getMessage()));
                     JOptionPane.showMessageDialog(null, t("cantConnectToDB"), "Ошибка", ERROR_MESSAGE);
-                    Logger.getGlobal().log(Level.SEVERE, "Can't establish connection with derby BD.");
                     System.exit(1);
                 }
-                Thread.sleep(500);
                 return 0;
             }
 
