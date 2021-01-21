@@ -114,7 +114,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         TubesCounter.TubesCounterUpdatedListener {
 
     private boolean monitoringPLC = true;
-    
+
     private static final int PIPE_POSITION_COLUMN = 5;
     private static final int PIPE_STATE_COLUMN = 3;
 
@@ -1479,8 +1479,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                             //Если если установка нашла дефекты на трубе
                             if (tubeIsBad) {
                                 //Делаем активными кнопки выбора
-                                button_ApproveDefect.setEnabled(true);
-                                button_MarkAsGood.setEnabled(true);
+                                button_EnableVerdict.setEnabled(true);
                                 button_RepeatDefectDetection.setEnabled(true);
                             } else {//Если установка дефектов не нашла
                                 EntityManager em1 = emf.createEntityManager();
@@ -1514,8 +1513,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                         }
                     } else {
                         //Делаем активными кнопки выбора
-                        button_ApproveDefect.setEnabled(true);
-                        button_MarkAsGood.setEnabled(true);
+                        button_EnableVerdict.setEnabled(true);
                         button_RepeatDefectDetection.setEnabled(true);
                     }
 
@@ -1967,8 +1965,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             if (mode != Modes.WORKING) {
                 //Отключаем кнопки "Брак", "повторить",
                 //"годная".
-                button_ApproveDefect.setEnabled(false);
-                button_MarkAsGood.setEnabled(false);
+                button_EnableVerdict.setEnabled(false);
                 button_RepeatDefectDetection.setEnabled(false);
             }
         } catch (ModbusException ex) {
@@ -2246,10 +2243,10 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     if (table.getValueAt(row, PIPE_POSITION_COLUMN) != t("device")) {
                         label.setBackground(Color.WHITE);
                     }
-                    if(table.getValueAt(row, PIPE_STATE_COLUMN).equals(t("googClass2"))){
+                    if (table.getValueAt(row, PIPE_STATE_COLUMN).equals(t("googClass2"))) {
                         label.setBackground(Color.YELLOW);
                     }
-                    if(table.getValueAt(row, PIPE_STATE_COLUMN).equals(t("googRepairClass2"))){
+                    if (table.getValueAt(row, PIPE_STATE_COLUMN).equals(t("googRepairClass2"))) {
                         label.setBackground(Color.ORANGE);
                     }
                     return label;
@@ -2318,9 +2315,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         label_OperatorValue = new javax.swing.JLabel();
         label_TubeType = new javax.swing.JLabel();
         label_TybeTypeValue = new javax.swing.JLabel();
-        button_ApproveDefect = new javax.swing.JButton();
         button_RepeatDefectDetection = new javax.swing.JButton();
-        button_MarkAsGood = new javax.swing.JButton();
         label_GoodTubesCount = new javax.swing.JLabel();
         label_GoodTubesCountValue = new javax.swing.JLabel();
         label_BadTubesCount = new javax.swing.JLabel();
@@ -2329,6 +2324,8 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         label_TotalTubesCountValue = new javax.swing.JLabel();
         button_DropTubesCounter = new javax.swing.JButton();
         checkBox_GoodAutohandle = new javax.swing.JCheckBox();
+        button_EnableVerdict = new javax.swing.JButton();
+        comboBox_TubeConditions = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         pnGrfsAll = new javax.swing.JPanel();
         magDef = new javax.swing.JPanel();
@@ -2549,30 +2546,12 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         label_TybeTypeValue.setMinimumSize(new java.awt.Dimension(285, 18));
         label_TybeTypeValue.setPreferredSize(new java.awt.Dimension(285, 18));
 
-        button_ApproveDefect.setText("Подтвердить брак");
-        button_ApproveDefect.setEnabled(false);
-        button_ApproveDefect.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        button_ApproveDefect.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_ApproveDefectActionPerformed(evt);
-            }
-        });
-
         button_RepeatDefectDetection.setText("Перепроверить");
         button_RepeatDefectDetection.setEnabled(false);
         button_RepeatDefectDetection.setMargin(new java.awt.Insets(2, 2, 2, 2));
         button_RepeatDefectDetection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button_RepeatDefectDetectionActionPerformed(evt);
-            }
-        });
-
-        button_MarkAsGood.setText("Отметить годной");
-        button_MarkAsGood.setEnabled(false);
-        button_MarkAsGood.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        button_MarkAsGood.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_MarkAsGoodActionPerformed(evt);
             }
         });
 
@@ -2598,6 +2577,16 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 button_DropTubesCounterActionPerformed(evt);
             }
         });
+
+        button_EnableVerdict.setText("Пометить");
+        button_EnableVerdict.setEnabled(false);
+        button_EnableVerdict.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_EnableVerdictActionPerformed(evt);
+            }
+        });
+
+        comboBox_TubeConditions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Годная", "Брак", "Годная ксласс 2", "Рем. класс 2" }));
 
         javax.swing.GroupLayout pnTubeTblLayout = new javax.swing.GroupLayout(pnTubeTbl);
         pnTubeTbl.setLayout(pnTubeTblLayout);
@@ -2646,12 +2635,12 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                             .addGap(3, 3, 3)
                             .addComponent(button_DropTubesCounter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(pnTubeTblLayout.createSequentialGroup()
-                        .addComponent(button_ApproveDefect, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(button_RepeatDefectDetection, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(button_EnableVerdict)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button_MarkAsGood)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboBox_TubeConditions, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(checkBox_GoodAutohandle)))
                 .addGap(3, 3, 3))
         );
@@ -2696,12 +2685,12 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     .addComponent(label_TotalTubesCountValue)
                     .addComponent(button_DropTubesCounter))
                 .addGap(6, 6, 6)
-                .addGroup(pnTubeTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnTubeTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(checkBox_GoodAutohandle, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnTubeTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(button_ApproveDefect)
                         .addComponent(button_RepeatDefectDetection)
-                        .addComponent(button_MarkAsGood))))
+                        .addComponent(button_EnableVerdict)
+                        .addComponent(comboBox_TubeConditions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -4994,86 +4983,14 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
     }//GEN-LAST:event_button_GetTotalReportActionPerformed
 
-    private void button_ApproveDefectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_ApproveDefectActionPerformed
-        //Отключаем кнопки выбора.
-        button_MarkAsGood.setEnabled(false);
-        button_RepeatDefectDetection.setEnabled(false);
-        button_ApproveDefect.setEnabled(false);
-        EntityManager em = emf.createEntityManager();
-        BasaTube tubeOnDevice = null;
-        //Сначала получаем последние результаты проверки по трбуе из базы
-        try {
-            tubeOnDevice = em.find(BasaTube.class, tmn.getDetail(Devicess.ID_R4, Device.DEFAULT_VALUE));
-            //Помечаем трубу бракованной
-            tubeOnDevice.setStatus(TubeConditions.BAD);
-            EntityTransaction trans = em.getTransaction();
-            //Сохраянем данные базу
-            try {
-                trans.begin();
-                em.merge(tubeOnDevice);
-                trans.commit();
-            } finally {
-                if (trans.isActive()) {
-                    trans.rollback();
-                }
-            }
-        } catch (Exception ex) {
-            simpleLogger.log(ex);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-
-        //Обновляем список труб
-        ((DefaultTableModel) table_Shift_Tubes.getModel()).setValueAt("брак", 0, 3);
-        //Отправляем комманду контроллеру, что труба брак.
-        sendCmdToPLC(Commands.MARK_AS_BAD);
-    }//GEN-LAST:event_button_ApproveDefectActionPerformed
-
     private void button_RepeatDefectDetectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_RepeatDefectDetectionActionPerformed
         //Отключаем кнопки выбора.
-        button_ApproveDefect.setEnabled(false);
-        button_MarkAsGood.setEnabled(false);
+        button_EnableVerdict.setEnabled(false);
         button_RepeatDefectDetection.setEnabled(false);
         //Отправляем комманду контроллеру, что необходимо повторить проверку.
         sendCmdToPLC(Commands.REPEAT_DEFECT_DETECTION);
 
     }//GEN-LAST:event_button_RepeatDefectDetectionActionPerformed
-
-    private void button_MarkAsGoodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_MarkAsGoodActionPerformed
-        //Отключаем кнопки выбора.
-        button_ApproveDefect.setEnabled(false);
-        button_MarkAsGood.setEnabled(false);
-        button_RepeatDefectDetection.setEnabled(false);
-        EntityManager em = emf.createEntityManager();
-        //Сначала получаем последние результаты проверке по трбуе из базы
-        try {
-            BasaTube tubeOnDevice = em.find(BasaTube.class, tmn.getDetail(Devicess.ID_R4, Device.DEFAULT_VALUE));
-            EntityTransaction trans = em.getTransaction();
-            try {
-                //Помечаем трубу годной
-                tubeOnDevice.setStatus(TubeConditions.GOOD);
-                em.getTransaction().begin();
-                em.merge(tubeOnDevice);
-                em.getTransaction().commit();
-            } finally {
-                if (trans.isActive()) {
-                    trans.rollback();
-                }
-            }
-        } catch (Exception ex) {
-            simpleLogger.log(ex);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-        //Обновляем список труб
-        ((DefaultTableModel) table_Shift_Tubes.getModel()).setValueAt("годная", 0, 3);
-        //Отправляем комманду контроллеру, что труба брак.
-        sendCmdToPLC(Commands.MARK_AS_GOOD);
-    }//GEN-LAST:event_button_MarkAsGoodActionPerformed
 
     private void button_graphPerPageReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_graphPerPageReportActionPerformed
         createGraphPerPageReport();
@@ -5098,6 +5015,77 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private void jButton_AllGraphsOnOnePageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AllGraphsOnOnePageActionPerformed
         createGraphsOnOnePage();
     }//GEN-LAST:event_jButton_AllGraphsOnOnePageActionPerformed
+
+    private void button_EnableVerdictActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_EnableVerdictActionPerformed
+        String selectedCondition = (String) comboBox_TubeConditions.getSelectedItem();
+        int tubeCondition;
+        String uiConditionLabel;
+        int plcCommand;
+        switch (selectedCondition) {
+            case "Годная":
+                tubeCondition = TubeConditions.GOOD;
+                uiConditionLabel = t("good");
+                plcCommand = Commands.MARK_AS_GOOD;
+                break;
+            case "Годная ксласс 2":
+                tubeCondition = TubeConditions.GOOD_CLASS_2;
+                uiConditionLabel = t("googClass2");
+                plcCommand = Commands.MARK_AS_GOOD;
+                break;
+            case "Рем. класс 2":
+                tubeCondition = TubeConditions.GOOD_REAPAIR_CLASS_2;
+                uiConditionLabel = t("googRepairClass2");
+                plcCommand = Commands.MARK_AS_GOOD;
+                break;
+            default://Брак
+                tubeCondition = TubeConditions.BAD;
+                uiConditionLabel = t("defect");
+                plcCommand = Commands.MARK_AS_BAD;
+        }
+        updateTubesTable(uiConditionLabel);
+        saveOperatorChoiceToDb(tubeCondition);
+        notifyController(plcCommand);
+    }//GEN-LAST:event_button_EnableVerdictActionPerformed
+
+    private void saveOperatorChoiceToDb(int tubeCondition) {
+        EntityManager em = emf.createEntityManager();
+        //Сначала получаем последние результаты проверки по трбуе из базы
+        try {
+            BasaTube tubeOnDevice = em.find(BasaTube.class, tmn.getDetail(Devicess.ID_R4, Device.DEFAULT_VALUE));
+            EntityTransaction trans = em.getTransaction();
+            //Задаем новый статус трубы
+            tubeOnDevice.setStatus(tubeCondition);
+            //Сохраянем данные базу
+            try {
+                trans.begin();
+                em.merge(tubeOnDevice);
+                trans.commit();
+            } finally {
+                if (trans.isActive()) {
+                    trans.rollback();
+                }
+            }
+        } catch (Exception ex) {
+            simpleLogger.log(ex);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    private void updateTubesTable(String uiConditionLabel) {
+        //Отключаем кнопки выбора.
+        button_EnableVerdict.setEnabled(false);
+        button_RepeatDefectDetection.setEnabled(false);
+        //Обновляем список труб
+        ((DefaultTableModel) table_Shift_Tubes.getModel()).setValueAt("годная", 0, PIPE_STATE_COLUMN);
+    }
+
+    private void notifyController(int plcCommand) {
+        //Отправляем комманду контроллеру о состоянии трубы.
+        sendCmdToPLC(plcCommand);
+    }
 
     private void createlengthWiseGraph() {
         //Если есть данные для вывода отчета
@@ -5265,12 +5253,12 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel USD;
-    private javax.swing.JButton button_ApproveDefect;
     private javax.swing.JToggleButton button_Carriage_Pump_on;
     private javax.swing.JButton button_CreateNewCustomer;
     private javax.swing.JToggleButton button_Demagnetization_Coil_On;
     private javax.swing.JButton button_DropTubesCounter;
     private javax.swing.JToggleButton button_Dryer_On;
+    private javax.swing.JButton button_EnableVerdict;
     private javax.swing.JButton button_GetArchiveData;
     private javax.swing.JButton button_GetTotalReport;
     private javax.swing.JToggleButton button_Holder_1_Down;
@@ -5278,7 +5266,6 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private javax.swing.JToggleButton button_Holder_3_Down;
     private javax.swing.JToggleButton button_Magnetic_Coil_On;
     private javax.swing.JToggleButton button_Magnetic_Heads_Close;
-    private javax.swing.JButton button_MarkAsGood;
     private javax.swing.JToggleButton button_Pumping_Out_On;
     private javax.swing.JToggleButton button_Reloader_1_Up;
     private javax.swing.JToggleButton button_Reloader_2_Up;
@@ -5291,6 +5278,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private javax.swing.JToggleButton button_Wetter_Close;
     private javax.swing.JButton button_graphPerPageReport;
     private javax.swing.JCheckBox checkBox_GoodAutohandle;
+    private javax.swing.JComboBox<String> comboBox_TubeConditions;
     private javax.swing.JComboBox combobox_CustomerSelection;
     private javax.swing.JComboBox combobox_TubeOnDeviceResults;
     private javax.swing.JButton frBtSave;
