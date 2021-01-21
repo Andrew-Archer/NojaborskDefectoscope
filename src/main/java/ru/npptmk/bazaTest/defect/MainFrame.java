@@ -5082,7 +5082,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         button_EnableVerdict.setEnabled(false);
         button_RepeatDefectDetection.setEnabled(false);
         //Обновляем список труб
-        ((DefaultTableModel) table_Shift_Tubes.getModel()).setValueAt("годная", 0, PIPE_STATE_COLUMN);
+        ((DefaultTableModel) table_Shift_Tubes.getModel()).setValueAt(uiConditionLabel, 0, PIPE_STATE_COLUMN);
     }
 
     private void notifyController(int plcCommand) {
