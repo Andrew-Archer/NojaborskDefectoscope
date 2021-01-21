@@ -388,7 +388,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         panFact = new BazaPanelFactory(blockMD, blockUSK1, blockUSK2);
 
         //Подкоючаемся к PLC.
-        plc = new S7_1200("localhost", INPUTS, OUTPUTS, REGS, DWREGS);
+        plc = new S7_1200("192.168.0.240", INPUTS, OUTPUTS, REGS, DWREGS);
         try {
             plc.connect();
         } catch (Exception ex) {
