@@ -306,7 +306,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     server.start(null);
                 } catch (Throwable ex) {
                     Logger.getGlobal().log(Level.SEVERE, String.format("Can't start derby BD Server. %s", ex.getMessage()));
-                    JOptionPane.showMessageDialog(null, t("cantConnectToDB"), "Ошибка", ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, String.format(t("cantCreateDB"), ex.getMessage()), "Ошибка", ERROR_MESSAGE);
                     System.exit(1);
                 }
                 return 0;
@@ -323,7 +323,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             emf = Persistence.createEntityManagerFactory("DefectPU");
         }catch(Exception ex){
             Logger.getGlobal().log(Level.SEVERE, String.format("Can't establish connection with derby BD. %s", ex.getMessage()));
-            JOptionPane.showMessageDialog(null, t("cantConnectToDB"), "Ошибка", ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, String.format(t("cantConnectToDB"), ex.getMessage()), "Ошибка", ERROR_MESSAGE);
             System.exit(1);
         }
         //Запускаем менеджер смен.
