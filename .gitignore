@@ -49,3 +49,8 @@ test-run
 
 ###Custom###
 db/
+/bin/
+/.theia/
+/.settings/
+/.project
+/.classpath
