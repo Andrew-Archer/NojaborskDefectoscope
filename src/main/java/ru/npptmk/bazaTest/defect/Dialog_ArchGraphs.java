@@ -3,6 +3,7 @@ package ru.npptmk.bazaTest.defect;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.geom.Rectangle2D;
+import static java.lang.Math.toIntExact;
 import java.util.ArrayList;
 import java.util.List;
 import org.jfree.chart.ChartFactory;
@@ -15,6 +16,7 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import ru.npptmk.bazaTest.defect.Util.jasper_report.UNTK_500DataSourceGenerator;
 import ru.npptmk.bazaTest.defect.model.BasaTube;
 
 /*
@@ -93,9 +95,9 @@ public class Dialog_ArchGraphs extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void updateGraphs(BasaTube tube) {
+    public void updateGraphs(BasaTube tube, TubeType tubeType) {
         List<BazaDefectResults> results = tube.getTubeResults();
-        XYDataset mdDataSet = createMDDataset(tube);
+        XYDataset mdDataSet = createMDDataset(tube, tubeType);
         chartPanel.setChart(configureMDGraph(
                 mdDataSet,
                 "Магнитная дефектоскопия",
@@ -138,36 +140,38 @@ public class Dialog_ArchGraphs extends javax.swing.JDialog {
         this.setVisible(true);
     }
 
-    private XYDataset createMDDataset(BasaTube tube) {
+    private XYDataset createMDDataset(BasaTube tube, TubeType tubeType) {
         BazaMDResult basaResult = tube.getTubeResults().get(0).mdRes;
         XYSeriesCollection dataset = new XYSeriesCollection();
         //Массивы для хранения графика
         float[][] x = new float[8][];
         float[][] y = new float[8][];
-        //Лист для хранения графиков для каждого канала
-        List<XYSeries> serieses = new ArrayList<>();
         //Зполняем каждый из 8 каналов графика
         for (int i = 0; i < 8; i++) {
             //Создаем график для текущего канала
-            serieses.add(new XYSeries("Канал " + i));
-            //Добавляем в датасет ссылку на созданный график
-            dataset.addSeries(serieses.get(i));
+            XYSeries currentChanel = new XYSeries("Канал " + i);
+
             y[i] = new float[basaResult.getGraficLength(i)];
             x[i] = new float[basaResult.getGraficLength(i)];
             //Копируем график из результатов
             basaResult.getGrafic(i, x[i], y[i]);
             for (int j = 0; j < basaResult.getGraficLength(i); j++) {
                 //Добавляем точку в график текущего канала
-                serieses.get(i).add(x[i][j], y[i][j]);
+                currentChanel.add(x[i][j], y[i][j]);
             }
-
+            //Добавляем в датасет ссылку на созданный график
+            dataset.addSeries(currentChanel);
         }
         //Добавляем уровень сигнала, привышение которого считается дефектом.
-        //Создаем график для текущего канала
-        serieses.add(new XYSeries("Граница дефектов "));
-        serieses.get(8).add(0, basaResult.getThreshold(0));
-        serieses.get(8).add(tube.getLengthInMeters(), basaResult.getThreshold(0));
-        dataset.addSeries(serieses.get(8));
+        int[] magneticBorders = tubeType.getParamsMD().porog;
+        for (int i = 0; i < magneticBorders.length; i++) {
+            //Создаем график для текущего канала
+            XYSeries defectsLimit = new XYSeries("Граница дефектов " + i);
+            defectsLimit.add(0, magneticBorders[i]);
+            defectsLimit.add(tube.getLengthInMeters() * 1000, magneticBorders[i]);
+            dataset.addSeries(defectsLimit);
+        }
+
         return dataset;
     }
 
