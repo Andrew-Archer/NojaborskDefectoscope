@@ -181,21 +181,36 @@ public class Dialog_ArchGraphs extends javax.swing.JDialog {
         //Массивы для хранения графика
         float[][] y = new float[4][];
         float[][] x = new float[4][];
-        //Лист для хранения графиков для каждого канала
-        List<XYSeries> serieses = new ArrayList<>();
+
         for (int i = 0; i < 4; i++) {
             //Создаем график для текущего канала
-            serieses.add(new XYSeries("Канал " + i));
-            //Добавляем в датасет ссылку на созданный график
-            dataset.addSeries(serieses.get(i));
+            XYSeries currentChanel = new XYSeries("Канал " + i);
+
             y[i] = new float[thickRes.getThickGrafLength(i)];
             x[i] = new float[thickRes.getThickGrafLength(i)];
             thickRes.getThickGrafic(i + 4, x[i], y[i]);
             for (int j = 0; j < thickRes.getThickGrafLength(i); j++) {
                 //Добавляем точку в график текущего канала
-                serieses.get(i).add(x[i][j], y[i][j]);
+                currentChanel.add(x[i][j], y[i][j]);
+            }
+            //Добавляем в датасет ссылку на созданный график
+            dataset.addSeries(currentChanel);
+        }
+        //Задаем пороги толщин
+        float[] thickBorders = tube.getTubeResults().get(0).tbRes.getTubeThicks();
+        for (int i = 0; i < thickBorders.length; i++) {
+            //Если прого не равен 0
+            if (thickBorders[i] != 0) {
+                XYSeries defectsLimit = new XYSeries("Границы толщин" + i);
+                defectsLimit.add(0, thickBorders[i]);
+                defectsLimit.add(tube.getLengthInMeters() * 1000, thickBorders[i]);
+                dataset.addSeries(defectsLimit);
             }
         }
+        XYSeries defectsLimit = new XYSeries("Потеря аккустического контакта");
+        defectsLimit.add(0, 3.0);
+        defectsLimit.add(tube.getLengthInMeters() * 1000, 3.0);
+        dataset.addSeries(defectsLimit);
         return dataset;
     }
 
