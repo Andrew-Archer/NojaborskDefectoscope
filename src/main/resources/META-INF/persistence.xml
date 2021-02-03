@@ -9,7 +9,6 @@
     <class>ru.npptmk.bazaTest.defect.Shift</class>
     <class>ru.npptmk.bazaTest.defect.Event</class>
     <class>ru.npptmk.bazaTest.defect.model.Operator</class>
-    <class>ru.npptmk.bazaTest.defect.model.TubeType</class>
     <class>ru.npptmk.bazaTest.defect.model.Customer</class>
     <class>ru.npptmk.bazaTest.defect.model.BasaTube</class>
     <class>ru.npptmk.bazaTest.defect.model.Tuberesult</class>
