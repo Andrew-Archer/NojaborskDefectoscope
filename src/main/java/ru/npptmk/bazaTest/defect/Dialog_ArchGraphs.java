@@ -246,27 +246,30 @@ public class Dialog_ArchGraphs extends javax.swing.JDialog {
         //Массивы для хранения графика
         float[][] y = new float[6][];
         float[][] x = new float[6][];
-        //Лист для хранения графиков для каждого канала
-        List<XYSeries> serieses = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             //Создаем график для текущего канала
-            serieses.add(new XYSeries("Канал " + i));
-            //Добавляем в датасет ссылку на созданный график
-            dataset.addSeries(serieses.get(i));
+            XYSeries currentChannel = new XYSeries("Канал " + i);
+
             y[i] = new float[lengWiseRes.getGraficLength(i)];
             x[i] = new float[lengWiseRes.getGraficLength(i)];
             lengWiseRes.getGrafic(i, x[i], y[i]);
             for (int j = 0; j < lengWiseRes.getGraficLength(i); j++) {
                 //Добавляем точку в график текущего канала
-                serieses.get(i).add(x[i][j], y[i][j]);
+                currentChannel.add(x[i][j], y[i][j]);
             }
+            //Добавляем в датасет ссылку на созданный график
+            dataset.addSeries(currentChannel);
         }
+
         //Добавляем уровень сигнала, привышение которого считается дефектом.
         //Создаем график для текущего канала
-        serieses.add(new XYSeries("Граница дефектов "));
-        serieses.get(6).add(0, lengWiseRes.getThreshold(0));
-        serieses.get(6).add(tube.getLengthInMeters(), lengWiseRes.getThreshold(0));
-        dataset.addSeries(serieses.get(6));
+         BazaUSDResult basaUsdResult = tube.getTubeResults().get(0).usk1Res;
+        for (int i = 0; i < 6; i++) {
+        XYSeries defectsLimit = new XYSeries("Граница дефектов " + i);
+        defectsLimit.add(0, basaUsdResult.getThreshold(i));
+        defectsLimit.add(tube.getLengthInMeters() * 1000, basaUsdResult.getThreshold(i));
+        dataset.addSeries(defectsLimit);
+        }
         return dataset;
     }
 
