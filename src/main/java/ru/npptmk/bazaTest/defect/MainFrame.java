@@ -317,7 +317,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         try {
             emf = Persistence.createEntityManagerFactory("DefectPU");
         } catch (Exception ex) {
-            log.error("Can't establish connection with derby BD. %s", ex.getMessage());
+            log.error("Can't establish connection with derby BD.", ex);
             JOptionPane.showMessageDialog(null, String.format(t("cantConnectToDB"), ex.getMessage()), "Ошибка", ERROR_MESSAGE);
             System.exit(1);
         }
@@ -386,8 +386,13 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         plc = new S7_1200(PLC_IP, INPUTS, OUTPUTS, REGS, DWREGS);
         try {
             plc.connect();
+            if (plc == null){
+                log.error("Can't connect to PLC on IP [{}].", PLC_IP);
+                System.exit(-1);
+            }
         } catch (Exception ex) {
             log.error("Can't connect to PLC on IP [{}].", PLC_IP, ex);
+            System.exit(-1);
         }
         mFrm = this;
         initComponents();
@@ -485,6 +490,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             try {
                 adr = InetAddress.getByName(prm.conTrLoc);
             } catch (UnknownHostException ex) {
+                log.error("Can't get operator PC IP", ex);
             }
             if (adr != null) {
                 plc.setShortRegister("IP_1", adr.getAddress()[0]);
@@ -612,7 +618,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 }
                 if (jTable_ArchiveResults.getSelectedRow() != -1) {
                     log.debug("Pipe for creating results preview: {}", archResults.get(jTable_ArchiveResults.getSelectedRow()).getId());
-                    jDialog_ArchiveGraphs.updateGraphs(archResults.get(jTable_ArchiveResults.getSelectedRow()));
+                    BasaTube selectedPipe = archResults.get(jTable_ArchiveResults.getSelectedRow());
+                    jDialog_ArchiveGraphs.updateGraphs(selectedPipe, 
+                            ((UEParams) tmn.getParam(Devicess.ID_R4)).tubeTypes.get(toIntExact(selectedPipe.getTypeID()) - 1));
                 } else {
                     jDialog_ArchiveGraphs.setVisible(false);
                 }
@@ -777,7 +785,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     reportParamsGenerator.setSignalBorder(
                             t("chanelName") + (i + 1),
                             SENSOR_TYPES.LENGTHWISE,
-                            (double) tubeResults.usk1Res.getThreshold(mode)
+                            (double) tubeResults.usk1Res.getThreshold(i)
                     );
                 }
 
