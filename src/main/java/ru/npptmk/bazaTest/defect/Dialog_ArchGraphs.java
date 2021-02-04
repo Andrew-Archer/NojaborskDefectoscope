@@ -263,12 +263,12 @@ public class Dialog_ArchGraphs extends javax.swing.JDialog {
 
         //Добавляем уровень сигнала, привышение которого считается дефектом.
         //Создаем график для текущего канала
-         BazaUSDResult basaUsdResult = tube.getTubeResults().get(0).usk1Res;
+        BazaUSDResult basaUsdResult = tube.getTubeResults().get(0).usk1Res;
         for (int i = 0; i < 6; i++) {
-        XYSeries defectsLimit = new XYSeries("Граница дефектов " + i);
-        defectsLimit.add(0, basaUsdResult.getThreshold(i));
-        defectsLimit.add(tube.getLengthInMeters() * 1000, basaUsdResult.getThreshold(i));
-        dataset.addSeries(defectsLimit);
+            XYSeries defectsLimit = new XYSeries("Граница дефектов " + i);
+            defectsLimit.add(0, basaUsdResult.getThreshold(i));
+            defectsLimit.add(tube.getLengthInMeters() * 1000, basaUsdResult.getThreshold(i));
+            dataset.addSeries(defectsLimit);
         }
         return dataset;
     }
@@ -318,11 +318,20 @@ public class Dialog_ArchGraphs extends javax.swing.JDialog {
         }
         //Добавляем уровень сигнала, привышение которого считается дефектом.
         //Создаем график для текущего канала
-        /*serieses.add(new XYSeries("Граница дефектов "));
-        serieses.get(4).add(0, usk2.getThreshold(0));
-        serieses.get(4).add(tube.getLengthInMeters(), usk2.getThreshold(0));
-        dataset.addSeries(serieses.get(4));
-         */
+        BazaUSDResult basaUsd1Result = tube.getTubeResults().get(0).usk1Res;
+        BazaUSDResult basaUsd2Result = tube.getTubeResults().get(0).usk2Res;
+        for (int i = 6; i < 8; i++) {
+            XYSeries defectsLimit = new XYSeries("Граница дефектов " + i);
+            defectsLimit.add(0, basaUsd1Result.getThreshold(i));
+            defectsLimit.add(tube.getLengthInMeters() * 1000, basaUsd1Result.getThreshold(i));
+            dataset.addSeries(defectsLimit);
+        }
+        for (int i = 0; i < 4; i++) {
+            XYSeries defectsLimit = new XYSeries("Граница дефектов " + i);
+            defectsLimit.add(0, basaUsd2Result.getThreshold(i));
+            defectsLimit.add(tube.getLengthInMeters() * 1000, basaUsd2Result.getThreshold(i));
+            dataset.addSeries(defectsLimit);
+        }
         return dataset;
     }
 
@@ -467,7 +476,7 @@ public class Dialog_ArchGraphs extends javax.swing.JDialog {
         //Устанавливаем длину оси х
         plot.getDomainAxis().setRange(0, tubeLength / 100 * 100);
         //Устанавливаем длину оси y
-        plot.getRangeAxis().setRange(0, 100);
+        //plot.getRangeAxis().setRange(0, 100);
         return chart;
     }
 
