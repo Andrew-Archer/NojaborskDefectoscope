@@ -785,7 +785,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     reportParamsGenerator.setSignalBorder(
                             t("chanelName") + (i + 1),
                             SENSOR_TYPES.LENGTHWISE,
-                            (double) tubeResults.usk1Res.getThreshold(mode)
+                            (double) tubeResults.usk1Res.getThreshold(i)
                     );
                 }
 
