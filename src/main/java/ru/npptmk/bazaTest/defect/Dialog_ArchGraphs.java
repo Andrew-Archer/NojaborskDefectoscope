@@ -440,7 +440,7 @@ public class Dialog_ArchGraphs extends javax.swing.JDialog {
         //Устанавливаем длину оси х
         plot.getDomainAxis().setRange(0, tubeLength / 100 * 100);
         //Устанавливаем длину оси y
-        plot.getRangeAxis().setRange(0, 100);
+        //plot.getRangeAxis().setRange(0, 100);
         return chart;
     }
 
