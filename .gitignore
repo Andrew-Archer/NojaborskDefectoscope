@@ -54,3 +54,4 @@ db/
 /.settings/
 /.project
 /.classpath
+nbactions.xml
