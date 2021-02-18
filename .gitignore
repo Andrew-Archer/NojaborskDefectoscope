@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+*~lock*
 
 # Log file
 *.log
@@ -55,3 +56,4 @@ db/
 /.project
 /.classpath
 nbactions.xml
+/nbproject/
