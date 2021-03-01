@@ -6,6 +6,9 @@
 package ru.npptmk.bazaTest.defect;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import ru.npptmk.guiObjects.ITubeDataProvider;
 
 /**
@@ -36,7 +39,7 @@ public class BazaTubeResult implements Serializable, ITubeDataProvider {
         for (int i = 0; i < nch; i++) {
             defects[i] = drv.getDefects(i);
         }
-       
+
     }
 
     @Override
@@ -57,6 +60,16 @@ public class BazaTubeResult implements Serializable, ITubeDataProvider {
     @Override
     public float[] getDefects(int ch) {
         return defects[ch];
+    }
+
+    public List<Integer> getAllDefectsPositions() {
+        List<Integer> defectsPositions = new ArrayList<>();
+        for (float[] defectsPos : defects){
+            for (float defectPos : defectsPos){
+                defectsPositions.add(Math.round(defectPos * 1000));
+            }
+        }
+        return defectsPositions;
     }
 
     @Override

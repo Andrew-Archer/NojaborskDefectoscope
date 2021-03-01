@@ -7,10 +7,16 @@
         <Menu class="javax.swing.JMenu" name="jMenu1">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x41c;&#x435;&#x43d;&#x44e;"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Dialog" size="20" style="0"/>
+            </Property>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="tubeTypesMenu">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x422;&#x438;&#x43f;&#x44b; &#x442;&#x440;&#x443;&#x431;"/>
               </Properties>
               <Events>
@@ -19,6 +25,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuItem_Settings">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x41d;&#x430;&#x441;&#x442;&#x440;&#x43e;&#x439;&#x43a;&#x430;"/>
               </Properties>
               <Events>
@@ -27,6 +36,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="sortoscopeMenu">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x41d;&#x430;&#x441;&#x442;&#x440;&#x43e;&#x439;&#x43a;&#x430; &#x441;&#x43e;&#x440;&#x442;&#x43e;&#x441;&#x43a;&#x43e;&#x43f;&#x430;"/>
               </Properties>
               <Events>
@@ -35,6 +47,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem14">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x421;&#x43e;&#x445;&#x440;&#x430;&#x43d;&#x438;&#x442;&#x44c; &#x43d;&#x430;&#x441;&#x442;&#x440;&#x43e;&#x439;&#x43a;&#x438; &#x423;&#x417;&#x41a;  &#x438; &#x41c;&#x414;"/>
               </Properties>
               <Events>
@@ -43,6 +58,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuItem_EnableLogging">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x412;&#x43a;&#x43b;&#x44e;&#x447;&#x438;&#x442;&#x44c; &#x437;&#x430;&#x43f;&#x438;&#x441;&#x44c; &#x436;&#x443;&#x440;&#x43d;&#x430;&#x43b;&#x430; &#x434;&#x43b;&#x44f; &#x43e;&#x442;&#x43b;&#x430;&#x434;&#x43a;&#x438;"/>
               </Properties>
               <Events>
@@ -51,6 +69,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x412;&#x44b;&#x445;&#x43e;&#x434;"/>
               </Properties>
               <Events>
@@ -62,10 +83,16 @@
         <Menu class="javax.swing.JMenu" name="menu_Drivers">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x414;&#x440;&#x430;&#x439;&#x432;&#x435;&#x440;&#x44b;"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Dialog" size="20" style="0"/>
+            </Property>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x417;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
               </Properties>
               <Events>
@@ -74,6 +101,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x41e;&#x441;&#x442;&#x430;&#x43d;&#x43e;&#x432;&#x438;&#x442;&#x44c;"/>
               </Properties>
               <Events>
@@ -83,10 +113,16 @@
             <Menu class="javax.swing.JMenu" name="jMenu3">
               <Properties>
                 <Property name="text" type="java.lang.String" value="&#x41c;&#x414;"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem9">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="20" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x417;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
                   </Properties>
                   <Events>
@@ -95,6 +131,9 @@
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem10">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="20" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x41e;&#x441;&#x442;&#x430;&#x43d;&#x43e;&#x432;&#x438;&#x442;&#x44c;"/>
                   </Properties>
                   <Events>
@@ -106,10 +145,16 @@
             <Menu class="javax.swing.JMenu" name="jMenu4">
               <Properties>
                 <Property name="text" type="java.lang.String" value="&#x423;&#x417;&#x41a;"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem11">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="20" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x417;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
                   </Properties>
                   <Events>
@@ -118,6 +163,9 @@
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem12">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="20" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x41e;&#x441;&#x442;&#x430;&#x43d;&#x43e;&#x432;&#x438;&#x442;&#x44c;"/>
                   </Properties>
                   <Events>
@@ -131,10 +179,16 @@
         <Menu class="javax.swing.JMenu" name="jMenu2">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x434;&#x43a;&#x43b;&#x44e;&#x447;&#x435;&#x43d;&#x438;&#x435;"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Dialog" size="20" style="0"/>
+            </Property>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x422;&#x440;&#x430;&#x43d;&#x441;&#x43f;&#x43e;&#x440;&#x442;"/>
               </Properties>
               <Events>
@@ -143,6 +197,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem5">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x41c;&#x414;"/>
               </Properties>
               <Events>
@@ -151,6 +208,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem7">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x423;&#x417;&#x41a; 1"/>
               </Properties>
               <Events>
@@ -159,6 +219,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem8">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x423;&#x417;&#x41a; 2"/>
               </Properties>
               <Events>
@@ -170,10 +233,16 @@
         <Menu class="javax.swing.JMenu" name="jMenu5">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x413;&#x440;&#x430;&#x444;&#x438;&#x43a;&#x438;"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Dialog" size="20" style="0"/>
+            </Property>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menuItem_AddGraph">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x414;&#x43e;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44c; &#x433;&#x440;&#x430;&#x444;&#x438;&#x43a;"/>
               </Properties>
               <Events>
@@ -182,6 +251,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem16">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x421;&#x43e;&#x445;&#x440;&#x430;&#x43d;&#x438;&#x442;&#x44c; &#x43d;&#x430;&#x431;&#x43e;&#x440;"/>
               </Properties>
               <Events>
@@ -190,6 +262,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem17">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x421;&#x43c;&#x435;&#x43d;&#x438;&#x442;&#x44c; &#x43d;&#x430;&#x431;&#x43e;&#x440;"/>
               </Properties>
               <Events>
@@ -198,6 +273,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem18">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="20" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x423;&#x434;&#x430;&#x43b;&#x438;&#x442;&#x44c; &#x43d;&#x430;&#x431;&#x43e;&#x440;"/>
               </Properties>
               <Events>
@@ -215,9 +293,11 @@
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[797, 549]"/>
     </Property>
-    <Property name="resizable" type="boolean" value="false"/>
+    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[1280, 1024]"/>
+    </Property>
     <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[797, 549]"/>
+      <Dimension value="[1280, 1024]"/>
     </Property>
   </Properties>
   <SyntheticProperties>
@@ -240,21 +320,24 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="jTabbedPane1" min="-2" pref="797" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-          </Group>
+          <Component id="jTabbedPane1" alignment="0" pref="1280" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jTabbedPane1" min="-2" pref="514" max="-2" attributes="0"/>
+          <Component id="jTabbedPane1" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Dialog" size="20" style="0"/>
+        </Property>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[32767, 1000]"/>
+        </Property>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[750, 450]"/>
         </Property>
@@ -286,9 +369,9 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="pnTubeTbl" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnTubeTbl" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" pref="406" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" pref="683" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -297,10 +380,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="pnTubeTbl" min="-2" max="-2" attributes="0"/>
-                          <Component id="jScrollPane2" alignment="0" min="-2" pref="476" max="-2" attributes="0"/>
+                          <Component id="pnTubeTbl" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -318,106 +400,122 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jLabel2" alignment="0" min="-2" pref="367" max="-2" attributes="0"/>
-                                  <Component id="button_Shift" alignment="0" min="-2" pref="367" max="-2" attributes="0"/>
-                                  <Component id="combobox_TubeOnDeviceResults" alignment="0" min="-2" pref="367" max="-2" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Component id="label_TubeType" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="label_TybeTypeValue" min="-2" pref="299" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="label_Operator" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="label_OperatorValue" min="-2" pref="302" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="label_State" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="label_StateValue" min="-2" pref="278" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jScrollPane4" alignment="0" min="-2" pref="367" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="label_xCoordinate" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="label_xCoordinateValue" min="-2" pref="127" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="combobox_CustomerSelection" min="-2" pref="246" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="button_CreateNewCustomer" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="label_GoodTubesCount" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="label_GoodTubesCountValue" min="-2" pref="51" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="label_BadTubesCount" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="label_BadTubesCountValue" min="-2" pref="54" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="label_TotalTubesCount" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="label_TotalTubesCountValue" min="-2" pref="59" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                                      <Component id="button_DropTubesCounter" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="label_xCoordinate" max="32767" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="label_xCoordinateValue" min="-2" pref="117" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="label_Operator" alignment="0" min="-2" pref="92" max="-2" attributes="0"/>
+                                              <Component id="label_TubeType" alignment="0" min="-2" pref="98" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="label_OperatorValue" max="32767" attributes="0"/>
+                                              <Component id="label_TybeTypeValue" max="32767" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="label_State" min="-2" pref="122" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="label_StateValue" max="32767" attributes="0"/>
+                                      </Group>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="button_RepeatDefectDetection" min="-2" pref="103" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                                  <Component id="button_EnableVerdict" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="button_Shift" alignment="1" max="32767" attributes="0"/>
+                                      <Component id="combobox_TubeOnDeviceResults" alignment="1" max="32767" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="1" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <Component id="button_RepeatDefectDetection" min="-2" pref="149" max="-2" attributes="0"/>
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                  <Component id="button_EnableVerdict" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="comboBox_TubeConditions" min="-2" pref="119" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                                                  <Component id="checkBox_GoodAutohandle" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" attributes="0">
+                                                  <Component id="label_GoodTubesCount" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="label_GoodTubesCountValue" min="-2" pref="51" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="label_BadTubesCount" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="label_BadTubesCountValue" min="-2" pref="54" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="label_TotalTubesCount" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="label_TotalTubesCountValue" min="-2" pref="59" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                                                  <Component id="button_DropTubesCounter" min="-2" pref="110" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <EmptySpace min="0" pref="92" max="32767" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="combobox_CustomerSelection" max="32767" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="button_CreateNewCustomer" min="-2" pref="232" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                              <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="comboBox_TubeConditions" min="-2" pref="119" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="checkBox_GoodAutohandle" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane4" max="32767" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="label_StateValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="label_State" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="label_xCoordinateValue" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
-                              <Component id="label_xCoordinate" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="label_State" min="-2" max="-2" attributes="0"/>
+                              <Component id="label_StateValue" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="label_Operator" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="label_OperatorValue" alignment="0" min="-2" pref="18" max="-2" attributes="0"/>
+                              <Component id="label_xCoordinate" min="-2" max="-2" attributes="0"/>
+                              <Component id="label_xCoordinateValue" min="-2" pref="26" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="label_TubeType" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="label_TybeTypeValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="label_Operator" max="32767" attributes="0"/>
+                              <Component id="label_OperatorValue" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="label_TubeType" min="-2" max="-2" attributes="0"/>
+                              <Component id="label_TybeTypeValue" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="combobox_CustomerSelection" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="button_CreateNewCustomer" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="combobox_TubeOnDeviceResults" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="button_Shift" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane4" min="-2" pref="190" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jScrollPane4" min="-2" pref="530" max="-2" attributes="0"/>
+                          <EmptySpace pref="96" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="label_GoodTubesCount" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="label_GoodTubesCountValue" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -427,9 +525,9 @@
                               <Component id="label_TotalTubesCountValue" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="button_DropTubesCounter" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="checkBox_GoodAutohandle" min="-2" pref="26" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="checkBox_GoodAutohandle" alignment="1" min="-2" pref="34" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="button_RepeatDefectDetection" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="button_EnableVerdict" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -443,6 +541,9 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="label_StateValue">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value=" "/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -451,10 +552,22 @@
                         </LineBorder>
                       </Border>
                     </Property>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_xCoordinateValue">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="0"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -464,13 +577,13 @@
                       </Border>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[127, 18]"/>
+                      <Dimension value="[10, 26]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[127, 18]"/>
+                      <Dimension value="[10, 26]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[127, 18]"/>
+                      <Dimension value="[10, 26]"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -484,7 +597,7 @@
                     <Component class="javax.swing.JTable" name="table_Shift_Tubes">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Dialog" size="10" style="0"/>
+                          <Font name="Dialog" size="18" style="0"/>
                         </Property>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                           <Table columnCount="6" rowCount="0">
@@ -550,6 +663,15 @@
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
                     </Property>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="combobox_TubeOnDeviceResultsActionPerformed"/>
@@ -557,23 +679,71 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel2">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="horizontalAlignment" type="int" value="0"/>
                     <Property name="text" type="java.lang.String" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a; &#x43f;&#x440;&#x43e;&#x432;&#x435;&#x440;&#x435;&#x43d;&#x43d;&#x44b;&#x445; &#x442;&#x440;&#x443;&#x431; &#x437;&#x430; &#x441;&#x43c;&#x435;&#x43d;&#x443;"/>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_xCoordinate">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43e;&#x440;&#x434;&#x438;&#x43d;&#x430;&#x442;&#x430; &#x43f;&#x435;&#x440;&#x435;&#x434;&#x43d;&#x435;&#x433;&#x43e; &#x43a;&#x440;&#x430;&#x44f; &#x442;&#x440;&#x443;&#x431;&#x44b; &#x432; &#x43c;&#x43c;:"/>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_State">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x412;&#x44b;&#x43f;&#x43e;&#x43b;&#x43d;&#x44f;&#x435;&#x442;&#x441;&#x44f;:"/>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JButton" name="button_Shift">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x41a;&#x43d;&#x43e;&#x43f;&#x43a;&#x430; &#x43d;&#x430;&#x447;&#x430;&#x43b;&#x430;/&#x437;&#x430;&#x432;&#x435;&#x440;&#x448;&#x435;&#x43d;&#x438;&#x44f; &#x441;&#x43c;&#x435;&#x43d;&#x44b;"/>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button_ShiftActionPerformed"/>
@@ -581,11 +751,20 @@
                 </Component>
                 <Component class="javax.swing.JComboBox" name="combobox_CustomerSelection">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[148, 25]"/>
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
                     </Property>
                   </Properties>
                   <AuxValues>
@@ -595,11 +774,20 @@
                 <Component class="javax.swing.JButton" name="button_CreateNewCustomer">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="0"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&#x41d;&#x43e;&#x432;&#x44b;&#x439; &#x437;&#x430;&#x43a;&#x430;&#x437;&#x447;&#x438;&#x43a;"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                       <Insets value="[2, 0, 2, 0]"/>
+                    </Property>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -608,11 +796,26 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_Operator">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x41e;&#x43f;&#x435;&#x440;&#x430;&#x442;&#x43e;&#x440;:"/>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_OperatorValue">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                         <LineBorder>
@@ -621,23 +824,38 @@
                       </Border>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[285, 18]"/>
+                      <Dimension value="[10, 26]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[285, 18]"/>
+                      <Dimension value="[10, 26]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[285, 18]"/>
+                      <Dimension value="[10, 26]"/>
                     </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_TubeType">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x422;&#x438;&#x43f; &#x442;&#x440;&#x443;&#x431;&#x44b;:"/>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[10, 26]"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_TybeTypeValue">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                         <LineBorder>
@@ -646,18 +864,21 @@
                       </Border>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[285, 18]"/>
+                      <Dimension value="[10, 26]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[285, 18]"/>
+                      <Dimension value="[10, 26]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[285, 18]"/>
+                      <Dimension value="[10, 26]"/>
                     </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JButton" name="button_RepeatDefectDetection">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x41f;&#x435;&#x440;&#x435;&#x43f;&#x440;&#x43e;&#x432;&#x435;&#x440;&#x438;&#x442;&#x44c;"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
@@ -670,11 +891,17 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_GoodTubesCount">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x413;&#x43e;&#x434;&#x43d;&#x44b;&#x445;:"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_GoodTubesCountValue">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="0"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -687,11 +914,17 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_BadTubesCount">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x411;&#x440;&#x430;&#x43a;:"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_BadTubesCountValue">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="0"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -704,11 +937,17 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_TotalTubesCount">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x418;&#x442;&#x43e;&#x433;&#x43e;:"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="label_TotalTubesCountValue">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="0"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -721,6 +960,9 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="button_DropTubesCounter">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x421;&#x431;&#x440;&#x43e;&#x441;"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                       <Insets value="[2, 2, 2, 2]"/>
@@ -734,6 +976,9 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="button_EnableVerdict">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x43c;&#x435;&#x442;&#x438;&#x442;&#x44c;"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
@@ -743,6 +988,9 @@
                 </Component>
                 <Component class="javax.swing.JComboBox" name="comboBox_TubeConditions">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="4">
                         <StringItem index="0" value="&#x413;&#x43e;&#x434;&#x43d;&#x430;&#x44f;"/>
@@ -799,8 +1047,7 @@
                           <Component id="pnNastr" min="-2" pref="417" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" min="-2" pref="354" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="840" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -809,12 +1056,11 @@
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="pnNastr" min="-2" pref="442" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="pnNastr" pref="938" max="32767" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="frBtSave" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -861,6 +1107,9 @@
             </Container>
             <Component class="javax.swing.JButton" name="frBtSave">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x421;&#x43e;&#x445;&#x440;&#x430;&#x43d;&#x438;&#x442;&#x44c;"/>
               </Properties>
               <Events>
@@ -884,20 +1133,14 @@
                   <Group type="102" attributes="0">
                       <Component id="pnNastrUSK" min="-2" pref="450" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane3" min="-2" pref="339" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPane3" pref="819" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jScrollPane3" pref="478" max="32767" attributes="0"/>
-                          <Component id="pnNastrUSK" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="pnNastrUSK" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" alignment="0" pref="996" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -971,21 +1214,21 @@
                       <Component id="jPanel_Magnetic" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel_Ultrasonic" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="4" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="jPanel_UnitFigure" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jPanel_UnitFigure" pref="1275" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jPanel_Magnetic" min="-2" max="-2" attributes="0"/>
                           <Component id="jPanel_Tansport" min="-2" max="-2" attributes="0"/>
-                          <Component id="jPanel_Ultrasonic" min="-2" max="-2" attributes="0"/>
+                          <Component id="jPanel_Magnetic" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jPanel_Ultrasonic" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="41" max="32767" attributes="0"/>
-                      <Component id="jPanel_UnitFigure" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="jPanel_UnitFigure" min="-2" pref="637" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -996,13 +1239,16 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="&lt;HTML&gt;&#x41c;&#x410;&#x413;&#x41d;&#x418;&#x422;&#x41d;&#x410;&#x42f; &#x414;&#x415;&#x424;&#x415;&#x41a;&#x422;&#x41e;&#x421;&#x41a;&#x41e;&#x41f;&#x418;&#x42f;&lt;/HTML&gt;">
+                    <TitledBorder title="&lt;HTML&gt;&#x422;&#x420;&#x410;&#x41d;&#x421;&#x41f;&#x41e;&#x420;&#x422;&lt;/HTML&gt;">
                       <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                         <LineBorder/>
                       </Border>
-                      <Font PropertyName="font" name="Dialog" size="10" style="1"/>
+                      <Font PropertyName="font" name="Dialog" size="18" style="0"/>
                     </TitledBorder>
                   </Border>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="Magnetic" noResource="true"/>
               </Properties>
@@ -1011,7 +1257,7 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="button_Magnetic_Heads_Close" max="32767" attributes="0"/>
-                      <Component id="button_Demagnetization_Coil_On" alignment="0" pref="239" max="32767" attributes="0"/>
+                      <Component id="button_Demagnetization_Coil_On" alignment="0" pref="337" max="32767" attributes="0"/>
                       <Component id="button_Magnetic_Coil_On" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
@@ -1031,7 +1277,7 @@
                 <Component class="javax.swing.JToggleButton" name="button_Magnetic_Heads_Close">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&lt;CENTER&gt;&#x414;&#x410;&#x422;&#x427;&#x418;&#x41a;&#x418; &#x41c;&#x414; &#x421;&#x412;&#x415;&#x421;&#x422;&#x418;&lt;/CENTER&gt;&lt;/HTML&gt;"/>
                     <Property name="name" type="java.lang.String" value="Magnetic_Heads_Close" noResource="true"/>
@@ -1043,7 +1289,7 @@
                 <Component class="javax.swing.JToggleButton" name="button_Demagnetization_Coil_On">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x420;&#x410;&#x417;&#x41c;&#x410;&#x413;&#x41d;&#x418;&#x427;&#x418;&#x412;&#x410;&#x41d;&#x418;&#x415; &#x412;&#x41a;&#x41b;&#x42e;&#x427;&#x418;&#x422;&#x42c;&lt;/HTML&gt;"/>
                     <Property name="name" type="java.lang.String" value="Demagnetization_Coil_On" noResource="true"/>
@@ -1055,7 +1301,7 @@
                 <Component class="javax.swing.JToggleButton" name="button_Magnetic_Coil_On">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x41d;&#x410;&#x41c;&#x410;&#x413;&#x41d;&#x418;&#x427;&#x418;&#x412;&#x410;&#x41d;&#x418;&#x415; &#x412;&#x41a;&#x41b;&#x42e;&#x427;&#x418;&#x422;&#x42c;&lt;/HTML&gt;"/>
                     <Property name="name" type="java.lang.String" value="Magnetic_Coil_On" noResource="true"/>
@@ -1070,13 +1316,16 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="&#x423;&#x427;&#x410;&#x421;&#x422;&#x41e;&#x41a; &#x423;&#x41b;&#x42c;&#x422;&#x420;&#x410;&#x417;&#x412;&#x423;&#x41a;&#x41e;&#x412;&#x41e;&#x419; &#x414;&#x415;&#x424;&#x415;&#x41a;&#x422;&#x41e;&#x421;&#x41a;&#x41e;&#x41f;&#x418;&#x418;">
+                    <TitledBorder title="&lt;HTML&gt;&#x422;&#x420;&#x410;&#x41d;&#x421;&#x41f;&#x41e;&#x420;&#x422;&lt;/HTML&gt;">
                       <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                         <LineBorder/>
                       </Border>
-                      <Font PropertyName="font" name="Dialog" size="10" style="1"/>
+                      <Font PropertyName="font" name="Dialog" size="18" style="0"/>
                     </TitledBorder>
                   </Border>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="Ultrasonic" noResource="true"/>
               </Properties>
@@ -1085,7 +1334,7 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="button_Wetter_Close" max="32767" attributes="0"/>
-                      <Component id="button_Pumping_Out_On" alignment="0" pref="239" max="32767" attributes="0"/>
+                      <Component id="button_Pumping_Out_On" alignment="0" pref="328" max="32767" attributes="0"/>
                       <Component id="button_USD_Carriage_Up" alignment="0" max="32767" attributes="0"/>
                       <Component id="button_Dryer_On" alignment="0" max="32767" attributes="0"/>
                       <Component id="button_Carriage_Pump_on" alignment="0" max="32767" attributes="0"/>
@@ -1111,7 +1360,7 @@
                 <Component class="javax.swing.JToggleButton" name="button_Wetter_Close">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x411;&#x41b;&#x41e;&#x41a; &#x421;&#x41c;&#x410;&#x427;&#x418;&#x412;&#x410;&#x41d;&#x418;&#x42f; &#x421;&#x416;&#x410;&#x422;&#x42c;&lt;/HTML&gt;"/>
                     <Property name="name" type="java.lang.String" value="Wetter_Close" noResource="true"/>
@@ -1123,7 +1372,7 @@
                 <Component class="javax.swing.JToggleButton" name="button_Pumping_Out_On">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x41d;&#x410;&#x421;&#x41e;&#x421; &#x41e;&#x422;&#x41a;&#x410;&#x427;&#x41a;&#x418; &#x412;&#x41a;&#x41b;&#x42e;&#x427;&#x418;&#x422;&#x42c;&lt;/HTML&gt;"/>
                     <Property name="name" type="java.lang.String" value="Pumping_Out_On" noResource="true"/>
@@ -1135,7 +1384,7 @@
                 <Component class="javax.swing.JToggleButton" name="button_USD_Carriage_Up">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x41a;&#x410;&#x420;&#x415;&#x422;&#x41a;&#x410; &#x423;&#x417;&#x41a; &#x41f;&#x41e;&#x414;&#x41d;&#x42f;&#x422;&#x42c;&lt;/HTML&gt;"/>
                     <Property name="name" type="java.lang.String" value="USD_Carriage_Up" noResource="true"/>
@@ -1147,7 +1396,7 @@
                 <Component class="javax.swing.JToggleButton" name="button_Dryer_On">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x411;&#x41b;&#x41e;&#x41a; &#x41e;&#x421;&#x423;&#x428;&#x41a;&#x418; &#x412;&#x41a;&#x41b;&#x42e;&#x427;&#x418;&#x422;&#x42c;&lt;/HTML&gt;"/>
                     <Property name="name" type="java.lang.String" value="Dryer_On" noResource="true"/>
@@ -1159,7 +1408,7 @@
                 <Component class="javax.swing.JToggleButton" name="button_Carriage_Pump_on">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x41f;&#x41e;&#x414;&#x410;&#x427;&#x410; &#x412;&#x41e;&#x414;&#x42b; &#x412;&#x41a;&#x41b;&#x42e;&#x427;&#x418;&#x422;&#x42c;&lt;/HTML&gt;"/>
                     <Property name="name" type="java.lang.String" value="Carriage_Pump_on" noResource="true"/>
@@ -1178,8 +1427,12 @@
                       <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                         <LineBorder/>
                       </Border>
+                      <Font PropertyName="font" name="Dialog" size="18" style="0"/>
                     </TitledBorder>
                   </Border>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="Transport" noResource="true"/>
               </Properties>
@@ -1222,7 +1475,7 @@
                           <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                             <LineBorder/>
                           </Border>
-                          <Font PropertyName="font" name="Dialog" size="10" style="1"/>
+                          <Font PropertyName="font" name="Dialog" size="18" style="0"/>
                         </TitledBorder>
                       </Border>
                     </Property>
@@ -1232,11 +1485,11 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="button_Rollgang_REV" min="-2" pref="82" max="-2" attributes="0"/>
+                              <Component id="button_Rollgang_REV" min="-2" pref="95" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="button_Stop_Rollgang" pref="88" max="32767" attributes="0"/>
+                              <Component id="button_Stop_Rollgang" min="-2" pref="110" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="button_Rollgang_FWD" min="-2" max="-2" attributes="0"/>
+                              <Component id="button_Rollgang_FWD" pref="115" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1257,12 +1510,13 @@
                     <Component class="javax.swing.JToggleButton" name="button_Rollgang_REV">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Dialog" size="10" style="1"/>
+                          <Font name="Dialog" size="18" style="0"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x41d;&#x410;&#x417;&#x410;&#x414;&lt;/HTML&gt;"/>
+                        <Property name="horizontalTextPosition" type="int" value="0"/>
                         <Property name="name" type="java.lang.String" value="Rollgang_REV" noResource="true"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[76, 24]"/>
+                          <Dimension value="[76, 34]"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -1272,13 +1526,17 @@
                     <Component class="javax.swing.JToggleButton" name="button_Rollgang_FWD">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Dialog" size="10" style="1"/>
+                          <Font name="Dialog" size="18" style="0"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x412;&#x41f;&#x415;&#x420;&#x415;&#x414;&lt;/HTML&gt;"/>
+                        <Property name="horizontalTextPosition" type="int" value="0"/>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[76, 24]"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="Rollgang_FWD" noResource="true"/>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[76, 34]"/>
+                        </Property>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button_Rollgang_FWDActionPerformed"/>
@@ -1286,7 +1544,11 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="button_Stop_Rollgang">
                       <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Dialog" size="18" style="0"/>
+                        </Property>
                         <Property name="text" type="java.lang.String" value="&#x421;&#x422;&#x41e;&#x41f;"/>
+                        <Property name="horizontalTextPosition" type="int" value="0"/>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[67, 24]"/>
                         </Property>
@@ -1294,7 +1556,7 @@
                           <Dimension value="[67, 24]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[76, 24]"/>
+                          <Dimension value="[76, 34]"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -1306,7 +1568,7 @@
                 <Component class="javax.swing.JToggleButton" name="button_Reloader_1_Up">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x41f;&#x415;&#x420;&#x415;&#x41a;&#x41b;&#x410;&#x414;&#x427;&#x418;&#x41a; 1 &#x41f;&#x41e;&#x414;&#x41d;&#x42f;&#x422;&#x42c;&lt;/HTML&gt;"/>
                     <Property name="name" type="java.lang.String" value="Reloader_1_Up" noResource="true"/>
@@ -1318,7 +1580,7 @@
                 <Component class="javax.swing.JToggleButton" name="button_Holder_1_Down">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x41f;&#x420;&#x418;&#x416;&#x418;&#x41c; 1 &#x41e;&#x41f;&#x423;&#x421;&#x422;&#x418;&#x422;&#x42c;&lt;/HTML&gt;"/>
                     <Property name="name" type="java.lang.String" value="Holder_1_Down" noResource="true"/>
@@ -1330,7 +1592,7 @@
                 <Component class="javax.swing.JToggleButton" name="button_Holder_2_Down">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x41f;&#x420;&#x418;&#x416;&#x418;&#x41c; 2 &#x41e;&#x41f;&#x423;&#x421;&#x422;&#x418;&#x422;&#x42c;&lt;/HTML&gt;"/>
                     <Property name="name" type="java.lang.String" value="Holder_2_Down" noResource="true"/>
@@ -1342,7 +1604,7 @@
                 <Component class="javax.swing.JToggleButton" name="button_Holder_3_Down">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x41f;&#x420;&#x418;&#x416;&#x418;&#x41c; 3 &#x41e;&#x41f;&#x423;&#x421;&#x422;&#x418;&#x422;&#x42c;&lt;/HTML&gt;"/>
                     <Property name="name" type="java.lang.String" value="Holder_3_Down" noResource="true"/>
@@ -1354,7 +1616,7 @@
                 <Component class="javax.swing.JToggleButton" name="button_Reloader_2_Up">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Dialog" size="10" style="1"/>
+                      <Font name="Dialog" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&#x41f;&#x415;&#x420;&#x415;&#x41a;&#x41b;&#x410;&#x414;&#x427;&#x418;&#x41a; 2 &#x41f;&#x41e;&#x414;&#x41d;&#x42f;&#x422;&#x42c;&lt;/HTML&gt;"/>
                     <Property name="name" type="java.lang.String" value="Reloader_2_Up" noResource="true"/>
@@ -1369,7 +1631,9 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="&#x421;&#x445;&#x435;&#x43c;&#x430; &#x443;&#x441;&#x442;&#x430;&#x43d;&#x43e;&#x432;&#x43a;&#x438;"/>
+                    <TitledBorder title="&#x421;&#x425;&#x415;&#x41c;&#x410; &#x423;&#x421;&#x422;&#x410;&#x41d;&#x41e;&#x412;&#x41a;&#x418;">
+                      <Font PropertyName="font" name="Dialog" size="18" style="0"/>
+                    </TitledBorder>
                   </Border>
                 </Property>
                 <Property name="name" type="java.lang.String" value="UnitFigure" noResource="true"/>
@@ -1731,7 +1995,7 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="10" y="10" width="770" height="160"/>
+                      <AbsoluteConstraints x="10" y="30" width="1260" height="160"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -1752,39 +2016,32 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="label_ErrorState" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="label_ErrorStateValue" min="-2" pref="560" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="235" max="-2" attributes="0"/>
-                              <Component id="label_ErrorTabCaption" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="scrollPane_ForErrorsTable" min="-2" pref="768" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="label_ErrorState" min="-2" pref="303" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="label_ErrorStateValue" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="scrollPane_ForErrorsTable" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="366" max="-2" attributes="0"/>
+                      <Component id="label_ErrorTabCaption" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="444" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                       <Component id="label_ErrorTabCaption" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="label_ErrorState" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="label_ErrorStateValue" alignment="3" min="-2" pref="16" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="label_ErrorState" max="32767" attributes="0"/>
+                          <Component id="label_ErrorStateValue" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="scrollPane_ForErrorsTable" min="-2" pref="427" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="scrollPane_ForErrorsTable" pref="922" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1825,16 +2082,33 @@
             </Container>
             <Component class="javax.swing.JLabel" name="label_ErrorTabCaption">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x421;&#x41f;&#x418;&#x421;&#x41e;&#x41a; &#x41e;&#x428;&#x418;&#x411;&#x41e;&#x41a; &#x412;&#x41e;&#x417;&#x41d;&#x418;&#x41a;&#x428;&#x418;&#x425; &#x412; &#x420;&#x415;&#x416;&#x418;&#x41c;&#x415; &#x420;&#x410;&#x411;&#x41e;&#x422;&#x42b;"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_ErrorState">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x42d;&#x442;&#x430;&#x43f; &#x43d;&#x430; &#x43a;&#x43e;&#x442;&#x43e;&#x440;&#x43e;&#x43c; &#x432;&#x43e;&#x437;&#x43d;&#x438;&#x43a;&#x43b;&#x430; &#x43e;&#x448;&#x438;&#x431;&#x43a;&#x430;:"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[20, 26]"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_ErrorStateValue">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[20, 26]"/>
+                </Property>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>
@@ -1858,76 +2132,80 @@
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
-                      <Component id="jScrollPane5" min="-2" pref="777" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jScrollPane6" min="-2" pref="300" max="-2" attributes="0"/>
-                                  <Component id="jLabel_DatePickerTitle" max="32767" attributes="0"/>
+                              <Component id="jLabel_DatePickerTitle" pref="502" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="761" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="label_TubeTotall" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="label_TotalTubesValue" min="-2" pref="100" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="label_TotalLength" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="label_TotalTubesLengthValue" min="-2" pref="100" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="label_BadTubes" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="label_BadTubesValue" min="-2" pref="100" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <Component id="label_GoodTubesLength" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="label_GoodTubesLengthValue" min="-2" pref="100" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <Component id="label_BadTubesLength" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="label_BadTubesLengthValue" min="-2" pref="100" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jCheckBox_CalculateSideThickness" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="label_AverageTubeControllTime" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="label_AverageTubeControllTimeValue" min="-2" pref="61" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="label_GoodTubes" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="label_GoodTubesValue" min="-2" pref="100" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="292" max="-2" attributes="0"/>
+                                      <Component id="jLabel_ReportCreationDuration" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jLabel_ReportCreationDurationValue" min="-2" pref="88" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="jScrollPane5" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="jScrollPane6" min="-2" pref="506" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="button_GetArchiveData" min="-2" pref="141" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="button_graphPerPageReport" min="-2" pref="309" max="-2" attributes="0"/>
-                                  <Component id="button_GetTotalReport" min="-2" pref="309" max="-2" attributes="0"/>
                                   <Component id="jButton_AllGraphsOnOnePage" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="label_TubeTotall" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="label_TotalTubesValue" min="-2" pref="100" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="label_TotalLength" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="label_TotalTubesLengthValue" min="-2" pref="100" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="label_BadTubes" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="label_BadTubesValue" min="-2" pref="100" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="label_GoodTubesLength" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="label_GoodTubesLengthValue" min="-2" pref="100" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="label_BadTubesLength" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="label_BadTubesLengthValue" min="-2" pref="100" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                      </Group>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jCheckBox_CalculateSideThickness" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="label_AverageTubeControllTime" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="label_AverageTubeControllTimeValue" min="-2" pref="61" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="label_GoodTubes" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="label_GoodTubesValue" min="-2" pref="100" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="292" max="-2" attributes="0"/>
-                                  <Component id="jLabel_ReportCreationDuration" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jLabel_ReportCreationDurationValue" min="-2" pref="88" max="-2" attributes="0"/>
+                                  <Component id="button_GetTotalReport" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="button_graphPerPageReport" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -1984,8 +2262,11 @@
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="button_GetArchiveData" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jLabel_DatePickerTitle" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="434" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jScrollPane6" pref="0" max="32767" attributes="0"/>
+                          <Component id="button_GetArchiveData" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jButton_AllGraphsOnOnePage" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -1993,14 +2274,8 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="button_graphPerPageReport" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="jLabel_DatePickerTitle" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jScrollPane6" min="-2" pref="55" max="-2" attributes="0"/>
-                          </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -2008,6 +2283,9 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="button_GetArchiveData">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&lt;LEFT&gt;&#x41f;&#x43e;&#x43b;&#x443;&#x447;&#x438;&#x442;&#x44c; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x435; &#x438;&#x437; &#x430;&#x440;&#x445;&#x438;&#x432;&#x430;&lt;/LEFT&gt;&lt;/HTML&gt;"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[186, 54]"/>
@@ -2024,11 +2302,19 @@
               </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane5">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
+              </Properties>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
                 <Component class="javax.swing.JTable" name="jTable_ArchiveResults">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="9" rowCount="0">
                         <Column editable="false" title="&#x2116; &#x442;&#x440;&#x443;&#x431;&#x44b;" type="java.lang.Long"/>
@@ -2091,6 +2377,7 @@
                         </Column>
                       </TableColumnModel>
                     </Property>
+                    <Property name="rowHeight" type="int" value="28"/>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
@@ -2110,7 +2397,7 @@
             <Component class="javax.swing.JButton" name="button_GetTotalReport">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Dialog" size="10" style="1"/>
+                  <Font name="Dialog" size="18" style="0"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&lt;HTML&gt;&lt;LEFT&gt;&#x412;&#x44b;&#x432;&#x435;&#x441;&#x442;&#x438; &#x43e;&#x431;&#x449;&#x438;&#x439; &#x43e;&#x442;&#x447;&#x435;&#x442;&lt;/LEFT&gt;&lt;/HTML&gt;"/>
                 <Property name="horizontalTextPosition" type="int" value="2"/>
@@ -2132,7 +2419,7 @@
             <Component class="javax.swing.JButton" name="button_graphPerPageReport">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Dialog" size="10" style="1"/>
+                  <Font name="Dialog" size="18" style="0"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x412;&#x44b;&#x432;&#x435;&#x441;&#x442;&#x438; &#x43a;&#x430;&#x436;&#x434;&#x44b;&#x439; &#x433;&#x440;&#x430;&#x444;&#x438;&#x43a; &#x43d;&#x430; &#x43e;&#x442;&#x434;&#x435;&#x43b;&#x44c;&#x43d;&#x43e;&#x439; &#x441;&#x442;&#x440;&#x430;&#x43d;&#x438;&#x446;&#x435;"/>
               </Properties>
@@ -2142,52 +2429,108 @@
             </Component>
             <Component class="javax.swing.JLabel" name="label_TubeTotall">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x412;&#x441;&#x435;&#x433;&#x43e; &#x442;&#x440;&#x443;&#x431; &#x43f;&#x440;&#x43e;&#x43a;&#x43e;&#x43d;&#x442;&#x440;&#x43e;&#x43b;&#x43b;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x43e;:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_TotalTubesValue">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_TotalLength">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x41e;&#x431;&#x449;&#x435;&#x439; &#x434;&#x43b;&#x438;&#x43d;&#x43e;&#x439;:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_TotalTubesLengthValue">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_GoodTubes">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x412;&#x441;&#x435;&#x433;&#x43e; &#x442;&#x440;&#x443;&#x431; &#x433;&#x43e;&#x434;&#x43d;&#x44b;&#x445;:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_GoodTubesValue">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_GoodTubesLength">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x41e;&#x431;&#x449;&#x435;&#x439; &#x434;&#x43b;&#x438;&#x43d;&#x43e;&#x439;:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_GoodTubesLengthValue">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_BadTubes">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x412;&#x441;&#x435;&#x433;&#x43e; &#x437;&#x430;&#x431;&#x440;&#x430;&#x43a;&#x43e;&#x432;&#x430;&#x43d;&#x43e;:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_BadTubesValue">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_BadTubesLength">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x41e;&#x431;&#x449;&#x435;&#x439; &#x434;&#x43b;&#x438;&#x43d;&#x43e;&#x439;:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_BadTubesLengthValue">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_AverageTubeControllTime">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x421;&#x440;&#x435;&#x434;&#x43d;&#x435;&#x435; &#x432;&#x440;&#x435;&#x43c;&#x44f; &#x43a;&#x43e;&#x43d;&#x442;&#x440;&#x43e;&#x43b;&#x44f; 1 &#x442;&#x440;&#x443;&#x431;&#x44b;:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_AverageTubeControllTimeValue">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
+              </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane6">
               <AuxValues>
@@ -2197,13 +2540,20 @@
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
                 <Component class="ru.npptmk.bazaTest.defect.TableDatePicker" name="table_DatePicker">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="18" style="0"/>
+                    </Property>
+                    <Property name="rowHeight" type="int" value="28"/>
+                    <Property name="rowSelectionAllowed" type="boolean" value="false"/>
+                  </Properties>
                 </Component>
               </SubComponents>
             </Container>
             <Component class="javax.swing.JButton" name="jButton_AllGraphsOnOnePage">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Dialog" size="10" style="1"/>
+                  <Font name="Dialog" size="18" style="0"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x412;&#x44b;&#x432;&#x435;&#x441;&#x442;&#x438; &#x433;&#x440;&#x430;&#x444;&#x438;&#x43a;&#x438; &#x43d;&#x430; &#x43e;&#x434;&#x43d;&#x43e;&#x439; &#x441;&#x442;&#x440;&#x430;&#x43d;&#x438;&#x446;&#x435;"/>
               </Properties>
@@ -2213,11 +2563,17 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel_DatePickerTitle">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x41f;&#x435;&#x440;&#x438;&#x43e;&#x434; &#x437;&#x430; &#x43a;&#x442;&#x43e;&#x440;&#x43e;&#x439; &#x43d;&#x435;&#x43e;&#x431;&#x445;&#x43e;&#x434;&#x438;&#x43c; &#x43e;&#x442;&#x447;&#x435;&#x442;:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jCheckBox_CalculateSideThickness">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x420;&#x430;&#x441;&#x447;&#x438;&#x442;&#x44b;&#x432;&#x430;&#x442;&#x44c; &#x442;&#x43e;&#x43b;&#x449;&#x438;&#x43d;&#x44b; &#x441;&#x442;&#x435;&#x43d;&#x43a;&#x438;"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 0, 2, 2]"/>
@@ -2226,10 +2582,18 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel_ReportCreationDuration">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="&#x412;&#x440;&#x435;&#x43c;&#x44f; &#x444;&#x43e;&#x440;&#x43c;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x44f; &#x43e;&#x442;&#x447;&#x435;&#x442;&#x430;:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel_ReportCreationDurationValue">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>
