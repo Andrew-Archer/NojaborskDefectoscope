@@ -1,8 +1,9 @@
-package ru.npptmk.bazaTest.defect;
+package ru.npptmk.bazaTest.defect.resultsvalidation;
 
 import java.util.List;
 import java.util.Set;
-import ru.npptmk.bazaTest.defect.model.DefectTestResult;
+import ru.npptmk.bazaTest.defect.BazaTubeResult;
+import ru.npptmk.bazaTest.defect.ValidationException;
 
 /**
  * Used to decide is pipe bad or good. Contains a number of validators that
@@ -59,6 +60,6 @@ public interface ResultsValidatorsManager {
      * @param result defect detection result to be validated.
      * @throws ValidationException on first validator fail.
      */
-    void validateResults(DefectTestResult result) throws ValidationException;
+    void validateResults(BazaTubeResult result) throws ValidationException;
 
 }

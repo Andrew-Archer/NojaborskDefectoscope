@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ru.npptmk.bazaTest.defect;
+package ru.npptmk.bazaTest.defect.resultsvalidation;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
+import ru.npptmk.bazaTest.defect.BazaTubeResult;
+import ru.npptmk.bazaTest.defect.ResultsValidatorsManagerImpl;
+import ru.npptmk.bazaTest.defect.ValidationException;
 
 import static org.junit.Assert.*;
 
@@ -16,6 +19,22 @@ import static org.junit.Assert.*;
  * @author razumnov
  */
 public class ResultsValidatorsManagerImplTest {
+    
+    private static final ResultsValidator alwaysTrueValidator = new ResultsValidator("Always true validator", "Always valid."){
+        @Override
+        public boolean test(BazaTubeResult result) {
+           return true;
+        }
+        
+    };
+    
+    private static final ResultsValidator alwaysFalseValidator = new ResultsValidator("Always false validator", "Always invalid."){
+        @Override
+        public boolean test(BazaTubeResult result) {
+           return false;
+        }
+        
+    };
 
     public ResultsValidatorsManagerImplTest() {
     }
@@ -27,13 +46,11 @@ public class ResultsValidatorsManagerImplTest {
     @Test(expected = IllegalStateException.class)
     public void testAddResultsValidators() {
         System.out.println("addResultsValidators");
-        String failConditionDescription = "desc";
-        ResultsValidator resultsValidator = new ResultsValidator("testValidator", results -> true, failConditionDescription);
-        List<ResultsValidator> validators = Collections.singletonList(resultsValidator);
+        List<ResultsValidator> validators = Collections.singletonList(alwaysTrueValidator);
         ResultsValidatorsManagerImpl instance = new ResultsValidatorsManagerImpl();
         instance.addResultsValidators(validators);
 
-        assertEquals("testValidator", instance.getValidatorsNamesSet().iterator().next());
+        assertEquals("Always true validator", instance.getValidatorsNamesSet().iterator().next());
         assertEquals(1, instance.getValidatorsNamesSet().size());
         instance.addResultsValidators(validators);
     }
@@ -45,9 +62,7 @@ public class ResultsValidatorsManagerImplTest {
     @Test
     public void testRemoveResultsValidators() {
         System.out.println("removeResultsValidators");
-        String failConditionDescription = "desc";
-        ResultsValidator resultsValidator = new ResultsValidator("testValidator", results -> true, failConditionDescription);
-        List<ResultsValidator> validators = Collections.singletonList(resultsValidator);
+        List<ResultsValidator> validators = Collections.singletonList(alwaysTrueValidator);
         ResultsValidatorsManagerImpl instance = new ResultsValidatorsManagerImpl();
         instance.addResultsValidators(validators);
 
@@ -63,12 +78,11 @@ public class ResultsValidatorsManagerImplTest {
     @Test(expected = IllegalStateException.class)
     public void testAddResultsValidator() {
         System.out.println("addResultsValidator");
-        String failConditionDescription = "desc";
-        ResultsValidator validator = new ResultsValidator("testValidator", results -> true, failConditionDescription);
+        ResultsValidator validator = alwaysTrueValidator;
         ResultsValidatorsManagerImpl instance = new ResultsValidatorsManagerImpl();
         instance.addResultsValidator(validator);
 
-        assertEquals("testValidator", instance.getValidatorsNamesSet().iterator().next());
+        assertEquals("Always true validator", instance.getValidatorsNamesSet().iterator().next());
         assertEquals(1, instance.getValidatorsNamesSet().size());
         instance.addResultsValidator(validator);
     }
@@ -80,11 +94,9 @@ public class ResultsValidatorsManagerImplTest {
     @Test
     public void testRemoveResultsValidator() {
         System.out.println("removeResultsValidator");
-        String failConditionDescription = "desc";
-        ResultsValidator resultsValidator = new ResultsValidator("testValidator", results -> true, failConditionDescription);
         ResultsValidatorsManagerImpl instance = new ResultsValidatorsManagerImpl();
 
-        instance.removeResultsValidator(resultsValidator.getName());
+        instance.removeResultsValidator(alwaysTrueValidator.getName());
         assertEquals(0, instance.getValidatorsNamesSet().size());
     }
 
@@ -96,12 +108,9 @@ public class ResultsValidatorsManagerImplTest {
         System.out.println("validateResults");
         int numberOfExceptions = 0;
         final int expectedNumberOfExceptions = 0;
-        String failConditionDescription = "desc";
-        ResultsValidator alwaysPassValidator = new ResultsValidator("alwaysPassValidator", results -> true, failConditionDescription);
-        ResultsValidator alwaysFailValidator = new ResultsValidator("alwaysFailValidator", results -> false, failConditionDescription);
         ResultsValidatorsManagerImpl instance = new ResultsValidatorsManagerImpl();
 
-        instance.addResultsValidator(alwaysPassValidator);
+        instance.addResultsValidator(alwaysTrueValidator);
         try {
             instance.validateResults(null);
         } catch (ValidationException ex) {
@@ -109,7 +118,7 @@ public class ResultsValidatorsManagerImplTest {
         }
         assertEquals(expectedNumberOfExceptions, numberOfExceptions);
 
-        instance.addResultsValidator(alwaysFailValidator);
+        instance.addResultsValidator(alwaysFalseValidator);
 
         instance.validateResults(null);
     }
@@ -121,9 +130,8 @@ public class ResultsValidatorsManagerImplTest {
     @Test
     public void testGetValidatorsNamesSet() {
         System.out.println("getValidatorsNamesSet");
-        String failConditionDescription = "desc";
-        ResultsValidator alwaysPassValidator = new ResultsValidator("alwaysPassValidator", results -> true, failConditionDescription);
-        ResultsValidator alwaysFailValidator = new ResultsValidator("alwaysFailValidator", results -> false, failConditionDescription);
+        ResultsValidator alwaysPassValidator = alwaysTrueValidator;
+        ResultsValidator alwaysFailValidator = alwaysFalseValidator;
         ResultsValidatorsManagerImpl instance = new ResultsValidatorsManagerImpl();
         List<ResultsValidator> validators = Arrays.asList(alwaysPassValidator, alwaysFailValidator);
         instance.addResultsValidators(validators);

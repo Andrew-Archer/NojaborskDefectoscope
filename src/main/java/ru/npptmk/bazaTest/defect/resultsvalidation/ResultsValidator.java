@@ -1,16 +1,14 @@
-package ru.npptmk.bazaTest.defect;
+package ru.npptmk.bazaTest.defect.resultsvalidation;
 
 import java.util.function.Predicate;
-import ru.npptmk.bazaTest.defect.model.DefectTestResult;
+import ru.npptmk.bazaTest.defect.BazaTubeResult;
 
-public class ResultsValidator implements Predicate<DefectTestResult> {
+public abstract class ResultsValidator implements Predicate<BazaTubeResult> {
     private String name;
-    private final Predicate<DefectTestResult> predicate;
     private final String failConditionDescription;
 
-    public ResultsValidator(String name, Predicate<DefectTestResult> predicate, String failConditionDescription) {
+    public ResultsValidator(String name, String failConditionDescription) {
         this.name = name;
-        this.predicate = predicate;
         this.failConditionDescription = failConditionDescription;
     }
 
@@ -31,9 +29,7 @@ public class ResultsValidator implements Predicate<DefectTestResult> {
 
 
     @Override
-    public boolean test(DefectTestResult result) {
-        return predicate.test(result);
-    }
+    abstract public boolean test(BazaTubeResult result);
 
     public String getFailConditionDescription() {
         return "DefaultString";
