@@ -18,6 +18,7 @@ import ru.npptmk.guiObjects.ITubeDataProvider;
  * @author MalginAS
  */
 public class BazaTubeResult implements Serializable, ITubeDataProvider {
+    private static final long serialVersionUID = 8292712334053359040L;
     private final long deviceID;      // Идентификатор источника данных
     private final int tubeLength;     // Длина трубы в миллиметрах.
     private final float[][] defects;  // Координаты дефектов по типам. 
