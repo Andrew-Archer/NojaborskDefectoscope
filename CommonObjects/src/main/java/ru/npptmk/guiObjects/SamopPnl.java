@@ -1,0 +1,253 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ru.npptmk.guiObjects;
+
+import java.awt.Color;
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * Компонет представляет собой панельку c возможностью рисования 
+ * произвольного набора растровых графиков. <br>
+ * Компонент предполагает использование
+ * в составе специальной панели {@code PanelForGraphics}, хотя сама
+ * она не поддерживает интерфейс {@code IDrvsDataReader}, так как не 
+ * предназначена для непосредственного приема данных от драйверов. Этот
+ * функционал должен быть реализован в суерклассах.<br>
+ * Каждый график представляет собой изменение во времени некоторой
+ * целочисленной величины. Для графического отображения время разделяется на равные отрезки.
+ * На каждом отрезок времени этой величине соответствуют два
+ * значения - минимальное и максимальное. Каждому отрезку времени на графике
+ * соответсвует вертикальный ряд пикселов, в котором пискелы, находящиеся
+ * между минимальным и максимальным значениями величины закрашиваются заданным
+ * цветом. Количество одновременно отображаемых графиков не регламентируется.
+ * Однако, все одновременно выводимые графики должны иметь одинаковую
+ * размерность. Масштаб вертикальной оси для всех графиков одинаков.<br>
+ * Графики формируются по одному вертикальному ряду пикселов за раз. При добавлении
+ * нового ряда его пикселы, находящиеся между минимальным и максимальным 
+ * значениями для каждого 
+ * из графиков закрашиваются цветом этого графика. Сформированный таким образом
+ * вертикальный ряд пикселов добавляется слева к имеющемуся изображению и все 
+ * изображение сдвигается в право на один ряд пикселов. Так последовательно
+ * получается растровое изображение ленты самописца с графиками<br>
+ * Цвет фона графика определяется фоном объекта {@code  frSmGr}. Для 
+ * облегчения интерпретации результатов на графике изображаются вертикальные и 
+ * горизонтальные линии координатной сетки. Они изображаются основным
+ * цветом объекта {@code  frSmGr}. Количество вертикальных линий
+ * сетки и интервал следования вертикальных линий задаются при создании
+ * компонента.<br>
+ * Помимо графика компонент содержит текстовые поля для вывода заголовка и 
+ * текущего значения в числовом виде с динамическим заданием цвета фона числа
+ * текущего значения.<br>
+ * В составе компонента имеются кнопки позволяющие пользователю выполнять
+ * следующие операции:
+ * <ul>
+ * <li> Удаление компонента из объекта {@code PanelForGraphics}.
+ * <li> Перемещение компонента вверх и вниз в коллекции аналогичных
+ * компонентов объекта {@code PanelForGraphics}.
+ * <li> Изменение настроек данного компонента.
+ * </ul>
+ */
+public class SamopPnl extends javax.swing.JPanel{
+    private RecorderIcon smGr;
+    public int visiblePos;
+    private final PanelForGraphics parentPnl;
+    
+    /**
+     * Конструктор панели самописцев.
+     * @param prn универсальный контейнер средств отображения данных.
+     * @param ind индекс панельки в коллекции параметров.
+     */
+    public SamopPnl(PanelForGraphics prn, int ind) {
+        parentPnl = prn;
+        visiblePos = ind;
+        SamopPnlParams par = (SamopPnlParams) parentPnl.getParamCollection().get(ind);
+        initComponents();
+        setGrafParams(par.minY, par.maxY, par.nHLine, par.vLinestep);
+        setTitle(par.name);
+        setCurVal("0", Color.green);
+    }
+    
+    /**
+     * Характеристики иконки графика.
+     * @param min минимальное значение по вертикальной оси.
+     * @param max максимальное значение по вертикальной оси.
+     * @param nHLines количество горизонтальных линий сетки.
+     * @param vLinStep шаг вертикальных линей сетки в пикселах.
+     */
+    public final void setGrafParams(int min, int max, int nHLines, int vLinStep ){
+        smGr = new RecorderIcon(min, max, nHLines, vLinStep,frSmGr);
+        frSmGr.setIcon(smGr);
+    }
+    /**
+     * Устанавливает заголовок средства отображения данных.
+     * @param title 
+     */
+    public final void setTitle(String title){
+        frName.setText(title);
+    }
+    /**
+     * Устанавливает текущее значение.
+     * @param text строковое представление значения.
+     * @param clr цвет фона на котором отображается значение.
+     */
+    public final void setCurVal(String text, Color clr){
+        frIndCh.setText(text);
+        frIndCh.setBackground(clr);
+        frIndCh.invalidate();
+    }
+    /**
+     * Добавляет новый интервал времени к графикам.
+     * @param pts массив описаний значений графиков.
+     */
+    public final void addPoint(RecorderPoint[] pts){
+        smGr.addPoint(pts);
+    }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        frSmGr = new javax.swing.JLabel();
+        frIndCh = new javax.swing.JLabel();
+        frBtCls = new javax.swing.JButton();
+        frBtUp = new javax.swing.JButton();
+        frBtDvn = new javax.swing.JButton();
+        frName = new javax.swing.JLabel();
+        frBtPrp = new javax.swing.JButton();
+
+        setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
+        setMaximumSize(new java.awt.Dimension(32767, 60000));
+        setMinimumSize(new java.awt.Dimension(0, 100));
+        setName(""); // NOI18N
+        setPreferredSize(new java.awt.Dimension(100, 130));
+
+        frSmGr.setBackground(new java.awt.Color(255, 255, 255));
+        frSmGr.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        frSmGr.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        frSmGr.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        frIndCh.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        frIndCh.setMaximumSize(new java.awt.Dimension(41, 500));
+        frIndCh.setMinimumSize(new java.awt.Dimension(41, 25));
+        frIndCh.setOpaque(true);
+        frIndCh.setPreferredSize(new java.awt.Dimension(41, 25));
+
+        frBtCls.setText("x");
+        frBtCls.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        frBtCls.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                frBtClsActionPerformed(evt);
+            }
+        });
+
+        frBtUp.setText("^");
+        frBtUp.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        frBtUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                frBtUpActionPerformed(evt);
+            }
+        });
+
+        frBtDvn.setText("v");
+        frBtDvn.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        frBtDvn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                frBtDvnActionPerformed(evt);
+            }
+        });
+
+        frName.setText("jLabel2");
+
+        frBtPrp.setText("...");
+        frBtPrp.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        frBtPrp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                frBtPrpActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(frBtCls, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(frBtUp, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(frBtDvn, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(frBtPrp, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(frIndCh, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(frName, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
+                    .addComponent(frSmGr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(frName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(frSmGr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(frBtCls, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(frBtUp, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(frBtDvn, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(frBtPrp, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(frIndCh, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void frBtClsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frBtClsActionPerformed
+        List<Serializable> op = parentPnl.getParamCollection();
+        op.remove(visiblePos);
+        parentPnl.redrawPanels();
+    }//GEN-LAST:event_frBtClsActionPerformed
+
+    private void frBtUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frBtUpActionPerformed
+        List<Serializable> op = parentPnl.getParamCollection();
+        if(visiblePos>0){
+            Serializable el = op.get(visiblePos);
+            op.set(visiblePos, op.get(visiblePos - 1));
+            op.set(visiblePos - 1, el);
+            parentPnl.redrawPanels();
+        }
+    }//GEN-LAST:event_frBtUpActionPerformed
+
+    private void frBtDvnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frBtDvnActionPerformed
+        List<Serializable> op = parentPnl.getParamCollection();
+        if(visiblePos<op.size()-1){
+            Serializable el = op.get(visiblePos);
+            op.set(visiblePos, op.get(visiblePos + 1));
+            op.set(visiblePos + 1, el);
+            parentPnl.redrawPanels();
+        }
+    }//GEN-LAST:event_frBtDvnActionPerformed
+
+    private void frBtPrpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frBtPrpActionPerformed
+        parentPnl.editParams(visiblePos);
+    }//GEN-LAST:event_frBtPrpActionPerformed
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton frBtCls;
+    private javax.swing.JButton frBtDvn;
+    private javax.swing.JButton frBtPrp;
+    private javax.swing.JButton frBtUp;
+    private javax.swing.JLabel frIndCh;
+    private javax.swing.JLabel frName;
+    private javax.swing.JLabel frSmGr;
+    // End of variables declaration//GEN-END:variables
+ 
+}
