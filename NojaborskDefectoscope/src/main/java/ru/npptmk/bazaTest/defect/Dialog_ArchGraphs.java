@@ -3,7 +3,6 @@ package ru.npptmk.bazaTest.defect;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.geom.Rectangle2D;
-import static java.lang.Math.toIntExact;
 import java.util.ArrayList;
 import java.util.List;
 import org.jfree.chart.ChartFactory;
@@ -16,7 +15,6 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import ru.npptmk.bazaTest.defect.Util.jasper_report.UNTK_500DataSourceGenerator;
 import ru.npptmk.bazaTest.defect.model.BasaTube;
 
 /*
