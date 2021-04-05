@@ -1,61 +1,6 @@
 package ru.npptmk.bazaTest.defect;
 
 import com.ghgande.j2mod.modbus.ModbusException;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import static java.lang.Math.toIntExact;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.ERROR_MESSAGE;
-import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
-import static javax.swing.JOptionPane.QUESTION_MESSAGE;
-import static javax.swing.JOptionPane.YES_NO_OPTION;
-import static javax.swing.JOptionPane.YES_OPTION;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JToggleButton;
-import javax.swing.SwingWorker;
-import javax.swing.Timer;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -68,23 +13,20 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.StandardChartTheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static ru.npptmk.bazaTest.defect.INPUTS_NAMES.*;
 import ru.npptmk.bazaTest.defect.TubeType.ThickClasses;
-import ru.npptmk.bazaTest.defect.Util.ProgressDialog;
-import ru.npptmk.bazaTest.defect.Util.jasper_report.JRDataSourceTablesList;
-import ru.npptmk.bazaTest.defect.Util.jasper_report.JRDataSourceUSKLengthWiseResults;
-import ru.npptmk.bazaTest.defect.Util.jasper_report.UNTK_500DataSourceGenerator;
-import ru.npptmk.bazaTest.defect.Util.jasper_report.UNTK_500DataSourceGenerator.SENSOR_TYPES;
-import ru.npptmk.bazaTest.defect.Util.jasper_report.XYChartBean;
-import ru.npptmk.bazaTest.defect.Util.jasper_report.XYChartPointBean;
+import ru.npptmk.baza_test.defect.util.DbSchemeUpdater;
+import ru.npptmk.baza_test.defect.util.FromClassPathSQLUpdater;
+import ru.npptmk.baza_test.defect.util.ProgressDialog;
+import ru.npptmk.baza_test.defect.util.jasper_report.JRDataSourceTablesList;
+import ru.npptmk.baza_test.defect.util.jasper_report.JRDataSourceUSKLengthWiseResults;
+import ru.npptmk.baza_test.defect.util.jasper_report.UNTK_500DataSourceGenerator;
+import ru.npptmk.baza_test.defect.util.jasper_report.UNTK_500DataSourceGenerator.SENSOR_TYPES;
+import ru.npptmk.baza_test.defect.util.jasper_report.XYChartBean;
+import ru.npptmk.baza_test.defect.util.jasper_report.XYChartPointBean;
 import ru.npptmk.bazaTest.defect.model.BasaTube;
 import ru.npptmk.bazaTest.defect.model.Customer;
 import ru.npptmk.commonObjects.GeneralUDPDevice;
-import ru.npptmk.devices.USKUdp.DeviceUSKUdp;
-import ru.npptmk.devices.USKUdp.DeviceUSKUdpChanDef;
-import ru.npptmk.devices.USKUdp.DeviceUSKUdpParam;
-import ru.npptmk.devices.USKUdp.DeviceUSKUdpParamPanel;
-import ru.npptmk.devices.USKUdp.DeviceUSKUdpParams;
+import ru.npptmk.devices.USKUdp.*;
 import ru.npptmk.devices.md8Udp.DeviceMD8Udp;
 import ru.npptmk.devices.md8Udp.DeviceMD8UdpParamsPanel;
 import ru.npptmk.devices.md8Udp.ParamsMD8Udp;
@@ -102,6 +44,40 @@ import ru.npptmk.transpmanager.Device;
 import ru.npptmk.transpmanager.EventEnt;
 import ru.npptmk.transpmanager.Roller1Tube;
 import ru.npptmk.transpmanager.TranspManager;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.swing.Timer;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.*;
+
+import static java.lang.Math.toIntExact;
+import static javax.swing.JOptionPane.*;
+import static ru.npptmk.bazaTest.defect.INPUTS_NAMES.*;
 
 /**
  * Главный класс приложения АРМ дефектоскописта
@@ -322,6 +298,8 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             JOptionPane.showMessageDialog(null, String.format(t("cantConnectToDB"), ex.getMessage()), "Ошибка", ERROR_MESSAGE);
             System.exit(1);
         }
+        DbSchemeUpdater dbSchemeUpdater = new FromClassPathSQLUpdater(emf);
+        dbSchemeUpdater.update();
         //Запускаем менеджер смен.
         shiftManager = new ShiftManagerImpl(emf);
 
@@ -854,9 +832,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                         log.debug("Chart name is:{}", xYChartBean.getChartName());
                         xYChartBean.getGraphData().getData().forEach((xYChartPointBean) -> {
                             log.debug("Series:{} X:{}, Y:{}",
-                                    ((ru.npptmk.bazaTest.defect.Util.jasper_report.XYChartPointBean) xYChartPointBean).getSeries(),
-                                    ((ru.npptmk.bazaTest.defect.Util.jasper_report.XYChartPointBean) xYChartPointBean).getxValue(),
-                                    ((ru.npptmk.bazaTest.defect.Util.jasper_report.XYChartPointBean) xYChartPointBean).getyValue());
+                                    ((XYChartPointBean) xYChartPointBean).getSeries(),
+                                    ((XYChartPointBean) xYChartPointBean).getxValue(),
+                                    ((XYChartPointBean) xYChartPointBean).getyValue());
                         });
                     });
                     JRViewer jasperViewer = new JRViewer(jasperPrint);
