@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ru.npptmk.bazaTest.defect.Util.jasper_report;
+package ru.npptmk.baza_test.defect.util.jasper_report;
 
 import java.io.Serializable;
 import java.util.ArrayList;

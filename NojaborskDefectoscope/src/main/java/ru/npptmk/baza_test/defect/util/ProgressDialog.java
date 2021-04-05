@@ -1,4 +1,4 @@
-package ru.npptmk.bazaTest.defect.Util;
+package ru.npptmk.baza_test.defect.util;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
