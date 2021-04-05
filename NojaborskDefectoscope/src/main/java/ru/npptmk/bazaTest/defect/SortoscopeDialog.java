@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
-import ru.npptmk.bazaTest.defect.Util.ProgressDialog;
+import ru.npptmk.baza_test.defect.util.ProgressDialog;
 import javax.swing.SwingWorker;
 import ru.npptmk.sortoscope.main.Sortoscope4Driver;
 import ru.npptmk.sortoscope.main.SortoscopeDriver;

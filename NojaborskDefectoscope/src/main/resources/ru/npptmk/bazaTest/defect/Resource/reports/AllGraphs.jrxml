@@ -54,7 +54,7 @@
 	<detail>
 		<band height="494">
 			<xyLineChart>
-				<chart evaluationTime="Page" customizerClass="ru.npptmk.bazaTest.defect.Util.jasper_report.JRCustomizer_Defects">
+				<chart evaluationTime="Page" customizerClass="ru.npptmk.baza_test.defect.util.jasper_report.JRCustomizer_Defects">
 					<reportElement x="0" y="0" width="800" height="494" uuid="54f3853a-fb0d-4593-bfdf-df58657c726d"/>
 					<chartTitle/>
 					<chartSubtitle/>
