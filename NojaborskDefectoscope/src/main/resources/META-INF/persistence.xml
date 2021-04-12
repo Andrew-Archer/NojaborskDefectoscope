@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.1" 
-             xmlns="http://xmlns.jcp.org/xml/ns/persistence" 
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="DefectPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>ru.npptmk.transpmanager.DeviceEnt</class>
@@ -17,6 +14,7 @@
     <class>ru.npptmk.bazaTest.defect.model.Tuberesult</class>
     <class>ru.npptmk.bazaTest.defect.model.SettingsChangeEvent</class>
     <class>ru.npptmk.bazaTest.defect.model.SettingChange</class>
+    <class>ru.npptmk.bazaTest.defect.model.UpdateScript</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/TestBase"/>
       <property name="javax.persistence.jdbc.user" value="tmk"/>
