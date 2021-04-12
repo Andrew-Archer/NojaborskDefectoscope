@@ -27,6 +27,8 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
 import org.eclipse.persistence.annotations.Index;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.npptmk.bazaTest.defect.BazaDefectResults;
 import ru.npptmk.bazaTest.defect.Shift;
 import ru.npptmk.bazaTest.defect.TubeConditions;
@@ -58,6 +60,7 @@ import ru.npptmk.bazaTest.defect.TubeConditions;
 })
 public class BasaTube implements Serializable {
     private static final ResourceBundle RB = ResourceBundle.getBundle("gui_text", new Locale("ru", "RU"));
+    private static final Logger log = LoggerFactory.getLogger(BasaTube.class);
 
     public static EntityManagerFactory emf;
 
@@ -414,7 +417,7 @@ public class BasaTube implements Serializable {
                 if (trans != null && trans.isActive()) {
                     trans.rollback();
                 }
-                ex.printStackTrace();
+                log.error("Can't find result for tube [{}]", idTube, ex);
             } finally {
                 if (em != null) {
                     em.close();
@@ -422,8 +425,7 @@ public class BasaTube implements Serializable {
             }
             return result;
         } else {
-            System.out.println("Попытка сохранить резултаты трубы при не ининициализивованном"
-                    + "статическом поле EntityManagerFactory в BasaTube");
+            log.error("Entity manager factory is null");
             return null;
         }
     }

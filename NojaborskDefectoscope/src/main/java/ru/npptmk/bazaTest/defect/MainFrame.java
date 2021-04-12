@@ -2535,7 +2535,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             }
         });
         table_Shift_Tubes.setFocusable(false);
-        table_Shift_Tubes.setRowHeight(28);
+        table_Shift_Tubes.setRowHeight(20);
         table_Shift_Tubes.setRowSelectionAllowed(false);
         table_Shift_Tubes.setSelectionBackground(new java.awt.Color(153, 255, 0));
         table_Shift_Tubes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -3318,6 +3318,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         scrollPane_ForErrorsTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jTable1.getTableHeader().setFont(SEGOE_UI_18);
+        jTable1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
@@ -3337,7 +3338,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setRowHeight(28);
+        jTable1.setRowHeight(20);
         scrollPane_ForErrorsTable.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
@@ -3431,7 +3432,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 return canEdit [columnIndex];
             }
         });
-        jTable_ArchiveResults.setRowHeight(28);
+        jTable_ArchiveResults.setRowHeight(20);
         jTable_ArchiveResults.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable_ArchiveResultsMouseClicked(evt);
