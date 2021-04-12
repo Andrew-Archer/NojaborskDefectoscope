@@ -70,6 +70,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static ru.npptmk.bazaTest.defect.INPUTS_NAMES.*;
 import ru.npptmk.bazaTest.defect.TubeType.ThickClasses;
+import ru.npptmk.bazaTest.defect.Util.DbSchemeUpdater;
+import ru.npptmk.bazaTest.defect.Util.FromClassPathSQLUpdater;
 import ru.npptmk.bazaTest.defect.Util.ProgressDialog;
 import ru.npptmk.bazaTest.defect.Util.jasper_report.JRDataSourceTablesList;
 import ru.npptmk.bazaTest.defect.Util.jasper_report.JRDataSourceUSKLengthWiseResults;
@@ -322,6 +324,8 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             JOptionPane.showMessageDialog(null, String.format(t("cantConnectToDB"), ex.getMessage()), "Ошибка", ERROR_MESSAGE);
             System.exit(1);
         }
+        DbSchemeUpdater dbSchemeUpdater = new FromClassPathSQLUpdater(emf);
+        dbSchemeUpdater.update();
         //Запускаем менеджер смен.
         shiftManager = new ShiftManagerImpl(emf);
 
