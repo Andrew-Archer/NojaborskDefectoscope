@@ -26,7 +26,7 @@ import ru.npptmk.bazaTest.defect.model.Operator;
  * @author razumnov
  */
 public class Dialog_RestrictedAccess extends javax.swing.JDialog {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(Dialog_RestrictedAccess.class);
     private final EntityManagerFactory emf;
 
@@ -38,12 +38,12 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
      * A return status code - returned if OK button has been pressed
      */
     public static final int RET_OK = 1;
-    
+
     @Override
-    public void setVisible(boolean isVisible){
+    public void setVisible(boolean isVisible) {
         super.setVisible(isVisible);
         this.jTextField_adminLogin.setText("");
-        this.jTextField_adminPass.setText("");
+        this.jPasswordField.setText("");
     }
 
     /**
@@ -73,7 +73,6 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
     public int getReturnStatus() {
         return returnStatus;
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -91,7 +90,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jTextField_adminLogin = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField_adminPass = new javax.swing.JTextField();
+        jPasswordField = new javax.swing.JPasswordField();
 
         setTitle("ОГРАНИЧЕННЫЙ ДОСТУП");
         setResizable(false);
@@ -128,12 +127,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel3.setText("Пароль");
 
-        jTextField_adminPass.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jTextField_adminPass.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField_adminPassActionPerformed(evt);
-            }
-        });
+        jPasswordField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -150,7 +144,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField_adminPass)))
+                        .addComponent(jPasswordField)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -165,7 +159,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField_adminPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -198,7 +192,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         final String firstName = jTextField_adminLogin.getText();
-        final String password = jTextField_adminPass.getText();
+        final String password = String.valueOf(jPasswordField.getPassword());
         Operator foundOperator = null;
         EntityManager em = null;
         try {
@@ -218,7 +212,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
                 em.close();
             }
         }
-        
+
         if (foundOperator != null
                 && foundOperator.getPassword() != null
                 && foundOperator.getPassword().equals(password)) {
@@ -239,10 +233,6 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
         doClose(RET_CANCEL);
     }//GEN-LAST:event_closeDialog
 
-    private void jTextField_adminPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_adminPassActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField_adminPassActionPerformed
-    
     private void doClose(int retStatus) {
         returnStatus = retStatus;
         setVisible(false);
@@ -255,8 +245,8 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPasswordField jPasswordField;
     private javax.swing.JTextField jTextField_adminLogin;
-    private javax.swing.JTextField jTextField_adminPass;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
 
