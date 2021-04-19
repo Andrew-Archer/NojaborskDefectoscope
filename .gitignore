@@ -2,3 +2,5 @@
 **/db/
 *.iml
 **/target/
+**/logs/
+**~lock.**
