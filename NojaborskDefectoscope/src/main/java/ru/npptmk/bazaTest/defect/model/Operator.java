@@ -7,13 +7,15 @@ package ru.npptmk.bazaTest.defect.model;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import ru.npptmk.bazaTest.defect.Shift;
 
 /**
  *
@@ -32,7 +34,11 @@ public class Operator implements Serializable {
     private String personalNumber;
     @OneToMany(fetch = FetchType.LAZY, mappedBy="author")
     private List<SettingsChangeEvent> settingsChangeEvents;
-
+    @Column(name = "USER_ROLE")
+    @Enumerated(EnumType.STRING)
+    private UserRoles userRole;
+    @Column(name = "USER_PASS")
+    private String pass;
     public Operator() {
         this(
                 "Не указано",
@@ -52,6 +58,30 @@ public class Operator implements Serializable {
         this.firstName = firstName;
         this.middleName = middleName;
         this.personalNumber = personalNumber;
+    }
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return pass;
+    }
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.pass = password;
+    }
+    /**
+     * @return the userRole
+     */
+    public UserRoles getUserRole() {
+        return userRole;
+    }
+    /**
+     * @param userRole the userRole to set
+     */
+    public void setUserRole(UserRoles userRole) {
+        this.userRole = userRole;
     }
 
     @Override
