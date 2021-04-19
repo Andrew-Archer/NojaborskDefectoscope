@@ -80,6 +80,7 @@ public class FromClassPathSQLUpdater implements DbSchemeUpdater {
 
         URL url = classLoader.getResource(SCRIPTS_FOLDER);
         if (url == null) {
+            log.warn("Has no found {} resource to search script in folder", SCRIPTS_FOLDER);
             return Collections.emptyList();
         }
         File folder = new File(url.getFile());
