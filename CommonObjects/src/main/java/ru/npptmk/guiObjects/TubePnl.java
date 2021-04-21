@@ -137,7 +137,7 @@ public class TubePnl extends javax.swing.JPanel implements IDrvsDataReader {
             }
         });
 
-        frBtPrp.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        frBtPrp.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         frBtPrp.setText("...");
         frBtPrp.setMargin(new java.awt.Insets(0, 0, 0, 0));
         frBtPrp.setMaximumSize(new java.awt.Dimension(32, 32));
@@ -174,7 +174,7 @@ public class TubePnl extends javax.swing.JPanel implements IDrvsDataReader {
                 .addComponent(frBtDvn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(frBtPrp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(frSmGr, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+            .addComponent(frSmGr, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
