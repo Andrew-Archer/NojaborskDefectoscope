@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -38,6 +37,8 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
      * A return status code - returned if OK button has been pressed
      */
     public static final int RET_OK = 1;
+    
+    private Operator op;
 
     @Override
     public void setVisible(boolean isVisible) {
@@ -100,7 +101,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
             }
         });
 
-        okButton.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        okButton.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         okButton.setText("Принять");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,7 +109,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
             }
         });
 
-        cancelButton.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        cancelButton.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         cancelButton.setText("Отмена");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -216,6 +217,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
         if (foundOperator != null
                 && foundOperator.getPassword() != null
                 && foundOperator.getPassword().equals(password)) {
+            op = foundOperator;
             LOG.debug("Admin creadentials are accepted.");
             doClose(RET_OK);
         }
@@ -251,4 +253,8 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private int returnStatus = RET_CANCEL;
+
+    public Operator getOperator() {
+        return op;
+    }
 }
