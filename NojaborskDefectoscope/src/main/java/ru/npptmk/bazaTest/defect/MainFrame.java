@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -46,8 +47,11 @@ import static javax.swing.JOptionPane.QUESTION_MESSAGE;
 import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.YES_OPTION;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JToggleButton;
+import javax.swing.JViewport;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
@@ -81,6 +85,9 @@ import ru.npptmk.bazaTest.defect.Util.jasper_report.XYChartBean;
 import ru.npptmk.bazaTest.defect.Util.jasper_report.XYChartPointBean;
 import ru.npptmk.bazaTest.defect.model.BasaTube;
 import ru.npptmk.bazaTest.defect.model.Customer;
+import ru.npptmk.bazaTest.defect.model.Operator;
+import ru.npptmk.bazaTest.defect.view.Dialog_RestrictedAccess;
+import ru.npptmk.bazaTest.defect.view.Dialog_changePass;
 import ru.npptmk.commonObjects.GeneralUDPDevice;
 import ru.npptmk.devices.USKUdp.DeviceUSKUdp;
 import ru.npptmk.devices.USKUdp.DeviceUSKUdpChanDef;
@@ -113,18 +120,19 @@ import ru.npptmk.transpmanager.TranspManager;
  */
 public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         TubesCounter.TubesCounterUpdatedListener {
-
+    
     private static final Logger log = LoggerFactory.getLogger(MainFrame.class);
     private static final Font SEGOE_UI_18 = new Font("Segoe UI", Font.PLAIN, 18);
-
+    
     private static final int PIPE_POSITION_COLUMN = 5;
     private static final int PIPE_STATE_COLUMN = 3;
-
+    
     private JasperPrint jasperPrint;
     /**
      * Последние получение из архива результаты. Необходимы для формирования
      * отчета.
      */
+    private Dialog_RestrictedAccess restrictedAccessDialog;
     private List<BasaTube> archResults;
     /**
      * Время, начиная с которого необходима искать данные в архиве. Необходимо
@@ -149,6 +157,8 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
      * Список режимов работы установки находится {@link  Modes}.
      */
     private int mode;
+    private boolean uskSettingsIsEnabled;
+    private boolean mdSettingsIsEnabled;
 
     /**
      * Список этапов техпроцесса находится в классе {@link States}.
@@ -177,7 +187,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private int tubeLength;          // Фактическая длина трубы в мм.
     private final DialogCustomerSelection dialogCustomerSelection;
     private static final String PLC_IP = "localhost";
-
+    
     public S7_1200 plc;           // Интерфейс когтроллера.
     static final TagDef[] INPUTS = {
         new TagDef(SQ1_TUBE_ON_IN_ROLLGANG, 6),//Наличие трубы на рольганге перед установкой
@@ -207,7 +217,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         new TagDef(SQ13_OUT_RELOADER_UP, 50),//Выходной перекладчик поднят
         new TagDef(SQ17_TUBE_ON_OUT_TABLE, 51)//Труба на выходном стелаже (Вместимостью 1 труба)
     };
-
+    
     static final TagDef[] OUTPUTS = {
         new TagDef("PC_Off", 0),
         new TagDef("Holder_1_Down", 01),
@@ -229,7 +239,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         new TagDef("Dryer_On", 44),
         new TagDef("Reloader_2_Up", 43)
     };
-
+    
     static final TagDef[] REGS = {
         new TagDef("Mode", 0),
         new TagDef("state", 2),
@@ -258,7 +268,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         new TagDef("OffDry", 48),
         new TagDef("Errors", 8)
     };
-
+    
     static final TagDef[] DWREGS = {};
     private final TranspManager tmn = new TranspManager();
     private SortoscopeDriver sortoscopeDriver;
@@ -276,6 +286,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private ProgressDialog progressDialog;
     private boolean mayScan;
     private EntityManagerFactory emf;
+    private Dialog_changePass newPass;
 
     /**
      * Creates new form MainFrame
@@ -288,12 +299,12 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         this.sortoscopeDialog = new SortoscopeDialog(this, true);
         this.sortoscopeDriver = new Sortoscope4Driver();
         this.jasperPrint = new JasperPrint();
-
+        
         System.setProperty("derby.system.home", ".\\db");
         System.setProperty("java.net.preferIPv4Stack", "true");
-
+        
         this.progressDialog = new ProgressDialog(this);
-
+        
         progressDialog.startProcessing(
                 t("connectingToBDMessage"),
                 new SwingWorker<Integer, Integer>() {
@@ -309,14 +320,14 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 }
                 return 0;
             }
-
+            
             @Override
             protected void done() {
                 progressDialog.setVisible(false);
             }
-
+            
         });
-
+        
         try {
             emf = Persistence.createEntityManagerFactory("DefectPU");
         } catch (Exception ex) {
@@ -328,15 +339,15 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         dbSchemeUpdater.update();
         //Запускаем менеджер смен.
         shiftManager = new ShiftManagerImpl(emf);
-
+        
         if (!tmn.startManager(emf.createEntityManager())) {
             JOptionPane.showMessageDialog(this, tmn.getError().getComment());
         }
-
+        
         if (!tmn.isDevPresent(Devicess.ID_R4)) {
             tmn.addNewDevice(Devicess.ID_R4, new UEParams(), "Рольганг Р4", Roller1Tube.class, 1);
         }
-
+        
         UEParams prm = (UEParams) tmn.getParam(Devicess.ID_R4);
         if (prm == null) {
             prm = new UEParams();
@@ -350,7 +361,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     "Настройки блока МД загружены с ошибкой.\n Будут использованы настройки по умолчанию.",
                     "Ошибка",
                     ERROR_MESSAGE);
-
+            
             blockMD = new DeviceMD8Udp(
                     InetSocketAddress.createUnresolved("192.168.0.242", 32973),
                     InetSocketAddress.createUnresolved("192.168.0.239", 2201),
@@ -401,20 +412,20 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         }
         mFrm = this;
         initComponents();
-
+        
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-
+        
         plc.setUpdateProc(REGS[1].getWordModbusAddr(), this::reactOnUpdatedState);
         plc.setUpdateProc(REGS[2].getWordModbusAddr(), this::reactOnCoordinateUpdated);
         plc.setUpdateProc(REGS[0].getWordModbusAddr(), this::reactOnModeUpdated);
-
+        
         setTitle(t("windowTitle"));
         grPnlMD = new PanelForGraphics(panFact, prm.prGrfMd.get(prm.currMDGrSet));
         pnGrfsMD.add(grPnlMD);
         prmMDEditPnl = (DeviceMD8UdpParamsPanel) blockMD.getParamsPanel();
         pnNastr.add(prmMDEditPnl);
         grPnlMD.redrawPanels();
-
+        
         grPnlUS = new PanelForGraphics(panFact, prm.prGrfUSK.get(prm.currUSGrSet));
         pnGrfsUSK.add(grPnlUS);
         DeviceUSKUdpChanDef[] defs = new DeviceUSKUdpChanDef[16];
@@ -434,10 +445,10 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 return 0;
             }
         });
-
+        
         pnNastrUSK.add(prmUSEditPnl);
         grPnlUS.redrawPanels();
-
+        
         grPnlAll = new PanelForGraphics(panFact, prm.prGrfTube.get(prm.currAllGrSet));
         pnGrfsAll.add(grPnlAll);
         grPnlAll.redrawPanels();
@@ -454,7 +465,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         blockMD.addListenerNewPoint(() -> {
             EventQueue.invokeLater(grUpdaterMD);
         });
-
+        
         blockUSK1.addListenerNewPoint(() -> {
             if (prmUSEditPnl.drv.getDeviceId() == blockUSK1.getDeviceId()) {
                 EventQueue.invokeLater(updaterAScanUSK1);
@@ -464,7 +475,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 blockUSK1.isNewPointReady = false;
             }
         });
-
+        
         blockUSK2.addListenerNewPoint(() -> {
             if (prmUSEditPnl.drv.getDeviceId() == blockUSK2.getDeviceId()) {
                 EventQueue.invokeLater(updaterAScanUSK2);
@@ -474,9 +485,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 blockUSK2.isNewPointReady = false;
             }
         });
-
+        
         startDrivers();
-
+        
         try {
             plc.setShortRegister("CalibrLen", prm.calibrLen);
             plc.setShortRegister("MDStart", prm.MDStart);
@@ -512,7 +523,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             log.error("PLC communication error", ex);
             System.exit(-1);
         }
-
+        
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -563,7 +574,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     UEParams pr = (UEParams) tmn.getParam(Devicess.ID_R4);
                     blockUSK1.setParams(pr.currentTubeType.getParamsUSK1());
                     blockUSK2.setParams(pr.currentTubeType.getParamsUSK2());
-
+                    
                 }
                 prmUSEditPnl.resetChanges();
             }
@@ -600,7 +611,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             updateTubeOnDeviceResults(tmn
                     .getDetail(Devicess.ID_R4, Device.DEFAULT_VALUE));
         });
-
+        
         updateCustomersList();
         shiftManager.addListener((Shift shift) -> {
             switch (shiftManager.getState()) {
@@ -613,9 +624,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             }
         });
         dialogCustomerSelection = new DialogCustomerSelection(mFrm, true, emf);
-        dialogCustomerSelection.setLocationRelativeTo(null);
+        dialogCustomerSelection.setLocationRelativeTo(MainFrame.this);
         customInitComponents();
-
+        
         jTable_ArchiveResults.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -675,15 +686,15 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             }
         }
     }
-
+    
     private SortoscopeDialog sortoscopeDialog;
-
+    
     private void createGraphPerPageReport() {
         //Если есть данные для вывода отчета
         if (archResults != null && !archResults.isEmpty()) {
             //Имя файла скомпилированного отчёта, готового для заполнения.
             URL compiledReport = getClass().getResource("Resource/reports/AllGraphs.jasper");
-
+            
             if (compiledReport == null) {
                 log.warn("Шаблон отчета не найден. \nНеправильно откомпилировали программу.");
                 JOptionPane.showMessageDialog(
@@ -722,7 +733,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                             nameOfDefect = "Толщиномер";
                             break;
                     }
-
+                    
                     float[] defectsArray = results.tbRes.getDefects(j);
                     for (int i = 0; i < defectsArray.length; i++) {
                         reportParamsGenerator.addDefectPoint(
@@ -865,11 +876,11 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     });
                     JRViewer jasperViewer = new JRViewer(jasperPrint);
                     jasperViewer.setZoomRatio(0.5f);
-
+                    
                     JDialog reportDialog = new JDialog();
                     reportDialog.add(jasperViewer);
                     reportDialog.setBounds(0, 0, 800, 600);
-                    reportDialog.setLocationRelativeTo(null);
+                    reportDialog.setLocationRelativeTo(MainFrame.this);
                     reportDialog.setVisible(true);
                 } catch (IOException ex) {
                     log.error("Report access error: ", ex);
@@ -901,14 +912,14 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     INFORMATION_MESSAGE);
         }
     }
-
+    
     private void createGraphsOnOnePage() {
         log.debug("Start printing the report...");
         //Если есть данные для вывода отчета
         if (archResults != null && !archResults.isEmpty()) {
             //Имя файла скомпилированного отчёта, готового для заполнения.
             URL compiledReport = getClass().getResource("Resource/reports/AllGraphsOnOnePage.jasper");
-
+            
             if (compiledReport == null) {
                 log.error("Report template [{}] has not been found...", "Resource/reports/AllGraphsOnOnePage.jasper");
                 JOptionPane.showMessageDialog(
@@ -951,7 +962,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                             nameOfDefect = "Толщиномер";
                             break;
                     }
-
+                    
                     float[] defectsArray = results.tbRes.getDefects(j);
                     for (int i = 0; i < defectsArray.length; i++) {
                         reportParamsGenerator.addDefectPoint(
@@ -1083,21 +1094,21 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     Collection<XYChartPointBean> debugCollection = (Collection<XYChartPointBean>) debugOutput.getData();
                     //Debug output
                     debugCollection.forEach((xYChartPointBean) -> {
-
+                        
                         log.debug(
                                 "Series: {} X:{}, Y:{}",
                                 ((XYChartPointBean) xYChartPointBean).getSeries(),
                                 ((XYChartPointBean) xYChartPointBean).getxValue(),
                                 ((XYChartPointBean) xYChartPointBean).getyValue());
-
+                        
                     });
                     JRViewer jasperViewer = new JRViewer(jasperPrint);
                     jasperViewer.setZoomRatio(0.5f);
-
+                    
                     JDialog reportDialog = new JDialog();
                     reportDialog.add(jasperViewer);
                     reportDialog.setBounds(0, 0, 800, 600);
-                    reportDialog.setLocationRelativeTo(null);
+                    reportDialog.setLocationRelativeTo(MainFrame.this);
                     reportDialog.setVisible(true);
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(null, "Ошибка доступа к отчету: " + ex.getLocalizedMessage());
@@ -1170,7 +1181,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
                     //Получаем данные от транспортного менеджера о наличии трубы
                     long tubeOnTheDeviceID = tmn.getDetail(Devicess.ID_R4, Device.DEFAULT_VALUE);
-
+                    
                     if (tubeOnTheDeviceID == 0) {//Если по учету на установке ничего нет
                         sendCmdToPLC(Commands.NOTHING_IS_ON_THE_DEVICE);
                     } else {//Если по учету труба на установке есть
@@ -1233,7 +1244,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
                     //Отправляем команду о том, что новая труба зарегистрирована
                     sendCmdToPLC(Commands.NEW_TUBE_IS_REGISTRED);
-
+                    
                     break;
                 }
                 case States.STATE_7: {
@@ -1386,7 +1397,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                             try {
                                 sortoscopeResult = null;
                                 sortoscopeResult = sortoscopeDriver.getDurabilityGroup();
-
+                                
                             } catch (NoMeasurementsReadyException ex) {
                                 log.warn("Got no ready measurements in sortoscope", ex);
                             }
@@ -1467,7 +1478,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
                             //Прячем диалог
                             progressDialog.setVisible(false);
-
+                            
                             return 0;
                         }
                     });
@@ -1485,7 +1496,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                         //Получаем данные от транспортного менеджера о наличии трубы
                         long tubeOnTheDeviceID = tmn.getDetail(Devicess.ID_R4, Device.DEFAULT_VALUE);
                         log.debug("Got [{}] pipe on device.", tubeOnTheDeviceID);
-
+                        
                         if (tubeOnTheDeviceID == 0) {//Если по учету на установке ничего нет
                             sendCmdToPLC(Commands.NOTHING_IS_ON_THE_DEVICE);
                             log.debug("No pipe on device command has been sent.");
@@ -1557,7 +1568,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                                 sendCmdToPLC(Commands.MARK_AS_GOOD);
                                 log.debug("[mark as good] commad has been sent to plc.");
                             }
-
+                            
                         }
                     } else {
                         //Делаем активными кнопки выбора
@@ -1614,7 +1625,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
                     //Получаем данные от транспортного менеджера о наличии трубы
                     long tubeOnTheDeviceID = tmn.getDetail(Devicess.ID_R4, Device.DEFAULT_VALUE);
-
+                    
                     if (tubeOnTheDeviceID == 0) {//Если по учету на установке ничего нет
                         sendCmdToPLC(Commands.NOTHING_IS_ON_THE_DEVICE);
                     } else {//Если по учету труба на установке есть
@@ -1747,7 +1758,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
         //Добавляем элемент предлагающий выбрать заказчика
         combobox_CustomerSelection.addItem(t("chooseCustomer"));
-
+        
         EntityManager em = emf.createEntityManager();
         try {
             //Получаем список заказчиков из базы
@@ -1833,7 +1844,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
                 //Ведется лог координаты если включен
                 log.debug(String.format("Current coordinate: {}", localCoord));
-
+                
                 if (state >= 16 && state <= 20 && mayScan) {
                     blockUSK1.setCurrenCoord(localCoord);
                     blockUSK2.setCurrenCoord(localCoord);
@@ -1843,11 +1854,11 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     blockMD.setCurrenCoord(localCoord);
                     EventQueue.invokeLater(MDgrUpdater);
                 }
-
+                
             }
-
+            
             this.coord = localCoord;
-
+            
         } catch (ModbusException ex) {
             log.error("Error reading data from PLC with IP [{}]", PLC_IP, ex);
         }
@@ -1912,7 +1923,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             case SHIFT_IS_NOT_STARTED:
             default:
                 smenaTubes = new ArrayList<>();
-
+            
         }
 
         //Получаем ID трубы находящейся на установке
@@ -1945,7 +1956,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 //то добавляем в список
                 //трубу находящуюся на установке.
                 data = new Object[1][6];
-
+                
                 data[0][0] = tubeOnDevice.getId();
                 data[0][1] = ((UEParams) tmn.getParam(Devicess.ID_R4)).tubeTypes.get(toIntExact(tubeOnDevice.getTypeID() - 1)) + tubeOnDevice.isSampleToString();
                 data[0][2] = tubeOnDevice.getLengthInMeters();
@@ -2013,7 +2024,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             mode = plc.getShortRegister("Mode");
             //Пишем в лог если включена отладка
             log.debug("Work mode changed to [{}]", mode);
-
+            
             if (mode != Modes.WORKING) {
                 //Отключаем кнопки "Брак", "повторить",
                 //"годная".
@@ -2023,7 +2034,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         } catch (ModbusException ex) {
             log.error("Error reading data from PLC with IP [{}]", PLC_IP, ex);
         }
-
+        
         switch (mode) {
             case Modes.TURNING_ON: {
                 label_xCoordinateValue.setText("");
@@ -2054,7 +2065,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 break;
             }
         }
-
+        
     }
 
     /**
@@ -2107,7 +2118,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         }
         //Сохраняем трубу в базу
         em = emf.createEntityManager();
-
+        
         synchronized (accessBd) {
             try {
                 EntityTransaction trans = em.getTransaction();
@@ -2128,10 +2139,10 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     em.close();
                 }
             }
-
+            
         }
     }
-
+    
     public void removeCurrentTubeFromDevice() {
         tmn.remDet(Device.DEFAULT_VALUE, Devicess.ID_R4, "Труба удалена с установки");
     }
@@ -2193,11 +2204,11 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             log.error("Can't add pipe into transport manager, because of: {}", ev.getComment());
             return null;
         }
-
+        
         em = emf.createEntityManager();
         try {
             EntityTransaction trans = em.getTransaction();
-
+            
             try {
                 trans.begin();
                 newTube.setIdCreateEvt(ev.getId());
@@ -2233,10 +2244,24 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         });
         return newTube;
     }
-
+    
     @Override
     public long getDeviceId() {
         return Devicess.ID_R4;
+    }
+    
+    private Operator isPassCheckOk() {
+        if (restrictedAccessDialog == null) {
+            restrictedAccessDialog = new Dialog_RestrictedAccess(mFrm, mayScan, emf);
+        }
+        restrictedAccessDialog.setModal(true);
+        restrictedAccessDialog.setLocationRelativeTo(MainFrame.this);
+        restrictedAccessDialog.setVisible(true);
+        
+        if (restrictedAccessDialog.getReturnStatus() == 1) {
+            return restrictedAccessDialog.getOperator();
+        }
+        return null;
     }
 
     /**
@@ -2244,9 +2269,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
      * конструкторе MainFarme после initComponents().
      */
     private void customInitComponents() {
-
+        
         label_TybeTypeValue.setText(((UEParams) tmn.getParam(Devicess.ID_R4)).currentTubeType.toString());
-
+        
         tubeTypesDialog = new TubeTypesDialog(
                 this,
                 true,
@@ -2303,31 +2328,78 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     return label;
                 }
             });
-
+            
         }
 
         //Подсчитывается текущее количество брака годных в текущем списке
         tubesCounter.addListener(mFrm);
         tubesCounter.updateToTableModel((DefaultTableModel) table_Shift_Tubes.getModel());
         BasaTube.emf = this.emf;
+        setUskSettingsEnabledState(false);
+        setMdSettingsEnabledState(false);
     }
-
+    
+    private void setUskSettingsEnabledState(boolean isEnabled) {
+        setEnabledRecurcively(USD, isEnabled);
+        uskSettingsIsEnabled = isEnabled;
+    }
+    
+    private void setMdSettingsEnabledState(boolean isEnabled) {
+        setEnabledRecurcively(magDef, isEnabled);
+        mdSettingsIsEnabled = isEnabled;
+    }
+    
+    private void setEnabledRecurcively(Component comp, boolean isEnabled) {
+        if (comp == null) {
+            return;
+        }
+        if (comp instanceof JPanel) {
+            Component[] comps = ((JPanel) comp).getComponents();
+            for (Component subComp : comps) {
+                setEnabledRecurcively(subComp, isEnabled);
+            }
+            return;
+        }
+        if (comp instanceof JTabbedPane) {
+            Component[] comps = ((JTabbedPane) comp).getComponents();
+            for (Component subComp : comps) {
+                setEnabledRecurcively(subComp, isEnabled);
+            }
+            return;
+        }
+        if (comp instanceof JScrollPane) {
+            Component[] comps = ((JScrollPane) comp).getComponents();
+            for (Component subComp : comps) {
+                setEnabledRecurcively(subComp, isEnabled);
+            }
+            return;
+        }
+        if (comp instanceof JViewport) {
+            Component[] comps = ((JViewport) comp).getComponents();
+            for (Component subComp : comps) {
+                setEnabledRecurcively(subComp, isEnabled);
+            }
+            return;
+        }
+        comp.setEnabled(isEnabled);
+    }
+    
     @Override
     public void reactOnTubesCountUpdated(long goodTubesCount, long badTubesCount) {
         label_BadTubesCountValue.setText(String.valueOf(badTubesCount));
         label_GoodTubesCountValue.setText(String.valueOf(goodTubesCount));
         label_TotalTubesCountValue.setText(String.valueOf(badTubesCount + goodTubesCount));
     }
-
+    
     class BOX extends JCheckBox {
-
+        
         public BOX() {
             setIcon(new OvalIcon(15, 15, Color.gray, Color.white));
             setRolloverIcon(new OvalIcon(15, 15, Color.gray, Color.white));
             setSelectedIcon(new OvalIcon(15, 15, Color.red, Color.white));
             setRolloverSelectedIcon(new OvalIcon(15, 15, Color.red, Color.white));
         }
-
+        
     }
 
     /**
@@ -2379,6 +2451,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         jScrollPane3 = new javax.swing.JScrollPane();
         pnGrfsUSK = new javax.swing.JPanel();
         pnNastrUSK = new javax.swing.JPanel();
+        jButton_saveUskSettings = new javax.swing.JButton();
         panel_Tunning = new javax.swing.JPanel();
         jPanel_Magnetic = new javax.swing.JPanel();
         button_Magnetic_Heads_Close = new javax.swing.JToggleButton();
@@ -2460,6 +2533,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         sortoscopeMenu = new javax.swing.JMenuItem();
         jMenuItem14 = new javax.swing.JMenuItem();
         menuItem_EnableLogging = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         menu_Drivers = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -2485,12 +2559,16 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         setTitle("АРМ дефектоскописта");
         setMaximumSize(new java.awt.Dimension(1280, 1000));
         setMinimumSize(new java.awt.Dimension(797, 549));
-        setPreferredSize(new java.awt.Dimension(1280, 1000));
         setSize(new java.awt.Dimension(1280, 1000));
 
         jTabbedPane1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTabbedPane1.setMaximumSize(new java.awt.Dimension(32767, 1000));
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(750, 450));
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+        });
 
         tube.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tube.setMaximumSize(new java.awt.Dimension(795, 494));
@@ -2741,7 +2819,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                                         .addComponent(label_TotalTubesCountValue, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(3, 3, 3)
                                         .addComponent(button_DropTubesCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 92, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(pnTubeTblLayout.createSequentialGroup()
                                 .addComponent(combobox_CustomerSelection, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2815,15 +2893,15 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             .addGroup(tubeLayout.createSequentialGroup()
                 .addComponent(pnTubeTbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 884, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 775, Short.MAX_VALUE))
         );
         tubeLayout.setVerticalGroup(
             tubeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tubeLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addGroup(tubeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnTubeTbl, javax.swing.GroupLayout.PREFERRED_SIZE, 851, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE)))
+                    .addComponent(pnTubeTbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 924, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("Работа", tube);
@@ -2857,14 +2935,14 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     .addComponent(frBtSave)
                     .addComponent(pnNastr, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1041, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 840, Short.MAX_VALUE))
         );
         magDefLayout.setVerticalGroup(
             magDefLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(magDefLayout.createSequentialGroup()
                 .addGroup(magDefLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(magDefLayout.createSequentialGroup()
-                        .addComponent(pnNastr, javax.swing.GroupLayout.DEFAULT_SIZE, 794, Short.MAX_VALUE)
+                        .addComponent(pnNastr, javax.swing.GroupLayout.DEFAULT_SIZE, 872, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(frBtSave))
                     .addComponent(jScrollPane1))
@@ -2872,6 +2950,8 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         );
 
         jTabbedPane1.addTab("УМД", magDef);
+
+        USD.setEnabled(false);
 
         jScrollPane3.setMaximumSize(new java.awt.Dimension(306, 470));
         jScrollPane3.setMinimumSize(new java.awt.Dimension(306, 470));
@@ -2886,19 +2966,35 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         pnNastrUSK.setPreferredSize(new java.awt.Dimension(273, 100));
         pnNastrUSK.setLayout(new java.awt.BorderLayout(1, 1));
 
+        jButton_saveUskSettings.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButton_saveUskSettings.setText("Сохранить");
+        jButton_saveUskSettings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_saveUskSettingsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout USDLayout = new javax.swing.GroupLayout(USD);
         USD.setLayout(USDLayout);
         USDLayout.setHorizontalGroup(
             USDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(USDLayout.createSequentialGroup()
-                .addComponent(pnNastrUSK, javax.swing.GroupLayout.PREFERRED_SIZE, 625, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(USDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnNastrUSK, javax.swing.GroupLayout.PREFERRED_SIZE, 625, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(USDLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton_saveUskSettings)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 845, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE))
         );
         USDLayout.setVerticalGroup(
             USDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnNastrUSK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 853, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 930, Short.MAX_VALUE)
+            .addGroup(USDLayout.createSequentialGroup()
+                .addComponent(pnNastrUSK, javax.swing.GroupLayout.PREFERRED_SIZE, 881, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton_saveUskSettings)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("УЗК", USD);
@@ -3303,7 +3399,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel_Ultrasonic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jPanel_UnitFigure, javax.swing.GroupLayout.DEFAULT_SIZE, 1476, Short.MAX_VALUE)
+            .addComponent(jPanel_UnitFigure, javax.swing.GroupLayout.DEFAULT_SIZE, 1275, Short.MAX_VALUE)
         );
         panel_TunningLayout.setVerticalGroup(
             panel_TunningLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3376,7 +3472,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             .addGroup(panel_ErrorsLayout.createSequentialGroup()
                 .addGap(366, 366, 366)
                 .addComponent(label_ErrorTabCaption)
-                .addContainerGap(677, Short.MAX_VALUE))
+                .addContainerGap(471, Short.MAX_VALUE))
         );
         panel_ErrorsLayout.setVerticalGroup(
             panel_ErrorsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3388,7 +3484,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     .addComponent(label_ErrorState, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(label_ErrorStateValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollPane_ForErrorsTable, javax.swing.GroupLayout.DEFAULT_SIZE, 774, Short.MAX_VALUE))
+                .addComponent(scrollPane_ForErrorsTable, javax.swing.GroupLayout.DEFAULT_SIZE, 855, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Ошибки", panel_Errors);
@@ -3565,7 +3661,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             .addGroup(panel_ArchiveLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel_DatePickerTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 1452, Short.MAX_VALUE)
+                    .addComponent(jLabel_DatePickerTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 1251, Short.MAX_VALUE)
                     .addGroup(panel_ArchiveLayout.createSequentialGroup()
                         .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(label_TubeTotall)
@@ -3607,7 +3703,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                         .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton_AllGraphsOnOnePage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(button_GetTotalReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(button_graphPerPageReport, javax.swing.GroupLayout.DEFAULT_SIZE, 810, Short.MAX_VALUE))))
+                            .addComponent(button_graphPerPageReport, javax.swing.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         panel_ArchiveLayout.setVerticalGroup(
@@ -3652,7 +3748,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(button_graphPerPageReport))
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(281, Short.MAX_VALUE))
+                .addContainerGap(354, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Архив", panel_Archive);
@@ -3704,6 +3800,15 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             }
         });
         jMenu1.add(menuItem_EnableLogging);
+
+        jMenuItem6.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
+        jMenuItem6.setText("Сменить пароль администратора");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem6);
 
         jMenuItem3.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
         jMenuItem3.setText("Выход");
@@ -3873,11 +3978,11 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1481, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 890, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 967, Short.MAX_VALUE)
         );
 
         pack();
@@ -3892,7 +3997,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             protected Integer doInBackground() throws Exception {
                 try {
                     plc.connect();
-
+                    
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(
                             null,
@@ -3924,7 +4029,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                                 t("error"),
                                 ERROR_MESSAGE
                         );
-
+                        
                         log.error("Magnetic defect detection: {}", blockMD.getErrMessage());
                     } else {
                         blockMD.setParam(((UEParams) tmn.getParam(Devicess.ID_R4)).getParamMD());
@@ -3937,12 +4042,12 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     } finally {
                         progressDialog.setVisible(false);
                     }
-
+                    
                     return 0;
                 }
             }
             );
-
+            
         }
 
         //Подключение к УЗК1
@@ -3959,7 +4064,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                                 t("error"),
                                 ERROR_MESSAGE
                         );
-
+                        
                         log.error("Ultrasonic defect detection 1: {}", blockMD.getErrMessage());
                     }
                     try {
@@ -3969,10 +4074,10 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     } finally {
                         progressDialog.setVisible(false);
                     }
-
+                    
                     return 0;
                 }
-
+                
             });
         }
 
@@ -3990,7 +4095,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                                 t("error"),
                                 ERROR_MESSAGE
                         );
-
+                        
                         log.error("Ultrasonic defect detection 2: {}", blockMD.getErrMessage());
                     }
                     try {
@@ -4001,11 +4106,11 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     progressDialog.setVisible(false);
                     return 0;
                 }
-
+                
             });
         }
     }
-
+    
     private void stopDrivers() {
         if (blockMD != null) {
             blockMD.stop();
@@ -4054,7 +4159,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     em.close();
                 }
             }
-
+            
         }
     }
 
@@ -4192,6 +4297,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
     private void menuItem_SettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItem_SettingsActionPerformed
+        if (isPassCheckOk() == null) {
+            return;
+        }
         MainParametersDialog mainParametersDialog = new MainParametersDialog(
                 ((UEParams) tmn.getParam(Devicess.ID_R4)),
                 prmUSEditPnl.getDeltaGainPanel()
@@ -4201,7 +4309,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         progressDialog.startProcessing(t("savingSettings"), new SwingWorker<Integer, Integer>() {
             @Override
             protected Integer doInBackground() throws Exception {
-
+                
                 if (mainParametersDialog.isChanged) {
                     //Коипируем выбранные настройки трубы
                     ((UEParams) tmn.getParam(Devicess.ID_R4)).currentTubeType = mainParametersDialog.getTubeType();
@@ -4229,7 +4337,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                         JOptionPane.showMessageDialog(null, t("canNotSendSettingsToPLC"));
                         log.error("Can't send setting to PLC on IP", PLC_IP, ex);
                     }
-
+                    
                     synchronized (accessBd) {
                         tmn.setParam(Devicess.ID_R4, ((UEParams) tmn.getParam(Devicess.ID_R4)));
                         EntityManager em = emf.createEntityManager();
@@ -4291,7 +4399,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                                 em.close();
                             }
                         }
-
+                        
                     }
                     if (combobox_TubeOnDeviceResults.getSelectedIndex() == 0 && table_Shift_Tubes.getSelectedRow() < 1) {
                         grPnlAll.updateGrafs(MainFrame.this);
@@ -4362,9 +4470,13 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        if (isPassCheckOk() == null) {
+            return;
+        }
         UEParams prm = (UEParams) tmn.getParam(Devicess.ID_R4);
         ControllerConnectionDialog ccd = new ControllerConnectionDialog(prm.getConTr());
         ccd.setIPLoc(prm.conTrLoc);
+        ccd.setLocationRelativeTo(MainFrame.this);
         ccd.setVisible(true);
         if (ccd.isChanged) {
             InetAddress adr;
@@ -4393,6 +4505,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        if (isPassCheckOk() == null) {
+            return;
+        }
         UEParams prm = (UEParams) tmn.getParam(Devicess.ID_R4);
         UDPDeviceConnectionDialog udd = new UDPDeviceConnectionDialog(t("MDConnection"), prm.connMDL, prm.connMDR);
         udd.setVisible(true);
@@ -4406,6 +4521,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        if (isPassCheckOk() == null) {
+            return;
+        }
         UEParams prm = (UEParams) tmn.getParam(Devicess.ID_R4);
         UDPDeviceConnectionDialog udd = new UDPDeviceConnectionDialog(t("USK1Connection"), prm.connUSK1L, prm.connUSK1R);
         udd.setVisible(true);
@@ -4419,6 +4537,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        if (isPassCheckOk() == null) {
+            return;
+        }
         UEParams prm = (UEParams) tmn.getParam(Devicess.ID_R4);
         UDPDeviceConnectionDialog udd = new UDPDeviceConnectionDialog(t("USK2Connection"), prm.connUSK2L, prm.connUSK2R);
         udd.setVisible(true);
@@ -4522,6 +4643,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 }
             }
         }
+        setMdSettingsEnabledState(false);
     }//GEN-LAST:event_frBtSaveActionPerformed
 
     private void combobox_TubeOnDeviceResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combobox_TubeOnDeviceResultsActionPerformed
@@ -4546,12 +4668,15 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     }//GEN-LAST:event_combobox_TubeOnDeviceResultsActionPerformed
 
     private void tubeTypesMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tubeTypesMenuActionPerformed
+        if (isPassCheckOk() == null) {
+            return;
+        }
         //Получаем параметры
         UEParams params = (UEParams) tmn.getParam(Devicess.ID_R4);
-
+        tubeTypesDialog.setLocationRelativeTo(MainFrame.this);
         //Показываем диалог и передаем в него типы труб
         tubeTypesDialog.setVisible(params.tubeTypes, true);
-
+        
         if (tubeTypesDialog.ShouldSaveChanges()) {
             //Копируем типы труб в параметры
             params.tubeTypes = tubeTypesDialog.getTubeTypesList();
@@ -4581,6 +4706,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     }//GEN-LAST:event_tubeTypesMenuActionPerformed
 
     private void sortoscopeMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortoscopeMenuActionPerformed
+        if (isPassCheckOk() == null) {
+            return;
+        }
         //Получаем параметры
         UEParams params = (UEParams) tmn.getParam(Devicess.ID_R4);
         sortoscopeDialog.setVisible(true, params.currentTubeType);
@@ -4622,7 +4750,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     }
                 }
                 break;
-
+            
             case SHIFT_IS_RUNNING:
                 if (JOptionPane.showOptionDialog(
                         null,
@@ -4649,7 +4777,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 break;
         }
     }//GEN-LAST:event_button_ShiftActionPerformed
-
+    
     private void switchToggleButton(java.awt.event.ActionEvent evt) {
         try {
             //Получаем имя кнопки. Должно совпадать с одним из OUTPUTS mFrm.
@@ -4896,7 +5024,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     tableModel.removeRow(0);
                 }
                 log.debug("Pipes list has been cleared.");
-
+                
                 Object[][] data = new Object[archResults.size()][9];
                 List<TubeType> tubeTypes = ((UEParams) tmn.getParam(Devicess.ID_R4)).tubeTypes;
                 log.debug("Preparing pipe data for UI.");
@@ -4926,12 +5054,12 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                                     .getMinThick(4, 7, 3.0f);
                             //Округляем до 2 знаков
                             minThick = ((float) Math.round(minThick * 100)) / 100;
-
+                            
                         }
                     } else {
                         minThick = 0;
                     }
-
+                    
                     data[i][4] = minThick == -1 ? "Нет контакта" : minThick;
                     data[i][5] = currentArchResult.getLengthInMeters();
                     data[i][6] = currentArchResult.getDurabilityGroup() == null
@@ -4993,13 +5121,13 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     }
                     totalTubesCount = goodTubesCount + badTubesCount;
                     totalTubesLength = goodTubesLength + badTubesLength;
-
+                    
                     label_BadTubesValue.setText(badTubesCount.toString());
                     label_BadTubesLengthValue.setText(Math.round(badTubesLength * 100.0) / 100.0 + "м");
-
+                    
                     label_GoodTubesValue.setText(goodTubesCount.toString());
                     label_GoodTubesLengthValue.setText(Math.round(goodTubesLength * 100.0) / 100.0 + "м");
-
+                    
                     label_TotalTubesValue.setText(totalTubesCount.toString());
                     label_TotalTubesLengthValue.setText(Math.round(totalTubesLength * 100.0) / 100.0 + "м");
                     if (totalTubesCount != 0) {
@@ -5033,7 +5161,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 protected Integer doInBackground() throws Exception {
                     //Имя файла скомпилированного отчёта, готового для заполнения.
                     URL compiledReport = getClass().getResource("Resource/reports/TubesTable.jasper");
-
+                    
                     if (compiledReport == null) {
                         JOptionPane.showMessageDialog(
                                 null,
@@ -5051,7 +5179,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
                     //Сюда положим параметры для отчёта
                     Map<String, Object> parameters = new HashMap<>();
-
+                    
                     parameters.put("REPORT_START_TIME", new SimpleDateFormat("dd.MM.YY HH:mm:ss").format(table_DatePicker.getStartDate()));
                     parameters.put("REPORT_END_TIME", new SimpleDateFormat("dd.MM.YY HH:mm:ss").format(table_DatePicker.getEndDate()));
                     //Считаем время нахождения всех труб на установке
@@ -5116,7 +5244,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     } catch (JRException ex) {
                         JOptionPane.showMessageDialog(null, "Ошибка заполнения отчета: " + ex.getLocalizedMessage());
                         progressDialog.setVisible(false);
-
+                        
                         reportDialog.dispose();
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null, "Ошибка заполнения отчета: " + ex.getLocalizedMessage());
@@ -5126,14 +5254,14 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     }
                     reportDialog.add(jRViewer);
                     reportDialog.setBounds(0, 0, 800, 550);
-                    reportDialog.setLocationRelativeTo(null);
+                    reportDialog.setLocationRelativeTo(MainFrame.this);
                     progressDialog.setVisible(false);
                     reportDialog.setVisible(true);
                     reportDialog.dispose();
                     return 0;
                 }
             });
-
+            
         } else {//Нет данных для вывода отчета
             JOptionPane.showMessageDialog(
                     null,
@@ -5144,7 +5272,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     "Уведомление",
                     INFORMATION_MESSAGE);
         }
-
+        
 
     }//GEN-LAST:event_button_GetTotalReportActionPerformed
 
@@ -5212,6 +5340,49 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         notifyController(plcCommand);
     }//GEN-LAST:event_button_EnableVerdictActionPerformed
 
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        int selectedTabIndex = jTabbedPane1.getSelectedIndex();
+        switch (selectedTabIndex) {
+            case 1:
+                if (!mdSettingsIsEnabled && isPassCheckOk() != null) {
+                    setMdSettingsEnabledState(true);
+                }
+                break;
+            case 2:
+                if (!uskSettingsIsEnabled && isPassCheckOk() != null) {
+                    setUskSettingsEnabledState(true);
+                }
+                break;
+            default:
+        }
+    }//GEN-LAST:event_jTabbedPane1StateChanged
+
+    private void jButton_saveUskSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_saveUskSettingsActionPerformed
+        saveUSKParams(blockUSK1);
+        blockUSK1.resetChangeFlag();
+        saveUSKParams(blockUSK2);
+        blockUSK2.resetChangeFlag();
+        prmUSEditPnl.resetChanges();
+        setUskSettingsEnabledState(false);
+    }//GEN-LAST:event_jButton_saveUskSettingsActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        if (isPassCheckOk() != null) {
+            if (newPass == null) {
+                this.newPass = new Dialog_changePass(MainFrame.this, true, emf, restrictedAccessDialog.getOperator());
+            }
+            newPass.setLocationRelativeTo(MainFrame.this);
+            newPass.setVisible(true);
+            if (newPass.getReturnStatus() == 1) {
+                JOptionPane.showMessageDialog(
+                        MainFrame.this,
+                        "Пароль изменен успешно.",
+                        "Уведомление",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+    
     private void saveOperatorChoiceToDb(int tubeCondition) {
         EntityManager em = emf.createEntityManager();
         //Сначала получаем последние результаты проверки по трбуе из базы
@@ -5239,7 +5410,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             }
         }
     }
-
+    
     private void updateTubesTable(String uiConditionLabel) {
         //Отключаем кнопки выбора.
         button_EnableVerdict.setEnabled(false);
@@ -5247,18 +5418,18 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         //Обновляем список труб
         ((DefaultTableModel) table_Shift_Tubes.getModel()).setValueAt(uiConditionLabel, 0, PIPE_STATE_COLUMN);
     }
-
+    
     private void notifyController(int plcCommand) {
         //Отправляем комманду контроллеру о состоянии трубы.
         sendCmdToPLC(plcCommand);
     }
-
+    
     private void createlengthWiseGraph() {
         //Если есть данные для вывода отчета
         if (archResults != null && !archResults.isEmpty()) {
             //Имя файла скомпилированного отчёта, готового для заполнения.
             URL compiledReport = getClass().getResource("Resource/LengthwiseReport.jasper");
-
+            
             if (compiledReport == null) {
                 JOptionPane.showMessageDialog(
                         null,
@@ -5282,7 +5453,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
                 //Сюда положим параметры для отчёта
                 Map<String, Object> parameters = new HashMap<>();
-
+                
                 parameters.put("TUBE_NUMBER", archResults.get(selectedRowIndex).getId());
                 parameters.put("CONTROL_TIME", new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(archResults.get(selectedRowIndex).getDateCreate()));
                 InputStream is = null;
@@ -5313,7 +5484,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     "Уведомление",
                     INFORMATION_MESSAGE);
         }
-
+        
     }
 
     /**
@@ -5345,7 +5516,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     ((JToggleButton) evt.getSource()).setText(pressedButtonText);
                 } else {
                     ((JToggleButton) evt.getSource()).setText(freeButtonText);
-
+                    
                 }
             } catch (ModbusException ex) {
                 log.error("Can't toggle button state to PLC with IP [{}]", PLC_IP, ex);
@@ -5447,6 +5618,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private javax.swing.JComboBox combobox_TubeOnDeviceResults;
     private javax.swing.JButton frBtSave;
     private javax.swing.JButton jButton_AllGraphsOnOnePage;
+    private javax.swing.JButton jButton_saveUskSettings;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox10;
     private javax.swing.JCheckBox jCheckBox11;
@@ -5488,6 +5660,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
@@ -5563,7 +5736,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     public int getTubeLength() {
         return tubeLength;
     }
-
+    
     @Override
     public String getTubeType() {
         TubeType tt = ((UEParams) tmn.getParam(Devicess.ID_R4)).currentTubeType;
@@ -5572,7 +5745,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         }
         return null;
     }
-
+    
     @Override
     public float[] getTubeThicks() {
         float[] res = new float[3];
@@ -5582,7 +5755,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         }
         return res;
     }
-
+    
     @Override
     public float[] getDefects(int ch) {
         TubeType ctt = ((UEParams) tmn.getParam(Devicess.ID_R4)).currentTubeType;
@@ -5668,7 +5841,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
      * @param deviceName имя устройства на которое необходимо поместить трубу.
      */
     public void newTube(String deviceName) {
-
+        
     }
 
     /**
@@ -5683,7 +5856,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             for (Component component : panel.getComponents()) {
                 //Если компонент панель, то вызываем метод рекурсивно.
                 if (component instanceof JPanel) {
-
+                    
                     updateTunePanel((JPanel) component);
                     continue;
                 }
@@ -5699,7 +5872,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     }
                     continue;
                 }
-
+                
                 if (component instanceof JButton) {
                     if (mode == 2) {
                         component.setEnabled(true);
@@ -5718,7 +5891,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             log.error("Can't update pipe panel from PLC with IP [{}]", PLC_IP, ex);
         }
     }
-
+    
     static public String getChanName(int idDev, int i) {
         if (idDev == Devicess.ID_USK1.intValue()) {
             if (i <= 5) {
@@ -5735,7 +5908,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             }
         }
         return "";
-
+        
     }
 
     /**
@@ -5743,15 +5916,15 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
      * отображения в фоновом потоке.
      */
     private class GrafsUpdater implements Runnable {
-
+        
         private final IScanDataProvider driver;
         private final PanelForGraphics pn;
-
+        
         public GrafsUpdater(IScanDataProvider driver, PanelForGraphics pn) {
             this.driver = driver;
             this.pn = pn;
         }
-
+        
         @Override
         public void run() {
             pn.updateGrafs(driver);
@@ -5763,16 +5936,16 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
      * отображения в фоновом потоке.
      */
     private class MDGrafsUpdater implements Runnable {
-
+        
         private final IScanDataProvider dr3;
         private final PanelForGraphics pn;
-
+        
         public MDGrafsUpdater(IScanDataProvider dr3, PanelForGraphics pn) {
-
+            
             this.dr3 = dr3;
             this.pn = pn;
         }
-
+        
         @Override
         public void run() {
             pn.updateGrafs(dr3);
@@ -5784,17 +5957,17 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
      * отображения в фоновом потоке.
      */
     private class USKGrafsUpdater implements Runnable {
-
+        
         private final IScanDataProvider dr1;
         private final IScanDataProvider dr2;
         private final PanelForGraphics pn;
-
+        
         public USKGrafsUpdater(IScanDataProvider dr1, IScanDataProvider dr2, PanelForGraphics pn) {
             this.dr1 = dr1;
             this.dr2 = dr2;
             this.pn = pn;
         }
-
+        
         @Override
         public void run() {
             pn.updateGrafs(dr1);
@@ -5807,19 +5980,19 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
      * отображения в фоновом потоке.
      */
     private class AScanUpdater implements Runnable {
-
+        
         private final DeviceUSKUdp driver;
         private final DeviceUSKUdpParamPanel pn;
-
+        
         public AScanUpdater(DeviceUSKUdp driver, DeviceUSKUdpParamPanel pn) {
             this.driver = driver;
             this.pn = pn;
         }
-
+        
         @Override
         public void run() {
             pn.updateAScan(driver);
         }
     }
-
+    
 }
