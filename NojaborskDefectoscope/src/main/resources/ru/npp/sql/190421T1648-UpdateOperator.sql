@@ -1,0 +1,2 @@
+INSERT INTO OPERATOR    (ID, FIRSTNAME, LASTNAME, MIDDLENAME, PERSONALNUMBER, USER_PASS, USER_ROLE)
+                VALUES  (7777777, 'admin', 'admin', 'admin', 'none', 'admin','ADMIN');

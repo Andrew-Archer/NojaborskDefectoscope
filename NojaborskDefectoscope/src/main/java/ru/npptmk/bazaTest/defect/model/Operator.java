@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 /**
@@ -22,6 +23,10 @@ import javax.persistence.OneToMany;
  * @author RazumnovAA
  */
 @Entity
+@NamedQuery(name="findByNameAndCode", query="select op from Operator op "
+        + "where op.firstName = :firstName and op.lastName = :lastName and op.middleName = :middleName and op.personalNumber = :personalNumber")
+@NamedQuery(name="findAllAdmins", query="select op from Operator op "
+        + "where op.userRole = ru.npptmk.bazaTest.defect.model.UserRoles.ADMIN")
 public class Operator implements Serializable {
 
     private static final long serialVersionUID = 0737672306132424747L;
