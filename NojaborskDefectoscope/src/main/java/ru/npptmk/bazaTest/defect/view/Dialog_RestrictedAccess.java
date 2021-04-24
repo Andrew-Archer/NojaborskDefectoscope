@@ -7,6 +7,8 @@ package ru.npptmk.bazaTest.defect.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.Collections;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -37,14 +39,17 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
      * A return status code - returned if OK button has been pressed
      */
     public static final int RET_OK = 1;
-    
+
     private Operator op;
 
     @Override
     public void setVisible(boolean isVisible) {
+        if (isVisible) {
+            jComboBox1.removeAllItems();
+            loadAllOperators().forEach(jComboBox1::addItem);
+            this.jPasswordField.setText("");
+        }
         super.setVisible(isVisible);
-        this.jTextField_adminLogin.setText("");
-        this.jPasswordField.setText("");
     }
 
     /**
@@ -68,6 +73,26 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
         });
     }
 
+    private List<Operator> loadAllOperators() {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = null;
+        List<Operator> result = Collections.EMPTY_LIST;
+        try {
+            tx = em.getTransaction();
+            tx.begin();
+            result = em.createNamedQuery("findAllAdmins", Operator.class).getResultList();
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+
+        } finally {
+            em.close();
+        }
+        return result;
+    }
+
     /**
      * @return the return status of this dialog - one of RET_OK or RET_CANCEL
      */
@@ -89,9 +114,9 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField_adminLogin = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jPasswordField = new javax.swing.JPasswordField();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setTitle("ОГРАНИЧЕННЫЙ ДОСТУП");
         setResizable(false);
@@ -118,17 +143,17 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
         });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel1.setText("Введите логин и пароль администратора");
+        jLabel1.setText("Выбирете администратора и укажите пароль");
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel2.setText("Имя");
-
-        jTextField_adminLogin.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel2.setText("Админ.");
 
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel3.setText("Пароль");
 
         jPasswordField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+
+        jComboBox1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -141,7 +166,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField_adminLogin))
+                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -156,7 +181,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField_adminLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -192,7 +217,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        final String firstName = jTextField_adminLogin.getText();
+        final String firstName = ((Operator) jComboBox1.getSelectedItem()).getFristName();
         final String password = String.valueOf(jPasswordField.getPassword());
         Operator foundOperator = null;
         EntityManager em = null;
@@ -243,12 +268,12 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
+    private javax.swing.JComboBox<Operator> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField;
-    private javax.swing.JTextField jTextField_adminLogin;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
 

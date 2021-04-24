@@ -25,6 +25,8 @@ import javax.persistence.OneToMany;
 @Entity
 @NamedQuery(name="findByNameAndCode", query="select op from Operator op "
         + "where op.firstName = :firstName and op.lastName = :lastName and op.middleName = :middleName and op.personalNumber = :personalNumber")
+@NamedQuery(name="findAllAdmins", query="select op from Operator op "
+        + "where op.userRole = ru.npptmk.bazaTest.defect.model.UserRoles.ADMIN")
 public class Operator implements Serializable {
 
     private static final long serialVersionUID = 0737672306132424747L;
