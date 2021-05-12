@@ -29,8 +29,8 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jPanel1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" attributes="0">
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Component id="edTime" linkSize="1" max="32767" attributes="0"/>
                           </Group>
@@ -49,36 +49,39 @@
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="edOffWater" min="-2" pref="70" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
-                                          <Component id="edMDStart" linkSize="1" min="-2" pref="70" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
-                                          <Component id="edMDEnd" linkSize="1" min="-2" pref="70" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                                          <Component id="cbTubeTypes" max="32767" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
-                                          <Component id="edOnWatter" min="-2" pref="71" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="button_SaveAndClose" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Component id="button_Close" min="-2" max="-2" attributes="0"/>
-                                      </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="edMDStart" linkSize="1" min="-2" pref="70" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="edMDEnd" linkSize="1" min="-2" pref="70" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                                      <Component id="cbTubeTypes" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="edOnWatter" min="-2" pref="71" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="button_SaveAndClose" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="button_Close" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="115" max="-2" attributes="0"/>
+                                      <Component id="jTextField_MinGoodLength" max="32767" attributes="0"/>
+                                  </Group>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -119,6 +122,10 @@
                               <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="edOffDry" min="-2" pref="70" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jCheckBox_minGoodLengthCheckDisable" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -200,6 +207,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="edOffDry" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="edTime" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -208,13 +216,18 @@
                           <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="edTime" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jTextField_MinGoodLength" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jCheckBox_minGoodLengthCheckDisable" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
               <Component id="jPanel1" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -230,7 +243,7 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x422;&#x438;&#x43f; &#x442;&#x440;&#x443;&#x431;&#x44b;"/>
       </Properties>
@@ -248,7 +261,7 @@
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x414;&#x43b;&#x438;&#x43d;&#x430; &#x43a;&#x430;&#x43b;&#x438;&#x431;&#x440;&#x43e;&#x432;&#x43e;&#x447;&#x43d;&#x43e;&#x433;&#x43e; &#x443;&#x447;&#x430;&#x441;&#x442;&#x43a;&#x430; &#x43c;&#x43c;."/>
       </Properties>
@@ -256,7 +269,7 @@
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43e;&#x440;&#x434;&#x438;&#x43d;&#x430;&#x442;&#x430; &#x43d;&#x430;&#x447;&#x430;&#x43b;&#x430; &#x43c;&#x430;&#x433;&#x43d;&#x438;&#x442;&#x43d;&#x43e;&#x439; &#x434;&#x435;&#x444;&#x435;&#x43a;&#x442;&#x43e;&#x441;&#x43a;&#x43e;&#x43f;&#x438;&#x438; &#x43c;&#x43c;."/>
       </Properties>
@@ -264,7 +277,7 @@
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43e;&#x440;&#x434;&#x438;&#x43d;&#x430;&#x442;&#x430; &#x43d;&#x430;&#x447;&#x430;&#x43b;&#x430; &#x423;&#x417;&#x414; &#x43c;&#x43c;."/>
       </Properties>
@@ -272,7 +285,7 @@
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43e;&#x440;&#x434;&#x438;&#x43d;&#x430;&#x442;&#x430; &#x43e;&#x43f;&#x443;&#x441;&#x43a;&#x430;&#x43d;&#x438;&#x44f; &#x432;&#x442;&#x43e;&#x440;&#x43e;&#x433;&#x43e; &#x43f;&#x440;&#x438;&#x436;&#x438;&#x43c;&#x430; &#x43c;&#x43c;."/>
       </Properties>
@@ -280,7 +293,7 @@
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43e;&#x440;&#x434;&#x438;&#x43d;&#x430;&#x442;&#x430; &#x43e;&#x43f;&#x443;&#x441;&#x43a;&#x430;&#x43d;&#x438;&#x44f; &#x442;&#x440;&#x435;&#x442;&#x44c;&#x435;&#x433;&#x43e; &#x43f;&#x440;&#x438;&#x436;&#x438;&#x43c;&#x430; &#x43c;&#x43c;."/>
       </Properties>
@@ -288,7 +301,7 @@
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43e;&#x440;&#x434;&#x438;&#x43d;&#x430;&#x442;&#x430; &#x43f;&#x43e;&#x434;&#x44a;&#x435;&#x43c;&#x430; &#x43f;&#x435;&#x440;&#x432;&#x43e;&#x433;&#x43e; &#x43f;&#x440;&#x438;&#x436;&#x438;&#x43c;&#x430; &#x43c;&#x43c;."/>
       </Properties>
@@ -296,7 +309,7 @@
     <Component class="javax.swing.JLabel" name="jLabel8">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43e;&#x440;&#x434;&#x438;&#x43d;&#x430;&#x442;&#x430; &#x43e;&#x43a;&#x43e;&#x43d;&#x447;&#x430;&#x43d;&#x438;&#x44f; &#x43c;&#x430;&#x433;&#x43d;&#x438;&#x442;&#x43d;&#x43e;&#x439; &#x434;&#x435;&#x444;&#x435;&#x43a;&#x442;&#x43e;&#x441;&#x43a;&#x43e;&#x43f;&#x438;&#x438; &#x43c;&#x43c;."/>
       </Properties>
@@ -304,7 +317,7 @@
     <Component class="javax.swing.JLabel" name="jLabel9">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43e;&#x440;&#x434;&#x438;&#x43d;&#x430;&#x442;&#x430; &#x43e;&#x43a;&#x43e;&#x43d;&#x447;&#x430;&#x43d;&#x438;&#x44f; &#x423;&#x417;&#x414; &#x43c;&#x43c;."/>
       </Properties>
@@ -334,7 +347,7 @@
     <Component class="javax.swing.JTextField" name="edCalibrLength">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
@@ -345,7 +358,7 @@
     <Component class="javax.swing.JTextField" name="edMDStart">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
@@ -356,7 +369,7 @@
     <Component class="javax.swing.JTextField" name="edUSDStart">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
@@ -367,7 +380,7 @@
     <Component class="javax.swing.JTextField" name="edSecLirStart">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
@@ -378,7 +391,7 @@
     <Component class="javax.swing.JTextField" name="edThirdLirStart">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
@@ -389,7 +402,7 @@
     <Component class="javax.swing.JTextField" name="edTailLen">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
@@ -400,7 +413,7 @@
     <Component class="javax.swing.JTextField" name="edMDEnd">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
@@ -411,7 +424,7 @@
     <Component class="javax.swing.JTextField" name="edUSDEnd">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
@@ -422,7 +435,7 @@
     <Component class="javax.swing.JLabel" name="jLabel10">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x412;&#x440;&#x435;&#x43c;&#x44f; &#x437;&#x430;&#x43f;&#x43e;&#x43b;&#x43d;&#x435;&#x43d;&#x438;&#x44f; &#x43a;&#x430;&#x440;&#x435;&#x442;&#x43a;&#x438; &#x432;&#x43e;&#x434;&#x43e;&#x439; &#x441;&#x435;&#x43a;."/>
       </Properties>
@@ -430,7 +443,7 @@
     <Component class="javax.swing.JTextField" name="edTime">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
@@ -441,7 +454,7 @@
     <Component class="javax.swing.JTextField" name="edIntSave">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
@@ -452,7 +465,7 @@
     <Component class="javax.swing.JLabel" name="jLabel11">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x428;&#x430;&#x433; &#x445;-&#x43a;&#x43e;&#x43e;&#x440;&#x434;&#x438;&#x43d;&#x430;&#x442;&#x44b; &#x433;&#x440;&#x430;&#x444;&#x438;&#x43a;&#x43e;&#x432;, &#x43c;&#x43c;."/>
       </Properties>
@@ -464,7 +477,7 @@
     <Component class="javax.swing.JTextField" name="edOffWater">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
@@ -475,7 +488,7 @@
     <Component class="javax.swing.JLabel" name="jLabel12">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43e;&#x440;&#x434;&#x438;&#x43d;&#x430;&#x442;&#x430; &#x43e;&#x43a;&#x43e;&#x43d;&#x447;&#x430;&#x43d;&#x438;&#x44f; &#x441;&#x43c;&#x430;&#x447;&#x438;&#x432;&#x430;&#x43d;&#x438;&#x44f;, &#x43c;&#x43c;."/>
       </Properties>
@@ -483,7 +496,7 @@
     <Component class="javax.swing.JTextField" name="edOnWatter">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
@@ -494,7 +507,7 @@
     <Component class="javax.swing.JLabel" name="jLabel13">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43e;&#x440;&#x434;&#x438;&#x43d;&#x430;&#x442;&#x430; &#x43d;&#x430;&#x447;&#x430;&#x43b;&#x430; &#x441;&#x43c;&#x430;&#x447;&#x438;&#x432;&#x430;&#x43d;&#x438;&#x44f;, &#x43c;&#x43c;."/>
       </Properties>
@@ -502,7 +515,7 @@
     <Component class="javax.swing.JTextField" name="edOffDry">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
@@ -513,7 +526,7 @@
     <Component class="javax.swing.JLabel" name="jLabel14">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43e;&#x440;&#x434;&#x438;&#x43d;&#x430;&#x442;&#x430; &#x43e;&#x43a;&#x43e;&#x43d;&#x447;&#x430;&#x43d;&#x438;&#x44f; &#x43e;&#x441;&#x443;&#x448;&#x43a;&#x438;, &#x43c;&#x43c;."/>
       </Properties>
@@ -521,7 +534,7 @@
     <Component class="javax.swing.JLabel" name="jLabel15">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43e;&#x440;&#x434;&#x438;&#x43d;&#x430;&#x442;&#x430; &#x43d;&#x430;&#x447;&#x430;&#x43b;&#x430; &#x43e;&#x441;&#x443;&#x448;&#x43a;&#x438;, &#x43c;&#x43c;."/>
       </Properties>
@@ -529,13 +542,37 @@
     <Component class="javax.swing.JTextField" name="edOnDry">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
+          <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="edMDStartMouseClicked"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel16">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Dialog" size="18" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&#x41c;&#x438;&#x43d;&#x438;&#x43c;&#x430;&#x43b;&#x44c;&#x43d;&#x430;&#x44f; &#x434;&#x43b;&#x438;&#x43d;&#x430; &#x433;&#x43e;&#x434;&#x43d;&#x43e;&#x433;&#x43e; &#x443;&#x447;&#x430;&#x441;&#x442;&#x43a;&#x430;, &#x43c;&#x43c;"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="jTextField_MinGoodLength">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Dialog" size="18" style="0"/>
+        </Property>
+        <Property name="horizontalAlignment" type="int" value="4"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="jCheckBox_minGoodLengthCheckDisable">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Dialog" size="14" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x43a;&#x43b;&#x44e;&#x447;&#x447;&#x438;&#x442;&#x44c; &#x43f;&#x440;&#x43e;&#x432;&#x435;&#x440;&#x43a;&#x443; &#x43c;&#x438;&#x43d;&#x438;&#x43c;&#x430;&#x43b;&#x44c;&#x43d;&#x43e;&#x439; &#x434;&#x43b;&#x438;&#x43d;&#x44b; &#x433;&#x43e;&#x434;&#x43d;&#x43e;&#x433;&#x43e; &#x443;&#x447;&#x430;&#x441;&#x442;&#x43a;&#x430;"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

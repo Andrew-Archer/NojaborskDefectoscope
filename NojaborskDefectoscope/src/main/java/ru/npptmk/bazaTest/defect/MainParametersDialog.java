@@ -64,6 +64,8 @@ public class MainParametersDialog extends javax.swing.JDialog {
         edOffWater.setText(String.valueOf(par.offWatter));
         edOnDry.setText(String.valueOf(par.onDry));
         edOffDry.setText(String.valueOf(par.offDry));
+        jTextField_MinGoodLength.setText(String.valueOf(par.minGoodLength));
+        jCheckBox_minGoodLengthCheckDisable.setSelected(par.disableMinGoodLengthCheck);
         for (TubeType ctt : ltt) {
             cbTubeTypes.addItem(ctt);
             if (ctt.equals(tt)) {
@@ -132,37 +134,40 @@ public class MainParametersDialog extends javax.swing.JDialog {
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         edOnDry = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        jTextField_MinGoodLength = new javax.swing.JTextField();
+        jCheckBox_minGoodLengthCheckDisable = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Параметры линии дефектоскопии.");
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel1.setText("Тип трубы");
 
         cbTubeTypes.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel2.setText("Длина калибровочного участка мм.");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel3.setText("Координата начала магнитной дефектоскопии мм.");
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel4.setText("Координата начала УЗД мм.");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel5.setText("Координата опускания второго прижима мм.");
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel6.setText("Координата опускания третьего прижима мм.");
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel7.setText("Координата подъема первого прижима мм.");
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel8.setText("Координата окончания магнитной дефектоскопии мм.");
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel9.setText("Координата окончания УЗД мм.");
 
         button_SaveAndClose.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -181,7 +186,7 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        edCalibrLength.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edCalibrLength.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edCalibrLength.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edCalibrLength.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -189,7 +194,7 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        edMDStart.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edMDStart.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edMDStart.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edMDStart.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -197,7 +202,7 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        edUSDStart.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edUSDStart.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edUSDStart.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edUSDStart.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -205,7 +210,7 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        edSecLirStart.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edSecLirStart.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edSecLirStart.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edSecLirStart.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -213,7 +218,7 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        edThirdLirStart.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edThirdLirStart.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edThirdLirStart.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edThirdLirStart.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -221,7 +226,7 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        edTailLen.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edTailLen.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edTailLen.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edTailLen.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -229,7 +234,7 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        edMDEnd.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edMDEnd.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edMDEnd.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edMDEnd.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -237,7 +242,7 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        edUSDEnd.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edUSDEnd.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edUSDEnd.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edUSDEnd.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -245,10 +250,10 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel10.setText("Время заполнения каретки водой сек.");
 
-        edTime.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edTime.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edTime.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edTime.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -256,7 +261,7 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        edIntSave.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edIntSave.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edIntSave.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edIntSave.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -264,12 +269,12 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel11.setText("Шаг х-координаты графиков, мм.");
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        edOffWater.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edOffWater.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edOffWater.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edOffWater.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -277,10 +282,10 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel12.setText("Координата окончания смачивания, мм.");
 
-        edOnWatter.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edOnWatter.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edOnWatter.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edOnWatter.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -288,10 +293,10 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel13.setText("Координата начала смачивания, мм.");
 
-        edOffDry.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edOffDry.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edOffDry.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edOffDry.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -299,19 +304,28 @@ public class MainParametersDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel14.setText("Координата окончания осушки, мм.");
 
-        jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel15.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel15.setText("Координата начала осушки, мм.");
 
-        edOnDry.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        edOnDry.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         edOnDry.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         edOnDry.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 edMDStartMouseClicked(evt);
             }
         });
+
+        jLabel16.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel16.setText("Минимальная длина годного участка, мм");
+
+        jTextField_MinGoodLength.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jTextField_MinGoodLength.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
+        jCheckBox_minGoodLengthCheckDisable.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jCheckBox_minGoodLengthCheckDisable.setText("Отключчить проверку минимальной длины годного участка");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -322,46 +336,49 @@ public class MainParametersDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(edTime))
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(edUSDStart, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(edUSDEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 70, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(edUSDEnd, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(edOffWater, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jLabel3)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(edMDStart, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(jLabel8)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(edMDEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(jLabel1)
-                                            .addGap(41, 41, 41)
-                                            .addComponent(cbTubeTypes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(jLabel13)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(edOnWatter, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(button_SaveAndClose)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(button_Close)))
-                                    .addComponent(jLabel10))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(edMDStart, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(edMDEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(41, 41, 41)
+                                        .addComponent(cbTubeTypes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel13)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(edOnWatter, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(button_SaveAndClose)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(button_Close))
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel16)
+                                        .addGap(115, 115, 115)
+                                        .addComponent(jTextField_MinGoodLength)))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -392,7 +409,10 @@ public class MainParametersDialog extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel14)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(edOffDry, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(edOffDry, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jCheckBox_minGoodLengthCheckDisable)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
 
@@ -455,16 +475,21 @@ public class MainParametersDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel14)
-                            .addComponent(edOffDry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(edOffDry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(edTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(edOffWater, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(edTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(64, 64, 64)
+                        .addComponent(jLabel10)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel16)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextField_MinGoodLength, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jCheckBox_minGoodLengthCheckDisable)))
+                .addGap(42, 42, 42)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -518,6 +543,8 @@ public class MainParametersDialog extends javax.swing.JDialog {
             prm.offWatter = Short.valueOf(edOffWater.getText());
             prm.onDry = Short.valueOf(edOnDry.getText());
             prm.offDry = Short.valueOf(edOffDry.getText());
+            prm.minGoodLength = Integer.valueOf(jTextField_MinGoodLength.getText());
+            prm.disableMinGoodLengthCheck = jCheckBox_minGoodLengthCheckDisable.isSelected();
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Данные введены неверно");
         }
@@ -550,6 +577,7 @@ public class MainParametersDialog extends javax.swing.JDialog {
     private javax.swing.JTextField edTime;
     private javax.swing.JTextField edUSDEnd;
     private javax.swing.JTextField edUSDStart;
+    private javax.swing.JCheckBox jCheckBox_minGoodLengthCheckDisable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -557,6 +585,7 @@ public class MainParametersDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -566,5 +595,6 @@ public class MainParametersDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField jTextField_MinGoodLength;
     // End of variables declaration//GEN-END:variables
 }

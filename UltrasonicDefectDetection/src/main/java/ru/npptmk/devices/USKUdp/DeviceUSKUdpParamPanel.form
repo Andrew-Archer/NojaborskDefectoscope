@@ -37,7 +37,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cbHardwareType" min="-2" pref="164" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButton1" pref="211" max="32767" attributes="0"/>
+                      <Component id="jButton1" pref="252" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jPanel5" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -58,7 +58,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jTabbedPane1" pref="481" max="32767" attributes="0"/>
+              <Component id="jTabbedPane1" pref="349" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -200,36 +200,39 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="cbDetect" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jButton4" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton8" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="cbDetect" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jButton4" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jButton8" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="edGain" alignment="0" max="-2" attributes="0"/>
+                                      <Component id="edDelay" alignment="0" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jButton3" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jButton9" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="edGain" alignment="0" max="-2" attributes="0"/>
-                                  <Component id="edDelay" alignment="0" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jButton6" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="edRange" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jButton5" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jButton3" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton9" alignment="1" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jLabel1" alignment="0" min="-2" pref="176" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jButton6" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="edRange" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton5" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jLabel1" alignment="0" min="-2" pref="176" max="-2" attributes="0"/>
+                          <Component id="jLabel18" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -262,7 +265,9 @@
                           <Component id="edDelay" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton9" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                       <Component id="cbDetect" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -554,6 +559,14 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbDetectActionPerformed"/>
               </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel18">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x414;&#x435;&#x442;&#x435;&#x43a;&#x442;&#x43e;&#x440;"/>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>
@@ -1701,13 +1714,6 @@
                               </Group>
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="jButton46" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="edVRCTime" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jButton47" min="-2" max="-2" attributes="0"/>
-                                  </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jButton48" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
@@ -1729,13 +1735,22 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jButton45" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jLabel27" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jLabel28" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jButton43" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jButton44" min="-2" pref="98" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel27" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jButton46" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="edVRCTime" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jButton47" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -2109,7 +2124,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="18" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&#x41e;&#x431;&#x449;+"/>
+                <Property name="text" type="java.lang.String" value="&#x41e;&#x431;&#x449;&#x435;&#x435; &#x443;&#x441;&#x438;&#x43b;&#x435;&#x43d;&#x438;&#x435; +"/>
                 <Property name="name" type="java.lang.String" value="130" noResource="true"/>
               </Properties>
               <Events>
@@ -2123,7 +2138,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="18" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&#x41e;&#x431;&#x449;-"/>
+                <Property name="text" type="java.lang.String" value="&#x41e;&#x431;&#x449;&#x435;&#x435; &#x443;&#x441;&#x438;&#x43b;&#x435;&#x43d;&#x438;&#x435; -"/>
                 <Property name="name" type="java.lang.String" value="131" noResource="true"/>
               </Properties>
               <Events>
@@ -2463,12 +2478,10 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jLabel34" max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="cbRVhoda" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jLabel16" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jLabel17" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jLabel15" alignment="0" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="cbRVhoda" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jLabel16" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jLabel17" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jLabel15" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -3125,7 +3138,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="jLabel20" max="32767" attributes="0"/>
-                                  <Component id="jLabel19" pref="316" max="32767" attributes="0"/>
+                                  <Component id="jLabel19" max="32767" attributes="0"/>
                                   <Component id="jLabel21" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
@@ -3204,7 +3217,7 @@
                           <Component id="jLabel23" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="edMechPos" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="227" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

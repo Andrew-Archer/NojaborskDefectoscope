@@ -40,7 +40,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
      */
     public static final int RET_OK = 1;
 
-    private Operator op;
+    private static Operator op;
 
     @Override
     public void setVisible(boolean isVisible) {
@@ -217,20 +217,20 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        final String firstName = ((Operator) jComboBox1.getSelectedItem()).getFristName();
+        final Long id = ((Operator) jComboBox1.getSelectedItem()).getId();
         final String password = String.valueOf(jPasswordField.getPassword());
         Operator foundOperator = null;
         EntityManager em = null;
         try {
             em = emf.createEntityManager();
             EntityTransaction tx = em.getTransaction();
-            foundOperator = em.createQuery("SELECT op FROM Operator op WHERE op.firstName = :firstName", Operator.class)
-                    .setParameter("firstName", firstName)
+            foundOperator = em.createQuery("SELECT op FROM Operator op WHERE op.id = :id", Operator.class)
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (IllegalStateException ex) {
             LOG.error("[Entity manager factory] has been closed so we can't obtain [entity manager]", ex);
         } catch (NoResultException ex) {
-            LOG.debug("Can't find [operator] with name [{}] and password [{}]", firstName, password, ex);
+            LOG.debug("Can't find [operator] with name [{}] and password [{}]", id, password, ex);
         } catch (Exception ex) {
             LOG.error("Can't load user from db.", ex);
         } finally {

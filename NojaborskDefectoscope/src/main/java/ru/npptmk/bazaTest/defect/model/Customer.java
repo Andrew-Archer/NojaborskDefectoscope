@@ -10,12 +10,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 /**
  *
  * @author RazumnovAA
  */
 @Entity
+@NamedQuery(name="loadAllCustomers", query="select c from Customer c")
 public class Customer implements Serializable {
 
     /**
