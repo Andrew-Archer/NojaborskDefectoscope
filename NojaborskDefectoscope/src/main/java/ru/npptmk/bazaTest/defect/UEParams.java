@@ -6,6 +6,11 @@
 package ru.npptmk.bazaTest.defect;
 
 import java.awt.Color;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -45,6 +50,15 @@ public class UEParams implements Serializable {
      * Параметры отображения панелей для магнитки
      */
     public HashMap<String, List<Serializable>> prGrfMd = new HashMap<>();
+    
+    /**
+     * Минимальная длина годного участка мм
+     */
+    public int minGoodLength = 6000;
+    /**
+     * Проверка минимальной длины участка отключена
+     */
+    public boolean disableMinGoodLengthCheck = false;
     /**
      * Имя набора графиков для вкладки труба.
      */
@@ -161,7 +175,7 @@ public class UEParams implements Serializable {
         prGrfMd.put("Все", grList);
         currMDGrSet = "Все";
         grList = new ArrayList<>();
-        Color[] threeCol = {Color.GREEN, Color.RED, Color.YELLOW};
+        Color[] threeCol = {Color.GREEN, Color.RED, Color.BLUE};
         String[] names = {"Магнитный", "УЗК", "Толщина"};
         long[] dev = {Devicess.ID_R4, Devicess.ID_R4, Devicess.ID_R4};
         int[] chans = {0, 1, 2};
@@ -198,7 +212,7 @@ public class UEParams implements Serializable {
 //        connUSK2L = new InetSocketAddress("192.168.0.124", 2203);
         conTr = "192.168.0.240";
         currentTubeType = new TubeType(1l, "НКТ", 73, 5.5f);
-        
+
         DeviceUSKUdpParams prs = new DeviceUSKUdpParams("УЗК 1");
         for (DeviceUSKUdpParam p : prs.prms) {
             if (p.getId() <= 5) {
@@ -208,7 +222,7 @@ public class UEParams implements Serializable {
             }
         }
         currentTubeType.setParamsUSK1(prs);
-        
+
         prs = new DeviceUSKUdpParams("УЗК 2");
         for (DeviceUSKUdpParam p : prs.prms) {
             if (p.getId() <= 3) {
@@ -250,6 +264,24 @@ public class UEParams implements Serializable {
      */
     public ParamsMD8Udp getParamMD() {
         return currentTubeType.getParamsMD();
+    }
+
+    public UEParams deepClone() {
+
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(this);
+
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            return (UEParams) ois.readObject();
+        } catch (IOException e) {
+            return null;
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+
     }
 
     /**

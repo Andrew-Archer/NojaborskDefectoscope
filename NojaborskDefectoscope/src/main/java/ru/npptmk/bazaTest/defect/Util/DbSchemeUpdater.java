@@ -14,8 +14,10 @@ public interface DbSchemeUpdater {
 
     /**
      * Get all sql scripts in the source folder and execute every script that is
-     * absent in the executed scripts db table. After executing script its name
+     * absent in the executed scripts db table.After executing script its name
      * added into the table.
+     *
+     * @throws java.lang.Exception If something wend wrog during update.
      */
-    void update();
+    void update() throws Exception;
 }

@@ -14,19 +14,18 @@ import java.util.Arrays;
  * результатами толщинометрии. Компонент используется в универсальном контейнере
  * {@code PanelForGraphics}.<br>
  * График одного канала толщинометрии изображаются в виде сплошной ломаной линии
- * заданного цвета, изображающей изменение величины толщины стенки. 
- * На компоненте может одновременно
- * отображаться несколько графиков. Графики могут поставляться различными
- * источниками данных.<br>
- * Помимо графика толщины на компонент выводятся значения порогов для
- * различных классо втруб. Цвета изображения порогов задаются в параметрах.
- * Максимальное значение координаты Y для всех графиков представляет собой
- * увеличенное на 1 значение округления номинальной толщины стенки трубы до
- * целых миллиметров.
-
+ * заданного цвета, изображающей изменение величины толщины стенки. На
+ * компоненте может одновременно отображаться несколько графиков. Графики могут
+ * поставляться различными источниками данных.<br>
+ * Помимо графика толщины на компонент выводятся значения порогов для различных
+ * классо втруб. Цвета изображения порогов задаются в параметрах. Максимальное
+ * значение координаты Y для всех графиков представляет собой увеличенное на 1
+ * значение округления номинальной толщины стенки трубы до целых миллиметров.
+ *
  * @author MalginAS
  */
 public class GraphicsPnlTls extends GraphicsPnl implements IDrvsDataReader {
+
     private final long[] devIds;
     private final int[] chanIds;
     private final GraphicsPnlTlsParams par;
@@ -38,11 +37,25 @@ public class GraphicsPnlTls extends GraphicsPnl implements IDrvsDataReader {
         chanIds = Arrays.copyOf(par.chanIds, par.chanIds.length);
         for (int i = 0; i < par.names.length; i++) {
             addGraphic(new Grafic("Толщина " + par.names[i], 0,
-                    par.colors[i], new float[1000], new float[1000]),i);
+                    par.colors[i], new float[1000], new float[1000]), i);
         }
         Color[] levels = par.levels;
-        for (int i=0; i<levels.length; i++){
-            Grafic porog = new Grafic("Класс " + i, 2,
+        for (int i = 0; i < levels.length; i++) {
+            String levelName;
+            switch (i) {
+                case 0:
+                    levelName = "Годная";
+                    break;
+                case 1:
+                    levelName = "Калсс 2";
+                    break;
+                case 2:
+                    levelName = "Брак";
+                    break;
+                default:
+                    levelName = "Порог " + i;
+            }
+            Grafic porog = new Grafic(levelName , 2,
                     levels[i], new float[2], new float[2]);
             porog.xPo[0] = 0;
             porog.xPo[1] = 12000;
@@ -68,29 +81,29 @@ public class GraphicsPnlTls extends GraphicsPnl implements IDrvsDataReader {
             }
             refresh();
         }
-        if (driver instanceof ITubeDataProvider){
+        if (driver instanceof ITubeDataProvider) {
             // Изменение глобальных параметров трубы
             ITubeDataProvider dp = (ITubeDataProvider) driver;
-            int len = (Math.round((float)dp.getTubeLength()/1000f) + 1) * 1000;
-            if (len == 1000){
+            int len = (Math.round((float) dp.getTubeLength() / 1000f) + 1) * 1000;
+            if (len == 1000) {
                 len = 12000;
             }
-            setMaxX(len, len/1000);
+            setMaxX(len, len / 1000);
             float[] nomThick = dp.getTubeThicks();
             int maxT = 10;
-            if (nomThick != null){
+            if (nomThick != null) {
                 maxT = Math.round(nomThick[0]) + 1;
-                for (int i=0; i<par.levels.length; i++){
+                for (int i = 0; i < par.levels.length; i++) {
                     Grafic porog = getGrafsHash().get(i + par.names.length);
-                    if(i < nomThick.length && nomThick[i] > 0){
+                    if (i < nomThick.length && nomThick[i] > 0) {
                         porog.yPo[0] = nomThick[i];
                         porog.yPo[1] = nomThick[i];
                     }
                 }
             }
-            setMaxY(maxT,maxT);
+            setMaxY(maxT, maxT);
             refresh();
         }
     }
-    
+
 }

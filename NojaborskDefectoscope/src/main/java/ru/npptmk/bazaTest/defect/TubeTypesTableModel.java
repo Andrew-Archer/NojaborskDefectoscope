@@ -16,20 +16,23 @@ import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import static ru.npptmk.bazaTest.defect.TubeType.ThickClasses.*;
+import ru.npptmk.bazaTest.defect.changeslogging.ChangesForLoggerListener;
 
 /**
  * Класс реализует {@link TableModel} для хранения {@link TubeType}.
  *
  * @author RazumnovAA
  */
-public class TubeTypesTableModel implements TableModel {
+public class TubeTypesTableModel extends AbstractTableModel {
 
     /**
      * Для хранения слушателей изменения модели, то есть <tt>tubeTypes</tt>.
      */
     private List<TableModelListener> listeners;
+    private List<ChangesForLoggerListener> changesForLoggersListeners;
 
     /**
      * Для хранения имеющегося списка типов труб.
@@ -39,11 +42,13 @@ public class TubeTypesTableModel implements TableModel {
     public TubeTypesTableModel() {
         tubeTypes = new ArrayList<>();
         listeners = new ArrayList<>();
+        changesForLoggersListeners = new ArrayList<>();
     }
-    
+
     public TubeTypesTableModel(List<TubeType> tubeTypes) {
         this.tubeTypes = tubeTypes;
         listeners = new ArrayList<>();
+        changesForLoggersListeners = new ArrayList<>();
     }
 
     @Override
@@ -75,11 +80,11 @@ public class TubeTypesTableModel implements TableModel {
             case 3:
                 return "Толщина стенки, мм";
             case 4:
-                return "1 класс, мм";
+                return "Годная, мм";
             case 5:
                 return "2 класс, мм";
             case 6:
-                return "3 класс, мм";
+                return "Брак, мм";
             default:
                 return "Неверный номер колонки, мм";
         }
@@ -112,12 +117,14 @@ public class TubeTypesTableModel implements TableModel {
         /**
          * Все ячейки редактируемые.
          */
-        if(columnIndex == 0) return false;
+        if (columnIndex == 0) {
+            return false;
+        }
         return true;
     }
 
     public void addRow() {
-        tubeTypes.add(new TubeType(new Long(tubeTypes.size()+1), "", 0, 0));
+        tubeTypes.add(new TubeType(new Long(tubeTypes.size() + 1), "", 0, 0));
         listeners.forEach((listener) -> {
             listener.tableChanged(new TableModelEvent(this));
         });
@@ -170,24 +177,80 @@ public class TubeTypesTableModel implements TableModel {
             //Возвращаем значение поля, соответствующее номеру колнки.
             switch (columnIndex) {
                 case 0:
+                    listeners.forEach((t) -> {
+                        t.tableChanged(new TableModelEvent(this, rowIndex, rowIndex, columnIndex));
+                    });
+                    changesForLoggersListeners.forEach((t) -> {
+                        t.dataChanged(String.format("Тип трубы %s %s параметр [№]", tubeType.getId(), tubeType.getName()),
+                                tubeType.getId(),
+                                aValue);
+                    });
                     tubeType.setIdTubeType((Long) aValue);
                     break;
                 case 1:
+                    listeners.forEach((t) -> {
+                        t.tableChanged(new TableModelEvent(this, rowIndex, rowIndex, columnIndex));
+                    });
+                    changesForLoggersListeners.forEach((t) -> {
+                        t.dataChanged(String.format("Тип трубы %s %s параметр [имя]", tubeType.getId(), tubeType.getName()),
+                                tubeType.getName(),
+                                aValue);
+                    });
                     tubeType.setName((String) aValue);
                     break;
-                case 2:
+                case 2:                    
+                    listeners.forEach((t) -> {
+                        t.tableChanged(new TableModelEvent(this, rowIndex, rowIndex, columnIndex));
+                    });
+                    changesForLoggersListeners.forEach((t) -> {
+                        t.dataChanged(String.format("Тип трубы %s %s параметр [диаметр]", tubeType.getId(), tubeType.getName()),
+                                tubeType.getDiameter(),
+                                aValue);
+                    });
                     tubeType.setDiameter((Float) aValue);
                     break;
                 case 3:
+                    listeners.forEach((t) -> {
+                        t.tableChanged(new TableModelEvent(this, rowIndex, rowIndex, columnIndex));
+                    });
+                    changesForLoggersListeners.forEach((t) -> {
+                        t.dataChanged(String.format("Тип трубы %s %s параметр [толщина]", tubeType.getId(), tubeType.getName()),
+                                tubeType.getThick(),
+                                aValue);
+                    });
                     tubeType.setThick((Float) aValue);
                     break;
-                case 4:
+                case 4:                    
+                    listeners.forEach((t) -> {
+                        t.tableChanged(new TableModelEvent(this, rowIndex, rowIndex, columnIndex));
+                    });
+                    changesForLoggersListeners.forEach((t) -> {
+                        t.dataChanged(String.format("Тип трубы %s %s параметр [class 1]", tubeType.getId(), tubeType.getName()),
+                                tubeType.getThickClassBorderValue(CLASS_1),
+                                aValue);
+                    });
                     tubeType.setThickClassBorder(CLASS_1, (Float) aValue);
                     break;
-                case 5:
+                case 5:                 
+                    listeners.forEach((t) -> {
+                        t.tableChanged(new TableModelEvent(this, rowIndex, rowIndex, columnIndex));
+                    });
+                    changesForLoggersListeners.forEach((t) -> {
+                        t.dataChanged(String.format("Тип трубы %s %s параметр [class 2]", tubeType.getId(), tubeType.getName()),
+                                tubeType.getThickClassBorderValue(CLASS_2),
+                                aValue);
+                    });
                     tubeType.setThickClassBorder(CLASS_2, (Float) aValue);
                     break;
                 case 6:
+                    listeners.forEach((t) -> {
+                        t.tableChanged(new TableModelEvent(this, rowIndex, rowIndex, columnIndex));
+                    });
+                    changesForLoggersListeners.forEach((t) -> {
+                        t.dataChanged(String.format("Тип трубы %s %s параметр [class 3]", tubeType.getId(), tubeType.getName()),
+                                tubeType.getThickClassBorderValue(CLASS_3),
+                                aValue);
+                    });
                     tubeType.setThickClassBorder(CLASS_3, (Float) aValue);
                     break;
 
@@ -202,6 +265,10 @@ public class TubeTypesTableModel implements TableModel {
     @Override
     public void addTableModelListener(TableModelListener listener) {
         listeners.add(listener);
+    }
+
+    public void addListeningLogger(ChangesForLoggerListener listener) {
+        changesForLoggersListeners.add(listener);
     }
 
     @Override
@@ -229,7 +296,7 @@ public class TubeTypesTableModel implements TableModel {
             listener.tableChanged(new TableModelEvent(this));
         });
     }
-    
+
     /**
      * Производит грлубинное клонирование данного листа типов. Клонирование
      * производится методом серриализации/десерриализации из потока объектов.

@@ -9,7 +9,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
@@ -28,7 +30,7 @@ import ru.npptmk.bazaTest.defect.model.UpdateScript;
 public class FromClassPathSQLUpdater implements DbSchemeUpdater {
 
     private static final Logger log = LoggerFactory.getLogger(FromClassPathSQLUpdater.class);
-    private static final String SCRIPTS_FOLDER = "ru/npp/sql/";
+    private static final String SCRIPTS_FOLDER = "./ru/npp/sql";
     private final EntityManagerFactory emf;
     private static final String TX_ROLLED_BACK_MSG = "Transaction has been rolled back.";
     private static final String EM_CLOSED_MSG = "Entity manger has been closed.";
@@ -38,13 +40,15 @@ public class FromClassPathSQLUpdater implements DbSchemeUpdater {
     }
 
     @Override
-    public void update() {
+    public void update() throws Exception {
         List<String> appliedScripts = getAlreadyAppliedScripts();
         List<File> classPathScripts = loadScriptsFromClassPath();
         List<File> notAppliedFiles = classPathScripts.stream()
                 .filter(t -> !appliedScripts.contains(t.getName()))
                 .collect(Collectors.toList());
-        notAppliedFiles.forEach(this::executeUpdateScript);
+        for (File file : notAppliedFiles) {
+            executeUpdateScript(file);
+        }
     }
 
     private List<String> getAlreadyAppliedScripts() {
@@ -78,35 +82,38 @@ public class FromClassPathSQLUpdater implements DbSchemeUpdater {
         log.debug("Start #loadScriptsFromClassPath()");
         ClassLoader classLoader = getClass().getClassLoader();
 
-        URL url = classLoader.getResource(SCRIPTS_FOLDER);
-        if (url == null) {
-            log.warn("Has no found {} resource to search script in folder", SCRIPTS_FOLDER);
+        URI uri = Paths.get(SCRIPTS_FOLDER).toUri();
+        if (uri == null) {
+            log.warn("Can not find uri by stiring {}", SCRIPTS_FOLDER);
             return Collections.emptyList();
         }
-        File folder = new File(url.getFile());
-
+        File folder = new File(uri);
+        log.debug("Path to sql scripts folder is {}", folder.getAbsolutePath());
         File[] files = folder.listFiles();
+
         if (files == null) {
+            log.error("Has not found script files to run");
             return Collections.emptyList();
         }
+        log.debug("Has found {} script files to run", files.length);
         List<File> sqlFiles = Arrays
                 .stream(files)
                 .filter(file -> file.getName().endsWith(".sql"))
                 .collect(Collectors.toList());
-        String debugString = sqlFiles.size() == 1 ?
-                "There are {} scripts have been found in {} folder" :
-                "There is {} script has been found in {} folder";
+        String debugString = sqlFiles.size() == 1
+                ? "There are {} scripts have been found in {} folder"
+                : "There is {} script has been found in {} folder";
         log.debug(debugString,
                 sqlFiles.size(),
                 folder.getAbsolutePath());
         return sqlFiles;
     }
 
-    private void executeUpdateScript(File file) {
+    private void executeUpdateScript(File file) throws Exception {
         log.debug("Start #executeUpdateScript()");
         EntityTransaction tx = null;
         EntityManager em = emf.createEntityManager();
-        try (BufferedReader fis = new BufferedReader(new InputStreamReader(new FileInputStream(file)))){
+        try (BufferedReader fis = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
             StringBuilder stringBuffer = new StringBuilder();
             String sqlLine = fis.readLine();
 
@@ -129,12 +136,12 @@ public class FromClassPathSQLUpdater implements DbSchemeUpdater {
             }
             markScriptAsExecuted(file);
         } catch (Exception ex) {
-            log.error("Can't execute update query from {} file", file, ex);
             if (tx != null && tx.isActive()) {
                 tx.rollback();
                 log.error(TX_ROLLED_BACK_MSG);
 
             }
+            throw new Exception(String.format("Can't execute update query from [%s] file beacause [%s]", file.toString(), ex.getMessage()));
         } finally {
             em.close();
             log.debug(EM_CLOSED_MSG);

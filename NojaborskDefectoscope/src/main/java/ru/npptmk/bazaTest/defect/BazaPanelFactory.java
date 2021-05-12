@@ -142,7 +142,7 @@ public class BazaPanelFactory implements IPanelFactory {
         if (type != null) {
             switch (type) {
                 case "Самописец дефектоскопа":
-                    return new SamopPnlDfParams("Дефектоскоп Ьлок МД Канал 1", Devicess.ID_MD, 0);
+                    return new SamopPnlDfParams("Дефектоскоп Блок МД Канал 1", Devicess.ID_MD, 0);
                 case "Самописец толщиномера":
                     return new SamopPnlTLSParams("Толщиномер Блок УЗК1 Канал 1", Devicess.ID_USK1, 0);
                 case "Графики дефектоскопа":
@@ -151,7 +151,7 @@ public class BazaPanelFactory implements IPanelFactory {
                             new Color[0],
                             new String[0], "Дефектоскоп", 12000, 6, 12);
                 case "Графики толщиномера":
-                    Color[] redGreen = {Color.GREEN, Color.RED, Color.BLUE};
+                    Color[] redGreen = {Color.GREEN, Color.MAGENTA, Color.BLUE};
                     return new GraphicsPnlTlsParams(new long[0], new int[0], new Color[0], new String[0],
                             redGreen, "Толщиномер", 15, 12000, 15, 12);
                 case "Схема дефектов":

@@ -83,6 +83,14 @@ public class TubeTypesDialog extends javax.swing.JDialog {
 
         jTable1.getTableHeader().setFont(new java.awt.Font("Segoe UI", 0, 18));
         jTable1.setFont(new java.awt.Font("Segoe UI", 0, 18));
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
         jTable1.setRowHeight(20);
         jScrollPane1.setViewportView(jTable1);
 

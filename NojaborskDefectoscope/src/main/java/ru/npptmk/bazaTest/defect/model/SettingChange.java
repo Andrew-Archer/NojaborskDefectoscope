@@ -23,6 +23,7 @@ import javax.persistence.ManyToOne;
 public class SettingChange implements Serializable{
 
 
+
     private static final long serialVersionUID = -7346684763406315445L;
     
     @Id
@@ -43,6 +44,24 @@ public class SettingChange implements Serializable{
     
     @Column(name="NEW_VALUE")
     private String newValue;
+    /**
+     * @param newValue the newValue to set
+     */
+    public void setNewValue(String newValue) {
+        this.newValue = newValue;
+    }
+    /**
+     * @param oldValue the oldValue to set
+     */
+    public void setOldValue(String oldValue) {
+        this.oldValue = oldValue;
+    }
+    /**
+     * @param paramName the paramName to set
+     */
+    public void setParamName(String paramName) {
+        this.paramName = paramName;
+    }
     /**
      * @return the paramGroup
      */

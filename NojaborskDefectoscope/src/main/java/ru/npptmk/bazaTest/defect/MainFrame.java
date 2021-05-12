@@ -3,10 +3,10 @@ package ru.npptmk.bazaTest.defect;
 import com.ghgande.j2mod.modbus.ModbusException;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -35,6 +35,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -83,9 +84,13 @@ import ru.npptmk.bazaTest.defect.Util.jasper_report.UNTK_500DataSourceGenerator;
 import ru.npptmk.bazaTest.defect.Util.jasper_report.UNTK_500DataSourceGenerator.SENSOR_TYPES;
 import ru.npptmk.bazaTest.defect.Util.jasper_report.XYChartBean;
 import ru.npptmk.bazaTest.defect.Util.jasper_report.XYChartPointBean;
+import ru.npptmk.bazaTest.defect.changeslogging.ChangesManager;
+import ru.npptmk.bazaTest.defect.changeslogging.ChangesManagerImpl;
 import ru.npptmk.bazaTest.defect.model.BasaTube;
 import ru.npptmk.bazaTest.defect.model.Customer;
 import ru.npptmk.bazaTest.defect.model.Operator;
+import ru.npptmk.bazaTest.defect.model.SettingsChangeEvent;
+import ru.npptmk.bazaTest.defect.view.Dialog_ChangesLog;
 import ru.npptmk.bazaTest.defect.view.Dialog_RestrictedAccess;
 import ru.npptmk.bazaTest.defect.view.Dialog_changePass;
 import ru.npptmk.commonObjects.GeneralUDPDevice;
@@ -289,6 +294,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private boolean mayScan;
     private EntityManagerFactory emf;
     private Dialog_changePass newPass;
+    private final ChangesManager changesManager;
 
     /**
      * Creates new form MainFrame
@@ -298,7 +304,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
         this.gui_text = ResourceBundle.getBundle("gui_text", new Locale("ru", "RU"));
         this.tubesCounter = new TubesCounter();
-        this.sortoscopeDialog = new SortoscopeDialog(this, true);
+
         this.sortoscopeDriver = new Sortoscope4Driver();
         this.jasperPrint = new JasperPrint();
 
@@ -306,6 +312,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         System.setProperty("java.net.preferIPv4Stack", "true");
 
         this.progressDialog = new ProgressDialog(this);
+        progressDialog.setModal(true);
 
         progressDialog.startProcessing(
                 t("connectingToBDMessage"),
@@ -337,10 +344,16 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             JOptionPane.showMessageDialog(null, String.format(t("cantConnectToDB"), ex.getMessage()), "Ошибка", ERROR_MESSAGE);
             System.exit(1);
         }
+        this.sortoscopeDialog = new SortoscopeDialog(this, true);
         DbSchemeUpdater dbSchemeUpdater = new FromClassPathSQLUpdater(emf);
-        dbSchemeUpdater.update();
+        try {
+            dbSchemeUpdater.update();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Ошибка обновления базы данных", JOptionPane.ERROR_MESSAGE);
+        }
         //Запускаем менеджер смен.
         shiftManager = new ShiftManagerImpl(emf);
+        changesManager = new ChangesManagerImpl(emf);
 
         if (!tmn.startManager(emf.createEntityManager())) {
             JOptionPane.showMessageDialog(this, tmn.getError().getComment());
@@ -2393,6 +2406,69 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         label_TotalTubesCountValue.setText(String.valueOf(badTubesCount + goodTubesCount));
     }
 
+    private void writeTubePupeChangesToLogManager(List<TubeType> oldTubeTypes, List<TubeType> newTubeTypes) {
+        final String paramGroupName = "Типы труб";
+        SettingsChangeEvent changesEvent = changesManager.addChangesEvent(restrictedAccessDialog.getOperator());
+        for (int i = 0; i < newTubeTypes.size(); i++) {
+            TubeType oldTubeType = oldTubeTypes.get(i);
+            TubeType newTubeType = newTubeTypes.get(i);
+            if (!oldTubeType.getName().equals(newTubeType.getName())) {
+                changesEvent.addSettingsChange(paramGroupName, String.format("%s>наименование", oldTubeType.getName()), oldTubeType.getName(), newTubeType.getName());
+            }
+            if (oldTubeType.getDiameter() != newTubeType.getDiameter()) {
+                changesEvent.addSettingsChange(paramGroupName, String.format("%s>диаметр", oldTubeType.getName()), String.valueOf(oldTubeType.getDiameter()), String.valueOf(newTubeType.getDiameter()));
+            }
+            if (oldTubeType.getThick() != newTubeType.getThick()) {
+                changesEvent.addSettingsChange(paramGroupName, String.format("%s>толщина", oldTubeType.getName()), String.valueOf(oldTubeType.getThick()), String.valueOf(newTubeType.getThick()));
+            }
+            if (!oldTubeType.getThickClassBorderValue(ThickClasses.CLASS_1).equals(newTubeType.getThickClassBorderValue(ThickClasses.CLASS_1))) {
+                changesEvent.addSettingsChange(paramGroupName, String.format("%s>1 класс", oldTubeType.getName()), oldTubeType.getThickClassBorderValue(ThickClasses.CLASS_1).toString(), newTubeType.getThickClassBorderValue(ThickClasses.CLASS_1).toString());
+            }
+            if (!oldTubeType.getThickClassBorderValue(ThickClasses.CLASS_2).equals(newTubeType.getThickClassBorderValue(ThickClasses.CLASS_2))) {
+                changesEvent.addSettingsChange(paramGroupName, String.format("%s>2 класс", oldTubeType.getName()), oldTubeType.getThickClassBorderValue(ThickClasses.CLASS_2).toString(), newTubeType.getThickClassBorderValue(ThickClasses.CLASS_2).toString());
+            }
+            if (!oldTubeType.getThickClassBorderValue(ThickClasses.CLASS_3).equals(newTubeType.getThickClassBorderValue(ThickClasses.CLASS_3))) {
+                changesEvent.addSettingsChange(paramGroupName, String.format("%s>3 класс", oldTubeType.getName()), oldTubeType.getThickClassBorderValue(ThickClasses.CLASS_3).toString(), newTubeType.getThickClassBorderValue(ThickClasses.CLASS_3).toString());
+            }
+        }
+    }
+
+    private void updateArchivePanel() {
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        jComboBox_AcrchiveTubeType.removeAllItems();
+        jComboBox_ArchiveOperator.removeAllItems();
+        jComboBox_ArchiveCustomer.removeAllItems();
+        jComboBox_AcrchiveTubeType.addItem(null);
+        ((UEParams) tmn.getParam(Devicess.ID_R4)).tubeTypes.forEach(jComboBox_AcrchiveTubeType::addItem);
+        List<Customer> customers = null;
+        List<Operator> operators = null;
+        try {
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            operators = em.createNamedQuery("findAllOperators", Operator.class).getResultList();
+            customers = em.createNamedQuery("loadAllCustomers", Customer.class).getResultList();
+            tx.commit();
+        } catch (Exception ex) {
+            log.error("Can't update achive filter data", ex);
+
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        jComboBox_ArchiveOperator.addItem(null);
+        if (operators != null) {
+            operators.forEach(jComboBox_ArchiveOperator::addItem);
+        }
+        jComboBox_ArchiveCustomer.addItem(null);
+        if (customers != null) {
+            customers.forEach(jComboBox_ArchiveCustomer::addItem);
+        }
+
+    }
+
     class BOX extends JCheckBox {
 
         public BOX() {
@@ -2446,9 +2522,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         pnGrfsAll = new javax.swing.JPanel();
         magDef = new javax.swing.JPanel();
         pnNastr = new javax.swing.JPanel();
+        frBtSave = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         pnGrfsMD = new javax.swing.JPanel();
-        frBtSave = new javax.swing.JButton();
         USD = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         pnGrfsUSK = new javax.swing.JPanel();
@@ -2504,7 +2580,6 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         button_GetArchiveData = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTable_ArchiveResults = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
         button_GetTotalReport = new javax.swing.JButton();
         button_graphPerPageReport = new javax.swing.JButton();
         label_TubeTotall = new javax.swing.JLabel();
@@ -2528,6 +2603,16 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         jCheckBox_CalculateSideThickness = new javax.swing.JCheckBox();
         jLabel_ReportCreationDuration = new javax.swing.JLabel();
         jLabel_ReportCreationDurationValue = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jComboBox_AcrchiveTubeType = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        jComboBox_ArchiveOperator = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        jComboBox_ArchiveCustomer = new javax.swing.JComboBox<>();
+        jCheckBox_ArchiveExcludeSOP = new javax.swing.JCheckBox();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBox_ArchiveTubeStatus = new javax.swing.JComboBox<>();
         mainMenu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         tubeTypesMenu = new javax.swing.JMenuItem();
@@ -2538,6 +2623,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         jMenuItem6 = new javax.swing.JMenuItem();
         menuItem_EnableLogging = new javax.swing.JMenuItem();
         jMenuItem_createAdmin = new javax.swing.JMenuItem();
+        jMenuItem_ChangesLog = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         menu_Drivers = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -2767,7 +2853,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         });
 
         comboBox_TubeConditions.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        comboBox_TubeConditions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Годная", "Брак", "Годная ксласс 2", "Рем. класс 2" }));
+        comboBox_TubeConditions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Годная", "Брак", "Класс 2" }));
 
         javax.swing.GroupLayout pnTubeTblLayout = new javax.swing.GroupLayout(pnTubeTbl);
         pnTubeTbl.setLayout(pnTubeTblLayout);
@@ -2800,29 +2886,19 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                             .addComponent(button_Shift, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(combobox_TubeOnDeviceResults, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(pnTubeTblLayout.createSequentialGroup()
-                                .addGroup(pnTubeTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(pnTubeTblLayout.createSequentialGroup()
-                                        .addComponent(button_RepeatDefectDetection, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(button_EnableVerdict)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(comboBox_TubeConditions, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(39, 39, 39)
-                                        .addComponent(checkBox_GoodAutohandle))
-                                    .addGroup(pnTubeTblLayout.createSequentialGroup()
-                                        .addComponent(label_GoodTubesCount)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(label_GoodTubesCountValue, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(label_BadTubesCount)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(label_BadTubesCountValue, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(label_TotalTubesCount)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(label_TotalTubesCountValue, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(3, 3, 3)
-                                        .addComponent(button_DropTubesCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(label_GoodTubesCount)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(label_GoodTubesCountValue, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(label_BadTubesCount)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(label_BadTubesCountValue, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(label_TotalTubesCount)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(label_TotalTubesCountValue, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(3, 3, 3)
+                                .addComponent(button_DropTubesCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(pnTubeTblLayout.createSequentialGroup()
                                 .addComponent(combobox_CustomerSelection, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2831,7 +2907,16 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnTubeTblLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane4)))
+                        .addComponent(jScrollPane4))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnTubeTblLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(button_RepeatDefectDetection, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(button_EnableVerdict)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboBox_TubeConditions, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(checkBox_GoodAutohandle)))
                 .addContainerGap())
         );
         pnTubeTblLayout.setVerticalGroup(
@@ -2864,8 +2949,15 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnTubeTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(checkBox_GoodAutohandle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnTubeTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(button_RepeatDefectDetection)
+                        .addComponent(comboBox_TubeConditions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(button_EnableVerdict)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnTubeTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_GoodTubesCount)
                     .addComponent(label_GoodTubesCountValue)
@@ -2873,14 +2965,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     .addComponent(label_BadTubesCountValue)
                     .addComponent(label_TotalTubesCount)
                     .addComponent(label_TotalTubesCountValue)
-                    .addComponent(button_DropTubesCounter))
-                .addGap(18, 18, 18)
-                .addGroup(pnTubeTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(checkBox_GoodAutohandle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnTubeTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(button_RepeatDefectDetection)
-                        .addComponent(button_EnableVerdict)
-                        .addComponent(comboBox_TubeConditions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(button_DropTubesCounter)))
         );
 
         jScrollPane2.getVerticalScrollBar().setPreferredSize(new Dimension(32,70));
@@ -2897,15 +2982,15 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             .addGroup(tubeLayout.createSequentialGroup()
                 .addComponent(pnTubeTbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 775, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 776, Short.MAX_VALUE))
         );
         tubeLayout.setVerticalGroup(
             tubeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tubeLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addGroup(tubeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnTubeTbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 924, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane2)
+                    .addComponent(pnTubeTbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("Работа", tube);
@@ -2913,13 +2998,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         pnNastr.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         pnNastr.setMaximumSize(new java.awt.Dimension(344, 409));
         pnNastr.setMinimumSize(new java.awt.Dimension(344, 409));
-        pnNastr.setLayout(new javax.swing.BoxLayout(pnNastr, javax.swing.BoxLayout.LINE_AXIS));
-
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-        pnGrfsMD.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        pnGrfsMD.setLayout(new java.awt.BorderLayout());
-        jScrollPane1.setViewportView(pnGrfsMD);
+        pnNastr.setLayout(new java.awt.BorderLayout());
 
         frBtSave.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         frBtSave.setText("Сохранить");
@@ -2928,6 +3007,13 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 frBtSaveActionPerformed(evt);
             }
         });
+        pnNastr.add(frBtSave, java.awt.BorderLayout.PAGE_END);
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        pnGrfsMD.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        pnGrfsMD.setLayout(new java.awt.BorderLayout());
+        jScrollPane1.setViewportView(pnGrfsMD);
 
         javax.swing.GroupLayout magDefLayout = new javax.swing.GroupLayout(magDef);
         magDef.setLayout(magDefLayout);
@@ -2935,22 +3021,14 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             magDefLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(magDefLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(magDefLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(frBtSave)
-                    .addComponent(pnNastr, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(pnNastr, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 840, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 841, Short.MAX_VALUE))
         );
         magDefLayout.setVerticalGroup(
             magDefLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(magDefLayout.createSequentialGroup()
-                .addGroup(magDefLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(magDefLayout.createSequentialGroup()
-                        .addComponent(pnNastr, javax.swing.GroupLayout.DEFAULT_SIZE, 872, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(frBtSave))
-                    .addComponent(jScrollPane1))
-                .addContainerGap())
+            .addComponent(jScrollPane1)
+            .addComponent(pnNastr, javax.swing.GroupLayout.DEFAULT_SIZE, 783, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("УМД", magDef);
@@ -2977,28 +3055,21 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 jButton_saveUskSettingsActionPerformed(evt);
             }
         });
+        pnNastrUSK.add(jButton_saveUskSettings, java.awt.BorderLayout.PAGE_END);
 
         javax.swing.GroupLayout USDLayout = new javax.swing.GroupLayout(USD);
         USD.setLayout(USDLayout);
         USDLayout.setHorizontalGroup(
             USDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(USDLayout.createSequentialGroup()
-                .addGroup(USDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnNastrUSK, javax.swing.GroupLayout.PREFERRED_SIZE, 625, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(USDLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton_saveUskSettings)))
+                .addComponent(pnNastrUSK, javax.swing.GroupLayout.PREFERRED_SIZE, 625, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE))
         );
         USDLayout.setVerticalGroup(
             USDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 930, Short.MAX_VALUE)
-            .addGroup(USDLayout.createSequentialGroup()
-                .addComponent(pnNastrUSK, javax.swing.GroupLayout.PREFERRED_SIZE, 881, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton_saveUskSettings)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(pnNastrUSK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 783, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("УЗК", USD);
@@ -3266,131 +3337,165 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         jPanel_UnitFigure.setName("UnitFigure"); // NOI18N
         jPanel_UnitFigure.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jCheckBox17.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox17.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox17.setText("SQ17");
         jCheckBox17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox17.setName("SQ17_TUBE_ON_OUT_TABLE"); // NOI18N
+        jCheckBox17.setOpaque(false);
         jCheckBox17.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox17, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 30, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox17, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 40, -1, -1));
 
+        jCheckBox16.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox16.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox16.setText("SQ16");
         jCheckBox16.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         jCheckBox16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox16.setName("SQ16_IN_RELOADER_UP"); // NOI18N
+        jCheckBox16.setOpaque(false);
         jCheckBox16.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox16, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox16, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, -1, -1));
 
+        jCheckBox15.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox15.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox15.setText("SQ15");
         jCheckBox15.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         jCheckBox15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox15.setName("SQ15_IN_RELOADER_DOWN"); // NOI18N
+        jCheckBox15.setOpaque(false);
         jCheckBox15.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox15, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox15, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 163, -1, -1));
 
+        jCheckBox14.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox14.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox14.setText("SQ14");
         jCheckBox14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox14.setName("SQ14_TUBE_ON_IN_RELOADER"); // NOI18N
+        jCheckBox14.setOpaque(false);
         jCheckBox14.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox14, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox14, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 40, -1, -1));
 
+        jCheckBox13.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox13.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox13.setText("SQ13");
         jCheckBox13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox13.setName("SQ13_OUT_RELOADER_UP"); // NOI18N
+        jCheckBox13.setOpaque(false);
         jCheckBox13.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox13, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 110, -1, -1));
 
+        jCheckBox12.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox12.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox12.setText("SQ12");
         jCheckBox12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox12.setName("SQ12_OUT_RELOADER_DOWN"); // NOI18N
+        jCheckBox12.setOpaque(false);
         jCheckBox12.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox12, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 110, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox12, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 163, -1, -1));
 
+        jCheckBox11.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox11.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox11.setText("SQ11");
         jCheckBox11.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         jCheckBox11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox11.setName("SQ11_TUBE_ON_OUT_ROLLGANG"); // NOI18N
+        jCheckBox11.setOpaque(false);
         jCheckBox11.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox11, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox11, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 110, -1, -1));
 
+        jCheckBox10.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox10.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox10.setText("SQ10");
         jCheckBox10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox10.setName("SQ10_AFTER_SORTOSCOPE"); // NOI18N
+        jCheckBox10.setOpaque(false);
         jCheckBox10.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox10, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox10, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 100, -1, -1));
 
+        jCheckBox9.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox9.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox9.setText("SQ9");
         jCheckBox9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox9.setName("SQ9_HIGH_WATER_LEVEL"); // NOI18N
+        jCheckBox9.setOpaque(false);
         jCheckBox9.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox9, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 100, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox9, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 130, -1, -1));
 
+        jCheckBox8.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox8.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox8.setText("SQ8");
         jCheckBox8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox8.setName("SQ8_FIX3_UP"); // NOI18N
+        jCheckBox8.setOpaque(false);
         jCheckBox8.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox8, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox8, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 50, -1, -1));
 
+        jCheckBox7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox7.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox7.setText("SQ7");
         jCheckBox7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox7.setName("SQ7_FIX2_UP"); // NOI18N
+        jCheckBox7.setOpaque(false);
         jCheckBox7.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox7, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 30, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox7, new org.netbeans.lib.awtextra.AbsoluteConstraints(684, 50, -1, -1));
 
+        jCheckBox6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox6.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox6.setText("SQ6");
         jCheckBox6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox6.setName("SQ6_BEFORE_ULTRA_SOUND_BATH"); // NOI18N
+        jCheckBox6.setOpaque(false);
         jCheckBox6.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox6, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox6, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 100, -1, -1));
 
+        jCheckBox5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox5.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox5.setText("SQ5");
         jCheckBox5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox5.setName("SQ5_CALIBRATION_SECTION_END"); // NOI18N
+        jCheckBox5.setOpaque(false);
         jCheckBox5.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox5, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox5, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 100, -1, -1));
 
+        jCheckBox4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox4.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox4.setText("SQ4");
         jCheckBox4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox4.setName("SQ4_FIX1_UP"); // NOI18N
+        jCheckBox4.setOpaque(false);
         jCheckBox4.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 50, -1, -1));
 
+        jCheckBox3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox3.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox3.setText("SQ3");
         jCheckBox3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox3.setName("SQ3_CALIBRATION_SECTION_START"); // NOI18N
+        jCheckBox3.setOpaque(false);
         jCheckBox3.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 100, -1, -1));
 
+        jCheckBox2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox2.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox2.setText("SQ2");
         jCheckBox2.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         jCheckBox2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox2.setName("SQ2_FIX1_MUST_BE_DOWN"); // NOI18N
+        jCheckBox2.setOpaque(false);
         jCheckBox2.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 70, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 100, -1, -1));
 
+        jCheckBox1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jCheckBox1.setForeground(new java.awt.Color(255, 51, 51));
         jCheckBox1.setText("SQ1");
         jCheckBox1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/Lamp.png"))); // NOI18N
         jCheckBox1.setName("SQ1_TUBE_ON_IN_ROLLGANG"); // NOI18N
+        jCheckBox1.setOpaque(false);
         jCheckBox1.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/LampON.png"))); // NOI18N
-        jPanel_UnitFigure.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, -1, -1));
+        jPanel_UnitFigure.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 130, -1, -1));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/npptmk/bazaTest/defect/Resource/images/UNKT500.png"))); // NOI18N
-        jPanel_UnitFigure.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 1260, 160));
+        jPanel_UnitFigure.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 1260, 250));
 
         javax.swing.GroupLayout panel_TunningLayout = new javax.swing.GroupLayout(panel_Tunning);
         panel_Tunning.setLayout(panel_TunningLayout);
@@ -3403,7 +3508,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel_Ultrasonic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jPanel_UnitFigure, javax.swing.GroupLayout.DEFAULT_SIZE, 1275, Short.MAX_VALUE)
+            .addComponent(jPanel_UnitFigure, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         panel_TunningLayout.setVerticalGroup(
             panel_TunningLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3412,9 +3517,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     .addComponent(jPanel_Tansport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel_Magnetic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel_Ultrasonic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel_UnitFigure, javax.swing.GroupLayout.PREFERRED_SIZE, 637, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel_UnitFigure, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(379, 379, 379))
         );
 
         jTabbedPane1.addTab("Наладка", panel_Tunning);
@@ -3476,7 +3581,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             .addGroup(panel_ErrorsLayout.createSequentialGroup()
                 .addGap(366, 366, 366)
                 .addComponent(label_ErrorTabCaption)
-                .addContainerGap(471, Short.MAX_VALUE))
+                .addContainerGap(472, Short.MAX_VALUE))
         );
         panel_ErrorsLayout.setVerticalGroup(
             panel_ErrorsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3488,7 +3593,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     .addComponent(label_ErrorState, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(label_ErrorStateValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollPane_ForErrorsTable, javax.swing.GroupLayout.DEFAULT_SIZE, 855, Short.MAX_VALUE))
+                .addComponent(scrollPane_ForErrorsTable, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Ошибки", panel_Errors);
@@ -3497,7 +3602,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         panel_Archive.setName("Archive"); // NOI18N
         panel_Archive.setPreferredSize(new java.awt.Dimension(1280, 991));
 
-        button_GetArchiveData.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        button_GetArchiveData.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         button_GetArchiveData.setText("<HTML><LEFT>Получить данные из архива</LEFT></HTML>");
         button_GetArchiveData.setMaximumSize(new java.awt.Dimension(186, 54));
         button_GetArchiveData.setMinimumSize(new java.awt.Dimension(186, 54));
@@ -3508,8 +3613,8 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             }
         });
 
-        jScrollPane5.getVerticalScrollBar().setPreferredSize(new Dimension(100,0));
-        jScrollPane5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jScrollPane5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "СПИСОК ПРОКОНТРОЛИРОВАННЫХ ТРУБ ЗА ВЫБРАННЫЙ ИНТЕРВАЛ ВРЕМЕНИ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 18))); // NOI18N
+        jScrollPane5.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
 
         jTable_ArchiveResults.setFont(SEGOE_UI_18);
         jTable_ArchiveResults.getTableHeader().setFont(SEGOE_UI_18);
@@ -3560,11 +3665,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             jTable_ArchiveResults.getColumnModel().getColumn(6).setMaxWidth(30);
         }
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel1.setText("СПИСОК ПРОКОНТРОЛИРОВАННЫХ ТРУБ ЗА ВЫБРАННЫЙ ИНТЕРВАЛ ВРЕМЕНИ");
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        button_GetTotalReport.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        button_GetTotalReport.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         button_GetTotalReport.setText("<HTML><LEFT>Вывести общий отчет</LEFT></HTML>");
         button_GetTotalReport.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         button_GetTotalReport.setMaximumSize(new java.awt.Dimension(149, 54));
@@ -3577,7 +3678,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             }
         });
 
-        button_graphPerPageReport.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        button_graphPerPageReport.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         button_graphPerPageReport.setText("Вывести каждый график на отдельной странице");
         button_graphPerPageReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3633,7 +3734,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         table_DatePicker.setRowSelectionAllowed(false);
         jScrollPane6.setViewportView(table_DatePicker);
 
-        jButton_AllGraphsOnOnePage.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButton_AllGraphsOnOnePage.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jButton_AllGraphsOnOnePage.setText("Вывести графики на одной странице");
         jButton_AllGraphsOnOnePage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3654,69 +3755,144 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         jLabel_ReportCreationDurationValue.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel_ReportCreationDurationValue.setPreferredSize(new java.awt.Dimension(0, 24));
 
+        jLabel4.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel4.setText("Типоразмер:");
+
+        jComboBox_AcrchiveTubeType.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+
+        jLabel5.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel5.setText("Оператор:");
+
+        jComboBox_ArchiveOperator.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel6.setText("Заказчик:");
+
+        jComboBox_ArchiveCustomer.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+
+        jCheckBox_ArchiveExcludeSOP.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jCheckBox_ArchiveExcludeSOP.setText("Исключить СОП");
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel1.setText("Состояние трубы:");
+
+        jComboBox_ArchiveTubeStatus.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jComboBox_ArchiveTubeStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { null, "брак", "годная", "класс 2"}));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jCheckBox_ArchiveExcludeSOP)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox_ArchiveTubeStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox_AcrchiveTubeType, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox_ArchiveOperator, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox_ArchiveCustomer, 0, 355, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jComboBox_AcrchiveTubeType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(jComboBox_ArchiveOperator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(jComboBox_ArchiveCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBox_ArchiveExcludeSOP)
+                    .addComponent(jLabel1)
+                    .addComponent(jComboBox_ArchiveTubeStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout panel_ArchiveLayout = new javax.swing.GroupLayout(panel_Archive);
         panel_Archive.setLayout(panel_ArchiveLayout);
         panel_ArchiveLayout.setHorizontalGroup(
             panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel_DatePickerTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 1276, Short.MAX_VALUE)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(panel_ArchiveLayout.createSequentialGroup()
-                .addGap(168, 168, 168)
-                .addComponent(jLabel1)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(panel_ArchiveLayout.createSequentialGroup()
-                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(button_GetArchiveData, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel_DatePickerTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 1251, Short.MAX_VALUE)
+                    .addComponent(jButton_AllGraphsOnOnePage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(button_GetTotalReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(button_graphPerPageReport, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)))
+            .addGroup(panel_ArchiveLayout.createSequentialGroup()
+                .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label_TubeTotall)
+                    .addComponent(label_GoodTubes)
+                    .addComponent(label_BadTubes))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label_TotalTubesValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label_GoodTubesValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label_BadTubesValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label_TotalLength)
+                    .addComponent(label_GoodTubesLength)
+                    .addComponent(label_BadTubesLength))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label_TotalTubesLengthValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label_GoodTubesLengthValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label_BadTubesLengthValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jCheckBox_CalculateSideThickness)
                     .addGroup(panel_ArchiveLayout.createSequentialGroup()
                         .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(label_TubeTotall)
-                            .addComponent(label_GoodTubes)
-                            .addComponent(label_BadTubes))
+                            .addComponent(label_AverageTubeControllTime)
+                            .addComponent(jLabel_ReportCreationDuration))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(label_TotalTubesValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label_GoodTubesValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label_BadTubesValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(label_TotalLength)
-                            .addComponent(label_GoodTubesLength)
-                            .addComponent(label_BadTubesLength))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(label_TotalTubesLengthValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label_GoodTubesLengthValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label_BadTubesLengthValue, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox_CalculateSideThickness)
-                            .addGroup(panel_ArchiveLayout.createSequentialGroup()
-                                .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(label_AverageTubeControllTime)
-                                    .addComponent(jLabel_ReportCreationDuration))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel_ReportCreationDurationValue, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                                    .addComponent(label_AverageTubeControllTimeValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_ArchiveLayout.createSequentialGroup()
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button_GetArchiveData, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton_AllGraphsOnOnePage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(button_GetTotalReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(button_graphPerPageReport, javax.swing.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE))))
+                        .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel_ReportCreationDurationValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(label_AverageTubeControllTimeValue, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(panel_ArchiveLayout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panel_ArchiveLayout.setVerticalGroup(
             panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_ArchiveLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(9, 9, 9)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(button_GetArchiveData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panel_ArchiveLayout.createSequentialGroup()
+                        .addComponent(jButton_AllGraphsOnOnePage)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(button_GetTotalReport, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(button_graphPerPageReport))
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(label_TubeTotall)
@@ -3742,17 +3918,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     .addComponent(jCheckBox_CalculateSideThickness))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_DatePickerTitle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel_ArchiveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(button_GetArchiveData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(panel_ArchiveLayout.createSequentialGroup()
-                        .addComponent(jButton_AllGraphsOnOnePage)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button_GetTotalReport, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button_graphPerPageReport))
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(354, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Архив", panel_Archive);
@@ -3760,7 +3926,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         jMenu1.setText("Меню");
         jMenu1.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
 
-        tubeTypesMenu.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        tubeTypesMenu.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         tubeTypesMenu.setText("Типы труб");
         tubeTypesMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3769,7 +3935,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         });
         jMenu1.add(tubeTypesMenu);
 
-        menuItem_Settings.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        menuItem_Settings.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         menuItem_Settings.setText("Настройка");
         menuItem_Settings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3778,7 +3944,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         });
         jMenu1.add(menuItem_Settings);
 
-        sortoscopeMenu.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        sortoscopeMenu.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         sortoscopeMenu.setText("Настройка сортоскопа");
         sortoscopeMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3787,7 +3953,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         });
         jMenu1.add(sortoscopeMenu);
 
-        jMenuItem14.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jMenuItem14.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jMenuItem14.setText("Сохранить настройки УЗК  и МД");
         jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3797,9 +3963,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         jMenu1.add(jMenuItem14);
 
         jMenu6.setText("Администрирование");
-        jMenu6.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jMenu6.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
 
-        jMenuItem6.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jMenuItem6.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jMenuItem6.setText("Сменить пароль администратора");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3808,7 +3974,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         });
         jMenu6.add(jMenuItem6);
 
-        menuItem_EnableLogging.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        menuItem_EnableLogging.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         menuItem_EnableLogging.setText("Включить запись журнала для отладки");
         menuItem_EnableLogging.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3817,7 +3983,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         });
         jMenu6.add(menuItem_EnableLogging);
 
-        jMenuItem_createAdmin.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jMenuItem_createAdmin.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jMenuItem_createAdmin.setText("Создать администратора");
         jMenuItem_createAdmin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3826,9 +3992,18 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         });
         jMenu6.add(jMenuItem_createAdmin);
 
+        jMenuItem_ChangesLog.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jMenuItem_ChangesLog.setText("Журнал изменений");
+        jMenuItem_ChangesLog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_ChangesLogActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMenuItem_ChangesLog);
+
         jMenu1.add(jMenu6);
 
-        jMenuItem3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jMenuItem3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jMenuItem3.setText("Выход");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3996,11 +4171,11 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1281, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 967, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 820, Short.MAX_VALUE)
         );
 
         pack();
@@ -4193,6 +4368,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             prm.currentTubeType.setParamsUSK2(dev.getParams());
         }
         tmn.setParam(Devicess.ID_R4, prm);
+        //TODO Здесь сохраняем изменения параметров
         EntityManager em = emf.createEntityManager();
         try {
             EntityTransaction trans = em.getTransaction();
@@ -4318,6 +4494,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         if (isPassCheckOk() == null) {
             return;
         }
+
         MainParametersDialog mainParametersDialog = new MainParametersDialog(
                 ((UEParams) tmn.getParam(Devicess.ID_R4)),
                 prmUSEditPnl.getDeltaGainPanel()
@@ -4329,11 +4506,15 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             protected Integer doInBackground() throws Exception {
 
                 if (mainParametersDialog.isChanged) {
+                    UEParams oldUEParams = ((UEParams) tmn.getParam(Devicess.ID_R4)).deepClone();
+                    TubeType oldTubeType = ((UEParams) tmn.getParam(Devicess.ID_R4)).currentTubeType;
+                    TubeType newTubeType = mainParametersDialog.getTubeType();
                     //Коипируем выбранные настройки трубы
-                    ((UEParams) tmn.getParam(Devicess.ID_R4)).currentTubeType = mainParametersDialog.getTubeType();
+                    ((UEParams) tmn.getParam(Devicess.ID_R4)).currentTubeType = newTubeType;
 
                     //Обновляем параметры в соостветствии с тем что введено на панели.
                     mainParametersDialog.updateParams((UEParams) tmn.getParam(Devicess.ID_R4));
+                    writeDeviceSettingsChangesToLog(restrictedAccessDialog.getOperator(), oldUEParams, (UEParams) tmn.getParam(Devicess.ID_R4));
                     //Отправляем обновленные параметры в PLC
                     try {
                         plc.setShortRegister("MDStart", ((UEParams) tmn.getParam(Devicess.ID_R4)).MDStart);
@@ -4378,6 +4559,10 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                             }
                         }
                     }
+                    //Save changes to log
+                    logLineParametorChanges(oldUEParams, ((UEParams) tmn.getParam(Devicess.ID_R4)));
+                    //Save tubeType change to log
+                    logTubeTypeChanges(oldTubeType, newTubeType);
                 }
                 //Возможно следующая строчка ошибочная так текущий тип трубы надо оплучать их транспортного менеджера.
                 //TubeType tubeType = mainParametersDialog.getTubeType();
@@ -4439,9 +4624,140 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 progressDialog.setVisible(false);
                 return 0;
             }
+
+            private void writeDeviceSettingsChangesToLog(Operator operator, UEParams oldParams, UEParams newParams) {
+                SettingsChangeEvent changeEvent = changesManager.addChangesEvent(operator);
+            }
+
+            private void logLineParametorChanges(UEParams oldUeParams, UEParams newUeParams) {
+                final String parametersGroupName = "Параметры линии";
+                SettingsChangeEvent changeEvent = changesManager.addChangesEvent(restrictedAccessDialog.getOperator());
+                if (oldUeParams.MDStart != newUeParams.MDStart) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Координата [начала] магнитной дефектоскопии",
+                            String.valueOf(oldUeParams.MDStart),
+                            String.valueOf(newUeParams.MDStart));
+                }
+                if (oldUeParams.MDEnd != newUeParams.MDEnd) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Координата [конца] магнитной дефектоскопии",
+                            String.valueOf(oldUeParams.MDEnd),
+                            String.valueOf(newUeParams.MDEnd));
+                }
+                if (oldUeParams.USDStart != newUeParams.USDStart) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Координата [конца] магнитной дефектоскопии",
+                            String.valueOf(oldUeParams.USDStart),
+                            String.valueOf(newUeParams.USDStart));
+                }
+                if (oldUeParams.USDStart != newUeParams.USDStart) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Координата [начала] УЗД",
+                            String.valueOf(oldUeParams.USDStart),
+                            String.valueOf(newUeParams.USDStart));
+                }
+                if (oldUeParams.USDEnd != newUeParams.USDEnd) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Координата [конца] УЗД",
+                            String.valueOf(oldUeParams.USDEnd),
+                            String.valueOf(newUeParams.USDEnd));
+                }
+                if (oldUeParams.onWatter != newUeParams.onWatter) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Координата [начала] смачивания",
+                            String.valueOf(oldUeParams.onWatter),
+                            String.valueOf(newUeParams.onWatter));
+                }
+                if (oldUeParams.offWatter != newUeParams.offWatter) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Координата [начала] смачивания",
+                            String.valueOf(oldUeParams.offWatter),
+                            String.valueOf(newUeParams.offWatter));
+                }
+                if (oldUeParams.offWatter != newUeParams.offWatter) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Координата [начала] смачивания",
+                            String.valueOf(oldUeParams.offWatter),
+                            String.valueOf(newUeParams.offWatter));
+                }
+                if (oldUeParams.fillTime != newUeParams.fillTime) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Время заполнения каретки водой",
+                            String.valueOf(oldUeParams.fillTime),
+                            String.valueOf(newUeParams.fillTime));
+                }
+                if (oldUeParams.tailLen != newUeParams.tailLen) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Координата подъема 1 прижима",
+                            String.valueOf(oldUeParams.tailLen),
+                            String.valueOf(newUeParams.tailLen));
+                }
+                if (oldUeParams.secLirStart != newUeParams.secLirStart) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Координата опускания 2 прижима",
+                            String.valueOf(oldUeParams.secLirStart),
+                            String.valueOf(newUeParams.secLirStart));
+                }
+                if (oldUeParams.thdLirStart != newUeParams.thdLirStart) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Координата опускания 3 прижима",
+                            String.valueOf(oldUeParams.thdLirStart),
+                            String.valueOf(newUeParams.thdLirStart));
+                }
+                if (oldUeParams.intSave != newUeParams.intSave) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Шаг x координаты графиков",
+                            String.valueOf(oldUeParams.intSave),
+                            String.valueOf(newUeParams.intSave));
+                }
+                if (oldUeParams.calibrLen != newUeParams.calibrLen) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Длина калибровочного участка",
+                            String.valueOf(oldUeParams.calibrLen),
+                            String.valueOf(newUeParams.calibrLen));
+                }
+                if (oldUeParams.onDry != newUeParams.onDry) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Координата [начала] осушки",
+                            String.valueOf(oldUeParams.onDry),
+                            String.valueOf(newUeParams.onDry));
+                }
+                if (oldUeParams.offDry != newUeParams.offDry) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Координата [окончания] осушки",
+                            String.valueOf(oldUeParams.offDry),
+                            String.valueOf(newUeParams.offDry));
+                }
+                if (oldUeParams.disableMinGoodLengthCheck != newUeParams.disableMinGoodLengthCheck) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Отключчить проверку минимальной длины годного участка",
+                            oldUeParams.disableMinGoodLengthCheck ? "отключена" : "включена",
+                            newUeParams.disableMinGoodLengthCheck ? "отключена" : "включена");
+                }
+                if (oldUeParams.minGoodLength != newUeParams.minGoodLength) {
+                    changeEvent.addSettingsChange(parametersGroupName,
+                            "Минимальная длина годного участка",
+                            String.valueOf(oldUeParams.minGoodLength),
+                            String.valueOf(newUeParams.minGoodLength));
+                }
+                if (changeEvent.getSettingsChanges().isEmpty()) {
+                    return;
+                }
+                changesManager.persistChanges();
+            }
+
+            private void logTubeTypeChanges(TubeType oldTubeType, TubeType newTubeType) {
+                if (!oldTubeType.getId().equals(newTubeType.getId())) {
+                    final String parametersGroupName = "Параметры линии";
+                    SettingsChangeEvent changeEvent = changesManager.addChangesEvent(restrictedAccessDialog.getOperator());
+                    changeEvent.addSettingsChange(parametersGroupName, "Текущий тип трубы", oldTubeType.toString(), newTubeType.toString());
+                    changesManager.persistChanges();
+                }
+            }
         });
         //Обновляем индикацию текущего типа трубы
         label_TybeTypeValue.setText(((UEParams) tmn.getParam(Devicess.ID_R4)).currentTubeType.toString());
+        grPnlAll.updateGrafs(mFrm);
     }//GEN-LAST:event_menuItem_SettingsActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
@@ -4696,11 +5012,13 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         tubeTypesDialog.setVisible(params.tubeTypes, true);
 
         if (tubeTypesDialog.ShouldSaveChanges()) {
+            writeTubePupeChangesToLogManager(params.tubeTypes, tubeTypesDialog.getTubeTypesList());
             //Копируем типы труб в параметры
             params.tubeTypes = tubeTypesDialog.getTubeTypesList();
 
             //Сохраняем параметры в базу данных
             tmn.setParam(Devicess.ID_R4, params);
+            JOptionPane.showMessageDialog(MainFrame.this, "Типы труб успешно сохранены", "Уведомление", INFORMATION_MESSAGE);
             EntityManager em = emf.createEntityManager();
             try {
                 EntityTransaction trans = em.getTransaction();
@@ -4709,7 +5027,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     em.persist(new Event("Сохранены измененные параметры типов труб.", 0));
                     trans.commit();
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    log.error("Can't save tube types.", ex);
                 } finally {
                     if (trans.isActive()) {
                         trans.rollback();
@@ -4720,7 +5038,16 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     em.close();
                 }
             }
+            changesManager.persistChanges();
         }
+        TubeType oldTubeType = ((UEParams) tmn.getParam(Devicess.ID_R4)).currentTubeType;
+        List<TubeType> tubeTypes = ((UEParams) tmn.getParam(Devicess.ID_R4)).tubeTypes;
+        tubeTypes.forEach(tubeType -> {
+            if (tubeType.getId().equals(oldTubeType.getId())) {
+                ((UEParams) tmn.getParam(Devicess.ID_R4)).currentTubeType = tubeType;
+            }
+        });
+        grPnlAll.updateGrafs(mFrm);
     }//GEN-LAST:event_tubeTypesMenuActionPerformed
 
     private void sortoscopeMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortoscopeMenuActionPerformed
@@ -4989,176 +5316,229 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         }
         jTable_ArchiveResults.getSelectionModel().clearSelection();
         DateFormat format = new SimpleDateFormat("dd.MM.yy HH:mm:ss");
-        String query = "SELECT a FROM BasaTube a WHERE a.dateCreate BETWEEN :startDate AND :endDate";
+        StringBuilder queryStringBuilder = new StringBuilder();
+        if (jComboBox_ArchiveOperator.getSelectedItem() != null) {
+            queryStringBuilder.append("SELECT a FROM BasaTube a JOIN a.shift.operator o WHERE a.dateCreate BETWEEN :startDate AND :endDate");
+            queryStringBuilder.append(" AND o = :operator");
+        } else {
+            queryStringBuilder.append("SELECT a FROM BasaTube a WHERE a.dateCreate BETWEEN :startDate AND :endDate");
+        }
+        if (jComboBox_AcrchiveTubeType.getSelectedItem() != null) {
+            queryStringBuilder.append(" AND a.tubeType = :tubeType");
+        }
+        if (jComboBox_ArchiveCustomer.getSelectedItem() != null) {
+            queryStringBuilder.append(" AND a.customer = :customer");
+        }
+        if (jComboBox_ArchiveTubeStatus.getSelectedItem() != null) {
+            queryStringBuilder.append(" AND a.status = :status");
+        }
+        if (jCheckBox_ArchiveExcludeSOP.isSelected()) {
+            queryStringBuilder.append(" AND a.sample = false");
+        } else {
+            queryStringBuilder.append(" AND a.sample = true");
+        }
+        final String readyQuery = queryStringBuilder.toString();
         //Получаем список результатов из базы данных
-        progressDialog.startProcessing("Получаем список труб из базы данных.", new SwingWorker<Integer, Integer>() {
-            @Override
-            protected Integer doInBackground() throws Exception {
-                EntityManager em = emf.createEntityManager();
-                try {
-                    log.debug("Starting loading results list...");
-                    archResults = em
-                            .createQuery(query)
-                            .setParameter("startDate", Date.from(table_DatePicker.getStartLocalDateTime().atZone(ZoneId.systemDefault()).toInstant()))
-                            .setParameter("endDate", Date.from(table_DatePicker.getEndLocalDateTime().atZone(ZoneId.systemDefault()).toInstant()))
-                            .getResultList();
-                    log.debug("Results list has been loaded...");
-                } catch (Exception ex) {
-                    log.error("Can't load result list because: ", ex);
-                } finally {
-                    if (em != null) {
-                        em.close();
-                    }
-                    progressDialog.setVisible(false);
-                }
-                return 0;
+        //progressDialog.startProcessing("Получаем список труб из базы данных.", new SwingWorker<Integer, Integer>() {
+        //@Override
+        // protected Integer doInBackground() throws Exception {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = null;
+        try {
+            log.debug("Starting loading results list...");
+            tx = em.getTransaction();
+            tx.begin();
+            Query query = em.createQuery(readyQuery)
+                    .setParameter("startDate", Date.from(table_DatePicker.getStartLocalDateTime().atZone(ZoneId.systemDefault()).toInstant()))
+                    .setParameter("endDate", Date.from(table_DatePicker.getEndLocalDateTime().atZone(ZoneId.systemDefault()).toInstant())) /*.setParameter("enableSOP", Date.from(table_DatePicker.getEndLocalDateTime().atZone(ZoneId.systemDefault()).toInstant()))*/;
+            if (jComboBox_ArchiveCustomer.getSelectedItem() != null) {
+                query.setParameter("customer", ((Customer) jComboBox_ArchiveCustomer.getSelectedItem()));
             }
-        });
+            if (jComboBox_ArchiveOperator.getSelectedItem() != null) {
+                query.setParameter("operator", ((Operator) jComboBox_ArchiveOperator.getSelectedItem()));
+            }
+            if (jComboBox_AcrchiveTubeType.getSelectedItem() != null) {
+                query.setParameter("tubeType", ((TubeType) jComboBox_AcrchiveTubeType.getSelectedItem()).getId());
+            }
+            if (jComboBox_ArchiveTubeStatus.getSelectedItem() != null) {
+
+                switch ((String) jComboBox_ArchiveTubeStatus.getSelectedItem()) {
+                    case "брак":
+                        query.setParameter("status", 0);
+                        break;
+                    case "годная":
+                        query.setParameter("status", 1);
+                        break;
+                    case "класс 2":
+                        query.setParameter("status", 3);
+                        break;
+                }
+
+            }
+
+            archResults = query.getResultList();
+            tx.commit();
+            log.debug("Results list has been loaded...");
+        } catch (Exception ex) {
+            log.error("Can't load result list because: ", ex);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+            progressDialog.setVisible(false);
+        }
+        //return 0;
+        //}
+        //});
         //Если результаты котрые вернула база пусты или содержат 0 запией
         if (archResults == null || archResults.isEmpty()) {
             DefaultTableModel table = (DefaultTableModel) jTable_ArchiveResults.getModel();
             //Очищаем таблицу
-            while (table.getRowCount() != 0) {
-                table.removeRow(0);
-            }
+            table.setRowCount(0);
+            label_BadTubesValue.setText("");
+            label_BadTubesLengthValue.setText("");
+
+            label_GoodTubesValue.setText("");
+            label_GoodTubesLengthValue.setText("");
+
+            label_TotalTubesValue.setText("");
+            label_TotalTubesLengthValue.setText("");
+
+            label_AverageTubeControllTimeValue.setText("");
+
             JOptionPane.showMessageDialog(
                     null,
-                    "По вышему запросу в базе данных труб не найдено.",
+                    "По вашему запросу в базе данных труб не найдено.",
                     "Уведомление",
                     INFORMATION_MESSAGE
             );
-            //Выходим из функции
-            return;
-        }
-        //Создаем массив для заполнения таблицы результатов
-        progressDialog.startProcessing("Готовим результаты", archResults.size(), new SwingWorker<Integer, Integer>() {
-            @Override
-            protected Integer doInBackground() throws Exception {
-                Date startDate = new Date();
-                DefaultTableModel tableModel = (DefaultTableModel) jTable_ArchiveResults.getModel();
-                //Удаляем предыдущий список
-                log.debug("Start clearing pipes list.");
-                while (tableModel.getRowCount() != 0) {
-                    tableModel.removeRow(0);
-                }
-                log.debug("Pipes list has been cleared.");
 
-                Object[][] data = new Object[archResults.size()][9];
-                List<TubeType> tubeTypes = ((UEParams) tmn.getParam(Devicess.ID_R4)).tubeTypes;
-                log.debug("Preparing pipe data for UI.");
-                for (int i = 0; i < archResults.size(); i++) {
-                    progressDialog.increment();
-                    BasaTube currentArchResult = archResults.get(i);
-                    data[i][0] = currentArchResult.getId();
-                    data[i][1] = currentArchResult.getDateCreate() == null ? "Не указано" : format.format(currentArchResult.getDateCreate());
-                    data[i][2] = currentArchResult.getStatusToString();
-                    data[i][3] = tubeTypes.get(
-                            toIntExact(currentArchResult.getTypeID()) - 1) == null
-                            ? "Не указано"
-                            : tubeTypes.get(toIntExact(currentArchResult.getTypeID()) - 1) + currentArchResult.isSampleToString();
-                    float minThick = -1f;
-                    //Если есть данные
-                    if (jCheckBox_CalculateSideThickness.isSelected()) {
-                        if (currentArchResult.getTubeResults() != null
-                                && currentArchResult.getTubeResults().get(0) != null
-                                && currentArchResult.getTubeResults().get(0).usk2Res != null
-                                && currentArchResult.getTubeResults().get(0).usk2Res.ty.length == 8) {
-                            //Получаем минимальное значение значение толщины
-
-                            minThick = archResults
-                                    .get(i)
-                                    .getTubeResults()
-                                    .get(0).usk2Res
-                                    .getMinThick(4, 7, 3.0f);
-                            //Округляем до 2 знаков
-                            minThick = ((float) Math.round(minThick * 100)) / 100;
-
-                        }
-                    } else {
-                        minThick = 0;
-                    }
-
-                    data[i][4] = minThick == -1 ? "Нет контакта" : minThick;
-                    data[i][5] = currentArchResult.getLengthInMeters();
-                    data[i][6] = currentArchResult.getDurabilityGroup() == null
-                            ? "Не указано"
-                            : currentArchResult.getDurabilityGroup();
-                    if (currentArchResult.getShift() != null) {
-                        data[i][7] = currentArchResult.getShift().getOperator() == null
-                                ? "Не указано"
-                                : currentArchResult.getShift().getOperator().toString();
-                    }
-                    data[i][8] = currentArchResult.getCustomer() == null
-                            ? "Не указано"
-                            : currentArchResult.getCustomer().toString();
-                }
-                log.debug("Preparing pipe data for UI has been finished.");
-
-                //Если есть трубы для вывода в таблицу,
-                //то выводим список труб за смену в таблицу.
-                log.debug("Populating table with pipes data.");
-                if (data != null && data.length > 0) {
-                    for (Object[] tubeRow : data) {
-                        tableModel.addRow(tubeRow);
-                    }
-                    log.debug("Populating table with pipes data has been finished.");
-                    //Заполняем сводные данные по полученному из архива диапазону труб
-                    //Считаем время нахождения всех труб на установке
-                    Long totalTime = 0L;
-                    //Считаем общую длину труб
-                    Float totalTubesLength = 0.0F;
-                    //Общее количество труб
-                    Integer totalTubesCount = 0;
-                    //Колличество годных
-                    Integer goodTubesCount = 0;
-                    //Длина годных труб
-                    Float goodTubesLength = 0.0F;
-                    //Количество забракованных
-                    Integer badTubesCount = 0;
-                    //Длина забракованных труб
-                    Float badTubesLength = 0.0F;
-                    for (BasaTube atube : archResults) {
-                        if (!atube.isSample()) {
-                            totalTime += atube.getControlDurationInSeconds();
-                            switch (atube.getStatus()) {
-                                //Бракованные
-                                case 0:
-                                    badTubesCount++;
-                                    badTubesLength += atube.getLengthInMeters();
-                                    break;
-                                //Годные
-                                case 1:
-                                    goodTubesCount++;
-                                    goodTubesLength += atube.getLengthInMeters();
-                                    break;
-                                //Непроконтроллированные
-                                case 3:
-                                    break;
-                            }
-                        }
-                    }
-                    totalTubesCount = goodTubesCount + badTubesCount;
-                    totalTubesLength = goodTubesLength + badTubesLength;
-
-                    label_BadTubesValue.setText(badTubesCount.toString());
-                    label_BadTubesLengthValue.setText(Math.round(badTubesLength * 100.0) / 100.0 + "м");
-
-                    label_GoodTubesValue.setText(goodTubesCount.toString());
-                    label_GoodTubesLengthValue.setText(Math.round(goodTubesLength * 100.0) / 100.0 + "м");
-
-                    label_TotalTubesValue.setText(totalTubesCount.toString());
-                    label_TotalTubesLengthValue.setText(Math.round(totalTubesLength * 100.0) / 100.0 + "м");
-                    if (totalTubesCount != 0) {
-                        label_AverageTubeControllTimeValue.setText(totalTime / totalTubesCount + "с");
-                    } else {
-                        label_AverageTubeControllTimeValue.setText(0 + "с");
-                    }
-                }
-                jLabel_ReportCreationDurationValue.setText(Long.toString((new Date().getTime() - startDate.getTime()) / 1000) + " c");
-                progressDialog.setVisible(false);
-                return 1;
+        } else {
+            //Создаем массив для заполнения таблицы результатов
+            Date startDate = new Date();
+            DefaultTableModel tableModel = (DefaultTableModel) jTable_ArchiveResults.getModel();
+            //Удаляем предыдущий список
+            log.debug("Start clearing pipes list.");
+            while (tableModel.getRowCount() != 0) {
+                tableModel.removeRow(0);
             }
-        });
+            log.debug("Pipes list has been cleared.");
+
+            Object[][] data = new Object[archResults.size()][9];
+            List<TubeType> tubeTypes = ((UEParams) tmn.getParam(Devicess.ID_R4)).tubeTypes;
+            log.debug("Preparing pipe data for UI.");
+            for (int i = 0; i < archResults.size(); i++) {
+                //progressDialog.increment();
+                BasaTube currentArchResult = archResults.get(i);
+                data[i][0] = currentArchResult.getId();
+                data[i][1] = currentArchResult.getDateCreate() == null ? "Не указано" : format.format(currentArchResult.getDateCreate());
+                data[i][2] = currentArchResult.getStatusToString();
+                data[i][3] = tubeTypes.get(
+                        toIntExact(currentArchResult.getTypeID()) - 1) == null
+                        ? "Не указано"
+                        : tubeTypes.get(toIntExact(currentArchResult.getTypeID()) - 1) + currentArchResult.isSampleToString();
+                float minThick = -1f;
+                //Если есть данные
+                if (jCheckBox_CalculateSideThickness.isSelected()) {
+                    if (currentArchResult.getTubeResults() != null
+                            && currentArchResult.getTubeResults().get(0) != null
+                            && currentArchResult.getTubeResults().get(0).usk2Res != null
+                            && currentArchResult.getTubeResults().get(0).usk2Res.ty.length == 8) {
+                        //Получаем минимальное значение значение толщины
+
+                        minThick = archResults
+                                .get(i)
+                                .getTubeResults()
+                                .get(0).usk2Res
+                                .getMinThick(4, 7, 3.0f);
+                        //Округляем до 2 знаков
+                        minThick = ((float) Math.round(minThick * 100)) / 100;
+
+                    }
+                } else {
+                    minThick = 0;
+                }
+
+                data[i][4] = minThick == -1 ? "Нет контакта" : minThick;
+                data[i][5] = currentArchResult.getLengthInMeters();
+                data[i][6] = currentArchResult.getDurabilityGroup() == null
+                        ? "Не указано"
+                        : currentArchResult.getDurabilityGroup();
+                if (currentArchResult.getShift() != null) {
+                    data[i][7] = currentArchResult.getShift().getOperator() == null
+                            ? "Не указано"
+                            : currentArchResult.getShift().getOperator().toString();
+                }
+                data[i][8] = currentArchResult.getCustomer() == null
+                        ? "Не указано"
+                        : currentArchResult.getCustomer().toString();
+            }
+            log.debug("Preparing pipe data for UI has been finished.");
+
+            //Если есть трубы для вывода в таблицу,
+            //то выводим список труб за смену в таблицу.
+            log.debug("Populating table with pipes data.");
+            if (data != null && data.length > 0) {
+                for (Object[] tubeRow : data) {
+                    tableModel.addRow(tubeRow);
+                }
+                log.debug("Populating table with pipes data has been finished.");
+                //Заполняем сводные данные по полученному из архива диапазону труб
+                //Считаем время нахождения всех труб на установке
+                Long totalTime = 0L;
+                //Считаем общую длину труб
+                Float totalTubesLength = 0.0F;
+                //Общее количество труб
+                Integer totalTubesCount = 0;
+                //Колличество годных
+                Integer goodTubesCount = 0;
+                //Длина годных труб
+                Float goodTubesLength = 0.0F;
+                //Количество забракованных
+                Integer badTubesCount = 0;
+                //Длина забракованных труб
+                Float badTubesLength = 0.0F;
+                for (BasaTube atube : archResults) {
+                    totalTime += atube.getControlDurationInSeconds();
+                    switch (atube.getStatus()) {
+                        //Бракованные
+                        case 0:
+                            badTubesCount++;
+                            badTubesLength += atube.getLengthInMeters();
+                            break;
+                        //Годные
+                        case 1:
+                            goodTubesCount++;
+                            goodTubesLength += atube.getLengthInMeters();
+                            break;
+                        case 2:
+                            badTubesCount++;
+                            badTubesLength += atube.getLengthInMeters();
+                            break;
+                        //Непроконтроллированные
+                        case 3:
+                            break;
+                    }
+                }
+                totalTubesCount = goodTubesCount + badTubesCount;
+                totalTubesLength = goodTubesLength + badTubesLength;
+
+                label_BadTubesValue.setText(badTubesCount.toString());
+                label_BadTubesLengthValue.setText(Math.round(badTubesLength * 100.0) / 100.0 + "м");
+
+                label_GoodTubesValue.setText(goodTubesCount.toString());
+                label_GoodTubesLengthValue.setText(Math.round(goodTubesLength * 100.0) / 100.0 + "м");
+
+                label_TotalTubesValue.setText(totalTubesCount.toString());
+                label_TotalTubesLengthValue.setText(Math.round(totalTubesLength * 100.0) / 100.0 + "м");
+                if (totalTubesCount != 0) {
+                    label_AverageTubeControllTimeValue.setText(totalTime / totalTubesCount + "с");
+                } else {
+                    label_AverageTubeControllTimeValue.setText(0 + "с");
+                }
+            }
+            jLabel_ReportCreationDurationValue.setText(Long.toString((new Date().getTime() - startDate.getTime()) / 1000) + " c");
+        }
     }//GEN-LAST:event_button_GetArchiveDataActionPerformed
 
     private void button_CreateNewCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_CreateNewCustomerActionPerformed
@@ -5338,7 +5718,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 uiConditionLabel = t("good");
                 plcCommand = Commands.MARK_AS_GOOD;
                 break;
-            case "Годная ксласс 2":
+            case "Класс 2":
                 tubeCondition = TubeConditions.GOOD_CLASS_2;
                 uiConditionLabel = t("googClass2");
                 plcCommand = Commands.MARK_AS_GOOD;
@@ -5373,6 +5753,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 break;
             default:
         }
+        updateArchivePanel();
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
     private void jButton_saveUskSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_saveUskSettingsActionPerformed
@@ -5427,6 +5808,12 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             }
         }
     }//GEN-LAST:event_jMenuItem_createAdminActionPerformed
+
+    private void jMenuItem_ChangesLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ChangesLogActionPerformed
+        Dialog_ChangesLog dialog_ChangesLog = new Dialog_ChangesLog(MainFrame.this, true, emf);
+        dialog_ChangesLog.setLocationRelativeTo(MainFrame.this);
+        dialog_ChangesLog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem_ChangesLogActionPerformed
 
     private void saveOperatorChoiceToDb(int tubeCondition) {
         EntityManager em = emf.createEntityManager();
@@ -5681,10 +6068,18 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private javax.swing.JCheckBox jCheckBox7;
     private javax.swing.JCheckBox jCheckBox8;
     private javax.swing.JCheckBox jCheckBox9;
+    private javax.swing.JCheckBox jCheckBox_ArchiveExcludeSOP;
     private javax.swing.JCheckBox jCheckBox_CalculateSideThickness;
+    private javax.swing.JComboBox<TubeType> jComboBox_AcrchiveTubeType;
+    private javax.swing.JComboBox<Customer> jComboBox_ArchiveCustomer;
+    private javax.swing.JComboBox<Operator> jComboBox_ArchiveOperator;
+    private javax.swing.JComboBox<String> jComboBox_ArchiveTubeStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel_DatePickerTitle;
     private javax.swing.JLabel jLabel_ReportCreationDuration;
     private javax.swing.JLabel jLabel_ReportCreationDurationValue;
@@ -5710,8 +6105,10 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
+    private javax.swing.JMenuItem jMenuItem_ChangesLog;
     private javax.swing.JMenuItem jMenuItem_createAdmin;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel_Magnetic;
     private javax.swing.JPanel jPanel_Tansport;
     private javax.swing.JPanel jPanel_Ultrasonic;
