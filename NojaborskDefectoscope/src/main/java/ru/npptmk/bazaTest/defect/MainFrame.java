@@ -191,7 +191,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     public BazaPanelFactory panFact;
     private int tubeLength;          // Фактическая длина трубы в мм.
     private final DialogCustomerSelection dialogCustomerSelection;
-    private static final String PLC_IP = "localhost";
+    private static final String PLC_IP = "192.168.0.240";
 
     private Dialog_createAdmin dialog_createAdmin;
 
@@ -1549,7 +1549,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                             if (tubeIsBad) {
                                 log.debug("Got defects for pipe with id [{}].", tubeOnTheDeviceID);
                                 //Делаем активными кнопки выбора
-                                button_EnableVerdict.setEnabled(true);
+                                jButton_MarkGood.setEnabled(true);
+                                jButton_MarkClass2.setEnabled(true);
+                                jButton_MarkDeffect.setEnabled(true);
                                 button_RepeatDefectDetection.setEnabled(true);
                             } else {//Если установка дефектов не нашла
                                 log.debug("No defects has been found for pipe with id [{}].", tubeOnTheDeviceID);
@@ -1587,7 +1589,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                         }
                     } else {
                         //Делаем активными кнопки выбора
-                        button_EnableVerdict.setEnabled(true);
+                        jButton_MarkGood.setEnabled(true);
+                        jButton_MarkClass2.setEnabled(true);
+                        jButton_MarkDeffect.setEnabled(true);
                         button_RepeatDefectDetection.setEnabled(true);
                     }
 
@@ -2043,7 +2047,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             if (mode != Modes.WORKING) {
                 //Отключаем кнопки "Брак", "повторить",
                 //"годная".
-                button_EnableVerdict.setEnabled(false);
+                jButton_MarkGood.setEnabled(false);
+                jButton_MarkClass2.setEnabled(false);
+                jButton_MarkDeffect.setEnabled(false);
                 button_RepeatDefectDetection.setEnabled(false);
             }
         } catch (ModbusException ex) {
@@ -2516,8 +2522,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         label_TotalTubesCountValue = new javax.swing.JLabel();
         button_DropTubesCounter = new javax.swing.JButton();
         checkBox_GoodAutohandle = new javax.swing.JCheckBox();
-        button_EnableVerdict = new javax.swing.JButton();
-        comboBox_TubeConditions = new javax.swing.JComboBox<>();
+        jButton_MarkGood = new javax.swing.JButton();
+        jButton_MarkClass2 = new javax.swing.JButton();
+        jButton_MarkDeffect = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         pnGrfsAll = new javax.swing.JPanel();
         magDef = new javax.swing.JPanel();
@@ -2843,17 +2850,29 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             }
         });
 
-        button_EnableVerdict.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        button_EnableVerdict.setText("Пометить");
-        button_EnableVerdict.setEnabled(false);
-        button_EnableVerdict.addActionListener(new java.awt.event.ActionListener() {
+        jButton_MarkGood.setText("Годная");
+        jButton_MarkGood.setEnabled(false);
+        jButton_MarkGood.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_EnableVerdictActionPerformed(evt);
+                jButton_MarkGoodActionPerformed(evt);
             }
         });
 
-        comboBox_TubeConditions.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        comboBox_TubeConditions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Годная", "Брак", "Класс 2" }));
+        jButton_MarkClass2.setText("Класс 2");
+        jButton_MarkClass2.setEnabled(false);
+        jButton_MarkClass2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_MarkClass2ActionPerformed(evt);
+            }
+        });
+
+        jButton_MarkDeffect.setText("Брак");
+        jButton_MarkDeffect.setEnabled(false);
+        jButton_MarkDeffect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_MarkDeffectActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnTubeTblLayout = new javax.swing.GroupLayout(pnTubeTbl);
         pnTubeTbl.setLayout(pnTubeTblLayout);
@@ -2909,13 +2928,15 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                         .addContainerGap()
                         .addComponent(jScrollPane4))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnTubeTblLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addContainerGap()
                         .addComponent(button_RepeatDefectDetection, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton_MarkDeffect)
                         .addGap(18, 18, 18)
-                        .addComponent(button_EnableVerdict)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comboBox_TubeConditions, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
+                        .addComponent(jButton_MarkClass2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton_MarkGood)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(checkBox_GoodAutohandle)))
                 .addContainerGap())
         );
@@ -2953,10 +2974,11 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnTubeTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(checkBox_GoodAutohandle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(button_RepeatDefectDetection)
                     .addGroup(pnTubeTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(button_RepeatDefectDetection)
-                        .addComponent(comboBox_TubeConditions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(button_EnableVerdict)))
+                        .addComponent(jButton_MarkGood)
+                        .addComponent(jButton_MarkClass2)
+                        .addComponent(jButton_MarkDeffect)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnTubeTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_GoodTubesCount)
@@ -5676,7 +5698,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
     private void button_RepeatDefectDetectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_RepeatDefectDetectionActionPerformed
         //Отключаем кнопки выбора.
-        button_EnableVerdict.setEnabled(false);
+        jButton_MarkGood.setEnabled(false);
+        jButton_MarkClass2.setEnabled(false);
+        jButton_MarkDeffect.setEnabled(false);
         button_RepeatDefectDetection.setEnabled(false);
         //Отправляем комманду контроллеру, что необходимо повторить проверку.
         sendCmdToPLC(Commands.REPEAT_DEFECT_DETECTION);
@@ -5706,37 +5730,6 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private void jButton_AllGraphsOnOnePageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AllGraphsOnOnePageActionPerformed
         createGraphsOnOnePage();
     }//GEN-LAST:event_jButton_AllGraphsOnOnePageActionPerformed
-
-    private void button_EnableVerdictActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_EnableVerdictActionPerformed
-        String selectedCondition = (String) comboBox_TubeConditions.getSelectedItem();
-        int tubeCondition;
-        String uiConditionLabel;
-        int plcCommand;
-        switch (selectedCondition) {
-            case "Годная":
-                tubeCondition = TubeConditions.GOOD;
-                uiConditionLabel = t("good");
-                plcCommand = Commands.MARK_AS_GOOD;
-                break;
-            case "Класс 2":
-                tubeCondition = TubeConditions.GOOD_CLASS_2;
-                uiConditionLabel = t("googClass2");
-                plcCommand = Commands.MARK_AS_GOOD;
-                break;
-            case "Рем. класс 2":
-                tubeCondition = TubeConditions.GOOD_REAPAIR_CLASS_2;
-                uiConditionLabel = t("googRepairClass2");
-                plcCommand = Commands.MARK_AS_GOOD;
-                break;
-            default://Брак
-                tubeCondition = TubeConditions.BAD;
-                uiConditionLabel = t("defect");
-                plcCommand = Commands.MARK_AS_BAD;
-        }
-        updateTubesTable(uiConditionLabel);
-        saveOperatorChoiceToDb(tubeCondition);
-        notifyController(plcCommand);
-    }//GEN-LAST:event_button_EnableVerdictActionPerformed
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         int selectedTabIndex = jTabbedPane1.getSelectedIndex();
@@ -5815,6 +5808,24 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         dialog_ChangesLog.setVisible(true);
     }//GEN-LAST:event_jMenuItem_ChangesLogActionPerformed
 
+    private void jButton_MarkGoodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_MarkGoodActionPerformed
+        updateTubesTable(t("good"));
+        saveOperatorChoiceToDb(TubeConditions.GOOD);
+        notifyController(Commands.MARK_AS_GOOD);
+    }//GEN-LAST:event_jButton_MarkGoodActionPerformed
+
+    private void jButton_MarkClass2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_MarkClass2ActionPerformed
+        updateTubesTable(t("googClass2"));
+        saveOperatorChoiceToDb(TubeConditions.GOOD_CLASS_2);
+        notifyController(Commands.MARK_AS_GOOD);
+    }//GEN-LAST:event_jButton_MarkClass2ActionPerformed
+
+    private void jButton_MarkDeffectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_MarkDeffectActionPerformed
+        updateTubesTable(t("defect"));
+        saveOperatorChoiceToDb(TubeConditions.BAD);
+        notifyController(Commands.MARK_AS_BAD);
+    }//GEN-LAST:event_jButton_MarkDeffectActionPerformed
+
     private void saveOperatorChoiceToDb(int tubeCondition) {
         EntityManager em = emf.createEntityManager();
         //Сначала получаем последние результаты проверки по трбуе из базы
@@ -5845,7 +5856,9 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
     private void updateTubesTable(String uiConditionLabel) {
         //Отключаем кнопки выбора.
-        button_EnableVerdict.setEnabled(false);
+        jButton_MarkGood.setEnabled(false);
+        jButton_MarkClass2.setEnabled(false);
+        jButton_MarkDeffect.setEnabled(false);
         button_RepeatDefectDetection.setEnabled(false);
         //Обновляем список труб
         ((DefaultTableModel) table_Shift_Tubes.getModel()).setValueAt(uiConditionLabel, 0, PIPE_STATE_COLUMN);
@@ -6025,7 +6038,6 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private javax.swing.JToggleButton button_Demagnetization_Coil_On;
     private javax.swing.JButton button_DropTubesCounter;
     private javax.swing.JToggleButton button_Dryer_On;
-    private javax.swing.JButton button_EnableVerdict;
     private javax.swing.JButton button_GetArchiveData;
     private javax.swing.JButton button_GetTotalReport;
     private javax.swing.JToggleButton button_Holder_1_Down;
@@ -6045,11 +6057,13 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private javax.swing.JToggleButton button_Wetter_Close;
     private javax.swing.JButton button_graphPerPageReport;
     private javax.swing.JCheckBox checkBox_GoodAutohandle;
-    private javax.swing.JComboBox<String> comboBox_TubeConditions;
     private javax.swing.JComboBox combobox_CustomerSelection;
     private javax.swing.JComboBox combobox_TubeOnDeviceResults;
     private javax.swing.JButton frBtSave;
     private javax.swing.JButton jButton_AllGraphsOnOnePage;
+    private javax.swing.JButton jButton_MarkClass2;
+    private javax.swing.JButton jButton_MarkDeffect;
+    private javax.swing.JButton jButton_MarkGood;
     private javax.swing.JButton jButton_saveUskSettings;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox10;
