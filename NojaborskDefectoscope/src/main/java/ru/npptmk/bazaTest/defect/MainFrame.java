@@ -542,30 +542,11 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if (prmUSEditPnl.isChangeParams()) {
-                    int rc = JOptionPane.showConfirmDialog(null, t("saveUSKChangesMessage"),
-                            t("saveUSKChangesMessageDialogCaption1"), JOptionPane.YES_NO_OPTION);
-                    if (rc == JOptionPane.YES_OPTION) {
-                        saveUSKParams(blockUSK1);
-                        saveUSKParams(blockUSK2);
-                    }
-                    if (rc == JOptionPane.NO_OPTION) {
-                        UEParams pr = (UEParams) tmn.getParam(Devicess.ID_R4);
-                        blockUSK1.setParams(pr.currentTubeType.getParamsUSK1());
-                        blockUSK2.setParams(pr.currentTubeType.getParamsUSK2());
-                    }
-                }
-                if (blockMD.getChangeFlag()) {
-                    int rc = JOptionPane.showConfirmDialog(null, t("saveMDChangesMessage"),
-                            t("saveMDChangesMessageDialogCaption"), JOptionPane.YES_NO_OPTION);
-                    if (rc == JOptionPane.YES_OPTION) {
-                        saveMDParams();
-                    }
-                }
                 if (server != null) {
                     try {
                         server.shutdown();
                     } catch (Exception ex) {
+                        log.error("Can't shut down bd server.", ex);
                     }
                 }
                 super.windowClosing(e); //To change body of generated methods, choose Tools | Templates.
