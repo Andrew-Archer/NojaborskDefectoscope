@@ -2456,6 +2456,46 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
 
     }
 
+    private void logChangedMDParams(final ParamsMD8Udp oldMdParams, final ParamsMD8Udp newMdParams) {
+        SettingsChangeEvent changeEvent = changesManager.addChangesEvent(restrictedAccessDialog.getOperator());
+        compareSimpleArraysAndAddToChangeEvent(
+                oldMdParams.gain,
+                newMdParams.gain,
+                t("md.channels.settings"),
+                t("md.channels.settings.gain"),
+                changeEvent);
+        compareSimpleArraysAndAddToChangeEvent(
+                oldMdParams.offset,
+                newMdParams.offset,
+                t("md.channels.settings"),
+                t("md.channels.settings.offset"),
+                changeEvent);
+        compareSimpleArraysAndAddToChangeEvent(
+                oldMdParams.porog,
+                newMdParams.porog,
+                t("md.channels.settings"),
+                t("md.channels.settings.porog"),
+                changeEvent);
+        if (oldMdParams.filtr != newMdParams.filtr) {
+            changeEvent.addSettingsChange(
+                    t("md.channels.settings"),
+                    t("md.channels.settings.filtr"),
+                    String.valueOf(oldMdParams.filtr),
+                    String.valueOf(newMdParams.filtr));
+        }
+        changesManager.persistChanges();
+    }
+
+    private void compareSimpleArraysAndAddToChangeEvent(int[] oldArray, int[] newArray, String paramGroup, String paramName, SettingsChangeEvent changeEvent) {
+        for (int i = 0; i < oldArray.length; i++) {
+            if (oldArray[i] != newArray[i]) {
+                changeEvent.addSettingsChange(paramGroup,
+                        paramName + " " + (i + 1),
+                        String.valueOf(oldArray[i]), String.valueOf(newArray[i]));
+            }
+        }
+    }
+
     class BOX extends JCheckBox {
 
         public BOX() {
@@ -4955,9 +4995,10 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         return gui_text.getString(key);
     }
     private void frBtSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frBtSaveActionPerformed
+        UEParams prm = (UEParams) tmn.getParam(Devicess.ID_R4);
+        ParamsMD8Udp oldMdParams = prm.currentTubeType.getParamsMD().getClone();
         ParamsMD8Udp prmMD = prmMDEditPnl.getActualParam();
         blockMD.setParam(prmMD);
-        UEParams prm = (UEParams) tmn.getParam(Devicess.ID_R4);
         prm.currentTubeType.setParamsMD(prmMD);
         EntityManager em = emf.createEntityManager();
         synchronized (accessBd) {
@@ -4980,6 +5021,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 }
             }
         }
+        logChangedMDParams(oldMdParams, ((UEParams) tmn.getParam(Devicess.ID_R4)).getParamMD());
         setMdSettingsEnabledState(false);
     }//GEN-LAST:event_frBtSaveActionPerformed
 
