@@ -77,6 +77,7 @@ import static ru.npptmk.bazaTest.defect.INPUTS_NAMES.*;
 import ru.npptmk.bazaTest.defect.TubeType.ThickClasses;
 import ru.npptmk.bazaTest.defect.Util.DbSchemeUpdater;
 import ru.npptmk.bazaTest.defect.Util.FromClassPathSQLUpdater;
+import ru.npptmk.bazaTest.defect.Util.ObjectClonner;
 import ru.npptmk.bazaTest.defect.Util.ProgressDialog;
 import ru.npptmk.bazaTest.defect.Util.jasper_report.JRDataSourceTablesList;
 import ru.npptmk.bazaTest.defect.Util.jasper_report.JRDataSourceUSKLengthWiseResults;
@@ -1375,7 +1376,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                     log.debug("Entered {} state", state);
                     label_StateValue.setText(t("state_22_Name"));
 
-                    //Обновляем граыик дефектов
+                    //Обновляем график дефектов
                     plc.readRegisters("TubeLen", 1);
                     tubeLength = plc.getShortRegister("TubeLen");
                     break;
@@ -2384,6 +2385,8 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             return;
         }
         comp.setEnabled(isEnabled);
+        frBtSave.setEnabled(true);
+        jButton_saveUskSettings.setEnabled(true);
     }
 
     @Override
@@ -2454,6 +2457,55 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
             customers.forEach(jComboBox_ArchiveCustomer::addItem);
         }
 
+    }
+
+    private void logChangedMDParams(final ParamsMD8Udp oldMdParams, final ParamsMD8Udp newMdParams) {
+        SettingsChangeEvent changeEvent = changesManager.addChangesEvent(restrictedAccessDialog.getOperator());
+        compareSimpleArraysAndAddToChangeEvent(
+                oldMdParams.gain,
+                newMdParams.gain,
+                t("md.channels.settings"),
+                t("md.channels.settings.gain"),
+                changeEvent);
+        compareSimpleArraysAndAddToChangeEvent(
+                oldMdParams.offset,
+                newMdParams.offset,
+                t("md.channels.settings"),
+                t("md.channels.settings.offset"),
+                changeEvent);
+        compareSimpleArraysAndAddToChangeEvent(
+                oldMdParams.porog,
+                newMdParams.porog,
+                t("md.channels.settings"),
+                t("md.channels.settings.porog"),
+                changeEvent);
+        if (oldMdParams.filtr != newMdParams.filtr) {
+            changeEvent.addSettingsChange(
+                    t("md.channels.settings"),
+                    t("md.channels.settings.filtr"),
+                    String.valueOf(oldMdParams.filtr),
+                    String.valueOf(newMdParams.filtr));
+        }
+        changesManager.persistChanges();
+    }
+
+    private void compareSimpleArraysAndAddToChangeEvent(int[] oldArray, int[] newArray, String paramGroup, String paramName, SettingsChangeEvent changeEvent) {
+        for (int i = 0; i < oldArray.length; i++) {
+            if (oldArray[i] != newArray[i]) {
+                changeEvent.addSettingsChange(paramGroup,
+                        paramName + " " + (i + 1),
+                        String.valueOf(oldArray[i]), String.valueOf(newArray[i]));
+            }
+        }
+    }
+
+    private void logUskParamChanges(DeviceUSKUdpParams oldParam, DeviceUSKUdpParams newParam) {
+        SettingsChangeEvent changeEvent = changesManager.addChangesEvent(restrictedAccessDialog.getOperator());
+        for (int i = 0; i < oldParam.prms.length; i++) {
+            DeviceUSKUdpParam oldChennelParam = oldParam.prms[i];
+            DeviceUSKUdpParam newChennelParam = newParam.prms[i];
+
+        }
     }
 
     class BOX extends JCheckBox {
@@ -3004,7 +3056,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         pnNastr.setLayout(new java.awt.BorderLayout());
 
         frBtSave.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        frBtSave.setText("Сохранить");
+        frBtSave.setText("Редактировать");
         frBtSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 frBtSaveActionPerformed(evt);
@@ -3051,8 +3103,8 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         pnNastrUSK.setPreferredSize(new java.awt.Dimension(273, 100));
         pnNastrUSK.setLayout(new java.awt.BorderLayout(1, 1));
 
-        jButton_saveUskSettings.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton_saveUskSettings.setText("Сохранить");
+        jButton_saveUskSettings.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jButton_saveUskSettings.setText("Редактировать");
         jButton_saveUskSettings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_saveUskSettingsActionPerformed(evt);
@@ -4364,11 +4416,20 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
      */
     private void saveUSKParams(DeviceUSKUdp dev) {
         UEParams prm = (UEParams) tmn.getParam(Devicess.ID_R4);
+        DeviceUSKUdpParams oldParam = null;
         if (dev.getDeviceId() == Devicess.ID_USK1) {
+            oldParam = prm.currentTubeType.getParamsUSK1();
             prm.currentTubeType.setParamsUSK1(dev.getParams());
         }
         if (dev.getDeviceId() == Devicess.ID_USK2) {
+            oldParam = prm.currentTubeType.getParamsUSK2();
             prm.currentTubeType.setParamsUSK2(dev.getParams());
+        }
+
+        try {
+            oldParam = ObjectClonner.getInstance().deepCopy(oldParam);
+        } catch (Exception ex) {
+            log.error("Can't get clone of old parameters [{}] ", oldParam);
         }
         tmn.setParam(Devicess.ID_R4, prm);
         //TODO Здесь сохраняем изменения параметров
@@ -4393,6 +4454,7 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
                 em.close();
             }
         }
+        logUskParamChanges(oldParam, dev.getParams());
     }
 
     /**
@@ -4954,35 +5016,6 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     private String t(String key) {
         return gui_text.getString(key);
     }
-    private void frBtSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frBtSaveActionPerformed
-        ParamsMD8Udp prmMD = prmMDEditPnl.getActualParam();
-        blockMD.setParam(prmMD);
-        UEParams prm = (UEParams) tmn.getParam(Devicess.ID_R4);
-        prm.currentTubeType.setParamsMD(prmMD);
-        EntityManager em = emf.createEntityManager();
-        synchronized (accessBd) {
-            try {
-                EntityTransaction trans = em.getTransaction();
-                try {
-                    trans.begin();
-                    em.persist(new Event("Пользователь сохранил параметры МД8", 0));
-                    trans.commit();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                } finally {
-                    if (trans.isActive()) {
-                        trans.rollback();
-                    }
-                }
-            } finally {
-                if (em != null) {
-                    em.close();
-                }
-            }
-        }
-        setMdSettingsEnabledState(false);
-    }//GEN-LAST:event_frBtSaveActionPerformed
-
     private void combobox_TubeOnDeviceResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combobox_TubeOnDeviceResultsActionPerformed
         Object so = combobox_TubeOnDeviceResults.getSelectedItem();
         if (so instanceof String) {
@@ -5713,30 +5746,25 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
     }//GEN-LAST:event_jButton_AllGraphsOnOnePageActionPerformed
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
-        int selectedTabIndex = jTabbedPane1.getSelectedIndex();
-        switch (selectedTabIndex) {
-            case 1:
-                if (!mdSettingsIsEnabled && isPassCheckOk() != null) {
-                    setMdSettingsEnabledState(true);
-                }
-                break;
-            case 2:
-                if (!uskSettingsIsEnabled && isPassCheckOk() != null) {
-                    setUskSettingsEnabledState(true);
-                }
-                break;
-            default:
-        }
-        updateArchivePanel();
+
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
     private void jButton_saveUskSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_saveUskSettingsActionPerformed
-        saveUSKParams(blockUSK1);
-        blockUSK1.resetChangeFlag();
-        saveUSKParams(blockUSK2);
-        blockUSK2.resetChangeFlag();
-        prmUSEditPnl.resetChanges();
-        setUskSettingsEnabledState(false);
+        if (jButton_saveUskSettings.getText().equals("Редактировать")) {
+            if (isPassCheckOk() == null) {
+                return;
+            }
+            setUskSettingsEnabledState(true);
+            jButton_saveUskSettings.setText("Сохранить");
+        } else {
+            saveUSKParams(blockUSK1);
+            blockUSK1.resetChangeFlag();
+            saveUSKParams(blockUSK2);
+            blockUSK2.resetChangeFlag();
+            prmUSEditPnl.resetChanges();
+            setUskSettingsEnabledState(false);
+            jButton_saveUskSettings.setText("Редактировать");
+        }
     }//GEN-LAST:event_jButton_saveUskSettingsActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
@@ -5806,6 +5834,46 @@ public class MainFrame extends javax.swing.JFrame implements ITubeDataProvider,
         saveOperatorChoiceToDb(TubeConditions.BAD);
         notifyController(Commands.MARK_AS_BAD);
     }//GEN-LAST:event_jButton_MarkDeffectActionPerformed
+
+    private void frBtSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frBtSaveActionPerformed
+        if (frBtSave.getText().equals("Редактировать")) {
+            if (isPassCheckOk() == null) {
+                return;
+            }
+            setMdSettingsEnabledState(true);
+            frBtSave.setText("Сохранить");
+        } else {
+            UEParams prm = (UEParams) tmn.getParam(Devicess.ID_R4);
+            ParamsMD8Udp oldMdParams = prm.currentTubeType.getParamsMD().getClone();
+            ParamsMD8Udp prmMD = prmMDEditPnl.getActualParam();
+            blockMD.setParam(prmMD);
+            prm.currentTubeType.setParamsMD(prmMD);
+            EntityManager em = emf.createEntityManager();
+            synchronized (accessBd) {
+                try {
+                    EntityTransaction trans = em.getTransaction();
+                    try {
+                        trans.begin();
+                        em.persist(new Event("Пользователь сохранил параметры МД8", 0));
+                        trans.commit();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    } finally {
+                        if (trans.isActive()) {
+                            trans.rollback();
+                        }
+                    }
+                } finally {
+                    if (em != null) {
+                        em.close();
+                    }
+                }
+            }
+            logChangedMDParams(oldMdParams, ((UEParams) tmn.getParam(Devicess.ID_R4)).getParamMD());
+            setMdSettingsEnabledState(false);
+            frBtSave.setText("Редактировать");
+        }
+    }//GEN-LAST:event_frBtSaveActionPerformed
 
     private void saveOperatorChoiceToDb(int tubeCondition) {
         EntityManager em = emf.createEntityManager();

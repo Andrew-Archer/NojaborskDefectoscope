@@ -80,6 +80,12 @@ public class SettingsChangeEvent implements Serializable {
         settingChange.setSettingsChangeEvent(this);
         settingsChanges.add(settingChange);
     }
+    
+    public void addSettingsChangeIfChanged(String groupName, String paramName, String oldValue, String newValue){
+        if(!oldValue.equals(newValue)){
+            addSettingsChange(groupName, paramName, oldValue, newValue);
+        }
+    }
 
     /**
      * @return the id

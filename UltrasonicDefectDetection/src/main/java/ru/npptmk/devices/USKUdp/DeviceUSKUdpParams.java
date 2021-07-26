@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author SmorkalovAV
  */
 public class DeviceUSKUdpParams implements Serializable {
-
+    public static final long serialVersionUID = 4806640107661539436L;
     public final DeviceUSKUdpParam prms[] = new DeviceUSKUdpParam[8];
     public String name;
     /**величина ослабления попересных каналов дефектоскопа*/
