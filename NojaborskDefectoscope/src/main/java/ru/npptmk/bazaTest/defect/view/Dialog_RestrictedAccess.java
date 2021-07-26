@@ -118,6 +118,7 @@ public class Dialog_RestrictedAccess extends javax.swing.JDialog {
         jPasswordField = new javax.swing.JPasswordField();
         jComboBox1 = new javax.swing.JComboBox<>();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("ОГРАНИЧЕННЫЙ ДОСТУП");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
